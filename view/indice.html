@@ -1,0 +1,30 @@
+<h1>SuperMakina</h1>
+<div id="container">
+    <div class="card-group mx-3">
+    <div class="card">
+        <img src="../assets/puzzle-bobble.jpg" class="card-img-top w-50" alt="puzzle-bobble">
+        <div class="card-body">
+            <h5 class="card-title">Puzzle Bobble</h5>
+            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, hic!</p>
+            <button type="button" class="btn btn-success" id="jugarPuzzleBobble">Jugar</button>
+            <button type="button" class="btn btn-secondary" id="descripcionPuzzleBobble">Descripcion</button>
+            <button type="button" class="btn btn-info" id="puntuacionesPuzzleBobble">Puntuaciones</button>
+        </div>
+    </div>
+    <div class="card">
+        <img src="../assets/arkanoid.jpg" class="card-img-top w-50" alt="arkanoid">
+        <div class="card-body">
+            <h5 class="card-title">Arkanoid</h5>
+            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, unde.</p>
+            <button type="button" class="btn btn-success" id="jugarArkanoid">Jugar</button>
+            <button type="button" class="btn btn-secondary" id="descripcionArkanoid">Descripcion</button>
+            <button type="button" class="btn btn-info" id="puntuacionesArkanoid">Puntuaciones</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    let botonJugarPuzzleBobble = document.getElementById("jugarPuzzleBobble");
+    botonJugarPuzzleBobble.addEventListener("click", cargarJuego("/Games/PuzzleBobble/index.html"));
+</script>
