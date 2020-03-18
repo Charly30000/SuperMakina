@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 
 const url = require('url');
 const path = require('path');
@@ -7,7 +7,7 @@ app.allowRendererProcessReuse = true;
 // Pantalla principal
 let mainWindow;
 
-app.on('ready', function(){
+app.on('ready', function () {
     mainWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true
@@ -19,14 +19,39 @@ app.on('ready', function(){
         pathname: path.join(__dirname, 'view/index.html'),
         protocol: 'file',
         slashes: true
-        
+
     }))
 
-    Menu.setApplicationMenu([
-        
-    ]);
-    mainWindow.on('closed', function() {
+    const mainMenu = Menu.buildFromTemplate(templateMenu);
+    Menu.setApplicationMenu(mainMenu);
+    mainWindow.on('closed', function () {
         app.quit();
     })
-    
 })
+
+const templateMenu = [
+    {
+        label: 'Exit',
+        click() {
+            app.quit();
+        }
+    }
+];
+
+if (process.env.NODE_ENV !== 'production') {
+    templateMenu.push({
+        label: 'DevTools',
+        submenu: [
+            {
+                label: 'Mostar / Ocultar DevTools',
+                click(item, focusedWindow) {
+                    focusedWindow.toggleDevTools();
+                },
+                accelerator: 'F12'
+            },
+            {
+                role: 'reload'
+            }
+        ]
+    })
+}
