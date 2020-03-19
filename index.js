@@ -13,6 +13,8 @@ if (process.env.NODE_ENV !== 'production'){
 // Pantalla principal
 let mainWindow;
 
+
+// Ventana principal
 app.on('ready', function () {
     mainWindow = new BrowserWindow({
         webPreferences: {
@@ -43,6 +45,9 @@ const templateMenu = [
         }
     }
 ];
+
+// Ventana de rankings
+
 
 if (process.env.NODE_ENV !== 'production') {
     templateMenu.push({
