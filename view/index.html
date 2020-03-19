@@ -2,43 +2,64 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperMakina</title>
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootswatch/dist/cerulean/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperMakina</title>
+  <link rel="stylesheet" type="text/css" href="../node_modules/bootswatch/dist/cerulean/bootstrap.min.css">
+  <!-- Insert this line above script imports  -->
+  <script>
+    if (typeof module === 'object') {
+      window.module = module; module = undefined
+    }
+  </script>
+  <!-- normal script imports etc  -->
+  <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="data/infoJuegos.js"></script>
+
+  <!-- Insert this line after script imports -->
+  <script>
+    if (window.module) module = window.module;
+  </script>
 </head>
 
 <body>
-    <h1>SuperMakina</h1>
-<div id="container">
+  <h1>SuperMakina</h1>
+  <div id="container">
     <div class="card-group mx-3">
-        <div class="card">
-            <img src="../assets/puzzle-bobble.jpg" class="card-img-top w-50" alt="puzzle-bobble">
-            <div class="card-body">
-                <h5 class="card-title">Puzzle Bobble</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, hic!</p>
-                <a class="btn btn-success" href="../Games/PuzzleBobble/index.html">Jugar</a>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion">Descripcion</button>
-                <button type="button" class="btn btn-info" id="puntuacionesPuzzleBobble">Puntuaciones</button>
-            </div>
+      <div class="card">
+        <img src="../assets/puzzle-bobble.jpg" class="card-img-top w-50" alt="puzzle-bobble">
+        <div class="card-body">
+          <h5 class="card-title">Puzzle Bobble</h5>
+          <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, hic!</p>
+          <a class="btn btn-success" href="../Games/PuzzleBobble/index.html">Jugar</a>
+          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+            id="botonDescripcionPuzzleBobble">Descripcion</button>
+          <button type="button" class="btn btn-info" id="botonPuntuacionesPuzzleBobble">Puntuaciones</button>
         </div>
-        <div class="card">
-            <img src="../assets/arkanoid.jpg" class="card-img-top w-50" alt="arkanoid">
-            <div class="card-body">
-                <h5 class="card-title">Arkanoid</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, unde.</p>
-                <a class="btn btn-success" href="../Games/Arkanoid/index.html">Jugar</a>
-                <button type="button" class="btn btn-secondary" id="descripcionArkanoid">Descripcion</button>
-                <button type="button" class="btn btn-info" id="puntuacionesArkanoid">Puntuaciones</button>
-            </div>
+      </div>
+      <div class="card">
+        <img src="../assets/arkanoid.jpg" class="card-img-top w-50" alt="arkanoid">
+        <div class="card-body">
+          <h5 class="card-title">Arkanoid</h5>
+          <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, unde.</p>
+          <a class="btn btn-success" href="../Games/Arkanoid/index.html">Jugar</a>
+          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+            id="botonDescripcionArkanoid">Descripcion</button>
+          <button type="button" class="btn btn-info" id="botonPuntuacionesArkanoid">Puntuaciones</button>
         </div>
+      </div>
     </div>
-</div>
-<div class="modal fade" id="modalDescripcion" tabindex="-1" role="dialog" aria-labelledby="modalDescripcion" aria-hidden="true">
+  </div>
+  <div class="modal fade" id="modalDescripcion" tabindex="-1" role="dialog" aria-labelledby="modalDescripcion"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="tituloJuego"><!-- Nombre del juego --></h5>
+          <h5 class="modal-title" id="tituloJuego">
+            <!-- Nombre del juego -->
+          </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -48,14 +69,27 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <a type="button" class="btn btn-primary" href="#">Jugar</a>
+          <a type="button" class="btn btn-primary" id="modalBotonJugar" href="#">Jugar</a>
         </div>
       </div>
     </div>
   </div>
-<script>
-
-</script>
+  <script>
+    // funcionalidad botones -> añade la información del fichero infoJuegos al modal
+    let botonDescripcionPuzzleBobble = document.getElementById("botonDescripcionPuzzleBobble");
+    let botonDescripcionArkanoid = document.getElementById("botonDescripcionArkanoid");
+    botonDescripcionPuzzleBobble.addEventListener("click", function () {
+      document.getElementById("tituloJuego").textContent = infoJuegos.PuzzleBobble.Titulo;
+      document.getElementById("descripcionJuego").textContent = infoJuegos.PuzzleBobble.Descripcion;
+      document.getElementById("modalBotonJugar").href = `../Games/${infoJuegos.PuzzleBobble.Titulo}/index.html`;
+    });
+    botonDescripcionArkanoid.addEventListener("click", function () {
+      document.getElementById("tituloJuego").textContent = infoJuegos.Arkanoid.Titulo;
+      document.getElementById("descripcionJuego").textContent = infoJuegos.Arkanoid.Descripcion;
+      document.getElementById("modalBotonJugar").href = `../Games/${infoJuegos.Arkanoid.Titulo}/index.html`;
+    });
+    // boton puntuaciones
+  </script>
 </body>
 
 </html>
