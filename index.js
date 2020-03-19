@@ -12,7 +12,6 @@ if (process.env.NODE_ENV !== 'production') {
 // Pantalla principal
 let mainWindow;
 
-
 // Ventana principal
 app.on('ready', function () {
     mainWindow = new BrowserWindow({
@@ -34,6 +33,7 @@ app.on('ready', function () {
     mainWindow.on('closed', function () {
         app.quit();
     })
+    mainWindow.maximize();
 })
 
 const templateMenu = [
@@ -45,6 +45,29 @@ const templateMenu = [
     }
 ];
 
+//Pantalla puntuaciones
+let ventanaPuntuaciones;
+
+// Funcion que crea una ventana con las puntuaciones del juego que el usuario pida
+function crearVentanaPuntuaciones() {
+    ventanaPuntuaciones = new BrowserWindow({
+        width: 800,
+        height: 800,
+        title: 'Puntuaciones',
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+    //ventanaPuntuaciones.setMenu(null);
+    ventanaPuntuaciones.loadURL(url.format({
+        pathname: path.join(__dirname, 'view/ventanaPuntuaciones.html'),
+        protocol: 'file',
+        slashes: true
+    }))
+    ventanaPuntuaciones.on('closed', function () {
+        ventanaPuntuaciones = null;
+    })
+}
 
 if (process.env.NODE_ENV !== 'production') {
     templateMenu.push({
@@ -65,7 +88,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 ipcMain.on('puntuaciones', (evt, juego) => {
-    mainWindow.webContents.send('juego', juego);
+    crearVentanaPuntuaciones();
     console.log(juego);
+    setTimeout(()=>{
+        ventanaPuntuaciones.webContents.send('juego', juego);
+    }, 1000)
 })
-

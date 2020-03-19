@@ -88,44 +88,15 @@
       document.getElementById("descripcionJuego").textContent = infoJuegos.Arkanoid.Descripcion;
       document.getElementById("modalBotonJugar").href = `../Games/${infoJuegos.Arkanoid.Titulo}/index.html`;
     });
+
     // boton puntuaciones
 
-    const { BrowserWindow, ipcMain } = require('electron').remote;
     const { ipcRenderer } = require('electron');
-    const url = require('url');
-    const path = require('path');
-    /* const mainWindow = require('electron').remote.BrowserWindow; */
-    // Funcion que crea una ventana con las puntuaciones de lo que el usuario pida
-
-    let ventanaPuntuaciones;
-
-    function crearVentanaPuntuaciones() {
-      ventanaPuntuaciones = new BrowserWindow({
-        width: 800,
-        height: 800,
-        title: 'Puntuaciones',
-        webPreferences: {
-          nodeIntegration: true
-        }
-      });
-      //newProductWindow.setMenu(null);
-      ventanaPuntuaciones.loadURL(url.format({
-        pathname: path.join(__dirname, 'ventanaPuntuaciones.html'),
-        protocol: 'file',
-        slashes: true
-      }))
-      ventanaPuntuaciones.on('closed', function () {
-        ventanaPuntuaciones = null;
-      })
-    }
 
     let botonPuntuacionesPuzzleBobble = document.getElementById("botonPuntuacionesPuzzleBobble");
     botonPuntuacionesPuzzleBobble.addEventListener("click", function () {
-      crearVentanaPuntuaciones();
       let juego = "PuzzleBobble";
       ipcRenderer.send('puntuaciones', juego);
-      /* setTimeout(ipcRenderer.send('puntuaciones', juego), 5000); */
-
     })
   </script>
 </body>
