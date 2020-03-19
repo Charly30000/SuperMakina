@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puntuaciones</title>
 </head>
+
 <body>
     <h1>Puntuaciones</h1>
+    <div id="juego">
+
+    </div>
     <table>
 
     </table>
-
+    <script>
+        const { ipcRenderer } = require('electron');
+        console.log(ipcRenderer);
+        console.log("Ventana Creada");
+        ipcRenderer.on('juego', (evt, juego) => {
+            console.log(juego);
+            document.getElementById("juego").textContent = juego;
+        });
+    </script>
 </body>
+
 </html>

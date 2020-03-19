@@ -36,8 +36,7 @@
           <a class="btn btn-success" href="../Games/PuzzleBobble/index.html">Jugar</a>
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
             id="botonDescripcionPuzzleBobble">Descripcion</button>
-          <button type="button" class="btn btn-info" id="botonPuntuacionesPuzzleBobble"
-            onclick="crearVentanaPuntuaciones()">Puntuaciones</button>
+          <button type="button" class="btn btn-info" id="botonPuntuacionesPuzzleBobble">Puntuaciones</button>
         </div>
       </div>
       <div class="card">
@@ -91,20 +90,15 @@
     });
     // boton puntuaciones
 
-    const { app, Menu, BrowserWindow, ipcRenderer } = require('electron').remote;
-    const botonPuntuacionesPuzzleBobble = document.getElementById('botonPuntuacionesPuzzleBobble');
-
+    const { BrowserWindow, ipcMain } = require('electron').remote;
+    const { ipcRenderer } = require('electron');
+    const url = require('url');
+    const path = require('path');
+    /* const mainWindow = require('electron').remote.BrowserWindow; */
     // Funcion que crea una ventana con las puntuaciones de lo que el usuario pida
 
     let ventanaPuntuaciones;
-    const templateMenu = [
-      {
-        label: 'Exit',
-        click() {
-          app.quit();
-        }
-      }
-    ];
+
     function crearVentanaPuntuaciones() {
       ventanaPuntuaciones = new BrowserWindow({
         width: 800,
@@ -116,7 +110,7 @@
       });
       //newProductWindow.setMenu(null);
       ventanaPuntuaciones.loadURL(url.format({
-        pathname: path.join(__dirname, './ventanaPuntuaciones.html'),
+        pathname: path.join(__dirname, 'ventanaPuntuaciones.html'),
         protocol: 'file',
         slashes: true
       }))
@@ -125,31 +119,13 @@
       })
     }
 
-    ipcMain.on('juego', (evt, juego) => {
-      mainWindow.webContents.send('juego', juego);
-      ventanaPuntuaciones.close();
-    })
-
-    if (process.env.NODE_ENV !== 'production') {
-      templateMenu.push({
-        label: 'DevTools',
-        submenu: [
-          {
-            label: 'Mostar / Ocultar DevTools',
-            click(item, focusedWindow) {
-              focusedWindow.toggleDevTools();
-            },
-            accelerator: 'F12'
-          },
-          {
-            role: 'reload'
-          }
-        ]
-      })
-    }
-
+    let botonPuntuacionesPuzzleBobble = document.getElementById("botonPuntuacionesPuzzleBobble");
     botonPuntuacionesPuzzleBobble.addEventListener("click", function () {
-      ipcRenderer.send("juego", "PuzzleBobble");
+      crearVentanaPuntuaciones();
+      let juego = "PuzzleBobble";
+      ipcRenderer.send('puntuaciones', juego);
+      /* setTimeout(ipcRenderer.send('puntuaciones', juego), 5000); */
+
     })
   </script>
 </body>

@@ -1,10 +1,9 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron');
-
 const url = require('url');
 const path = require('path');
 app.allowRendererProcessReuse = true;
 
-if (process.env.NODE_ENV !== 'production'){
+if (process.env.NODE_ENV !== 'production') {
     require('electron-reload')(__dirname, {
         electron: path.join(__dirname, '/node_modules', '.bin', 'electron')
     });
@@ -46,8 +45,6 @@ const templateMenu = [
     }
 ];
 
-// Ventana de rankings
-
 
 if (process.env.NODE_ENV !== 'production') {
     templateMenu.push({
@@ -66,3 +63,9 @@ if (process.env.NODE_ENV !== 'production') {
         ]
     })
 }
+
+ipcMain.on('puntuaciones', (evt, juego) => {
+    mainWindow.webContents.send('juego', juego);
+    console.log(juego);
+})
+
