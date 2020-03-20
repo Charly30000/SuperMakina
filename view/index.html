@@ -95,7 +95,7 @@
 
     let botonPuntuacionesPuzzleBobble = document.getElementById("botonPuntuacionesPuzzleBobble");
     botonPuntuacionesPuzzleBobble.addEventListener("click", function () {
-      let juego = "PuzzleBobble";
+      let juego = infoJuegos.PuzzleBobble.Titulo;
       ipcRenderer.send('puntuaciones', juego);
     })
   </script>

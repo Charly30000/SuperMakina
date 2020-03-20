@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puntuaciones</title>
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootswatch/dist/cerulean/bootstrap.min.css">
+    <!-- Insert this line above script imports  -->
+    <script>
+      if (typeof module === 'object') {
+        window.module = module; module = undefined
+      }
+    </script>
+    <!-- normal script imports etc  -->
+    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  
+    <!-- Insert this line after script imports -->
+    <script>
+      if (window.module) module = window.module;
+    </script>
 </head>
 
 <body>
@@ -12,17 +27,46 @@
     <div id="juego" style="font-size: 8em;">
 
     </div>
-    <table>
-
+    <table id="tabla">     
     </table>
     <script>
         const { ipcRenderer } = require('electron');
-        console.log(ipcRenderer);
-        console.log("Ventana Creada");
         ipcRenderer.on('juego', (evt, juego) => {
             console.log(juego);
             document.getElementById("juego").textContent = juego;
         });
+        localStorage.setItem(juego,JSON.stringify(
+            [
+                {
+                    "nombre": "san",
+                    "puntuacion" : 123312
+                },
+                {
+                    "nombre" : "alb",
+                    "puntuacion" : 123123123
+                },
+                {
+                    "nombre" : "and",
+                    "puntuacion" :4567867
+                }
+            ]
+        ));
+        let objeto = JSON.parse(localStorage.getItem(juego));
+        let tabla = document.getElementById("tabla");
+        objeto.sort((a,b)=>{
+            if(a.puntuacion > b.puntuacion) {
+                return -1;
+            }else if(a.puntuacion < b.puntuacion) {
+                return 1;
+            }else {
+                return 0;
+            }
+        });
+        $("<tr><td>Puesto</td><td>Nombre</td><td>Puntuacion</td></tr>").appendTo("#tabla");
+        for(let i = 1;i < objeto.length + 1 ; i++) {
+            $(`<tr><td>${i}</td><td>${objeto[i - 1].nombre}</td><td>${objeto[i -1].puntuacion}</td></tr>`).appendTo("#tabla");
+        }
+        
     </script>
 </body>
 
