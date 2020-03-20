@@ -56,7 +56,8 @@ function crearVentanaPuntuaciones() {
         title: 'Puntuaciones',
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        show: false
     });
     //ventanaPuntuaciones.setMenu(null);
     ventanaPuntuaciones.loadURL(url.format({
@@ -89,8 +90,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 ipcMain.on('puntuaciones', (evt, juego) => {
     crearVentanaPuntuaciones();
-    console.log(juego);
-    setTimeout(()=>{
+    ventanaPuntuaciones.once('ready-to-show', ()=>{
         ventanaPuntuaciones.webContents.send('juego', juego);
-    }, 1000)
+        ventanaPuntuaciones.show();
+    })
 })
