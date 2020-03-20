@@ -50,24 +50,30 @@ let ventanaPuntuaciones;
 
 // Funcion que crea una ventana con las puntuaciones del juego que el usuario pida
 function crearVentanaPuntuaciones() {
-    ventanaPuntuaciones = new BrowserWindow({
-        width: 800,
-        height: 800,
-        title: 'Puntuaciones',
-        webPreferences: {
-            nodeIntegration: true
-        },
-        show: false
-    });
-    //ventanaPuntuaciones.setMenu(null);
-    ventanaPuntuaciones.loadURL(url.format({
-        pathname: path.join(__dirname, 'view/ventanaPuntuaciones.html'),
-        protocol: 'file',
-        slashes: true
-    }))
-    ventanaPuntuaciones.on('closed', function () {
-        ventanaPuntuaciones = null;
-    })
+    if (!ventanaPuntuaciones) {
+        ventanaPuntuaciones = new BrowserWindow({
+            width: 800,
+            height: 400,
+            title: 'Puntuaciones',
+            webPreferences: {
+                nodeIntegration: true
+            },
+            show: false
+        });
+        //ventanaPuntuaciones.setMenu(null);
+        ventanaPuntuaciones.loadURL(url.format({
+            pathname: path.join(__dirname, 'view/ventanaPuntuaciones.html'),
+            protocol: 'file',
+            slashes: true
+        }))
+        ventanaPuntuaciones.on('closed', function () {
+            ventanaPuntuaciones = null;
+            mainWindow.setEnabled(true);
+            mainWindow.show();
+        })
+        ventanaPuntuaciones.setMaximizable(false);
+        ventanaPuntuaciones.setResizable(false);
+    }
 }
 
 if (process.env.NODE_ENV !== 'production') {
@@ -91,7 +97,9 @@ if (process.env.NODE_ENV !== 'production') {
 ipcMain.on('puntuaciones', (evt, juego) => {
     crearVentanaPuntuaciones();
     ventanaPuntuaciones.once('ready-to-show', ()=>{
+        console.log(juego)
         ventanaPuntuaciones.webContents.send('juego', juego);
         ventanaPuntuaciones.show();
+        mainWindow.setEnabled(false);
     })
 })
