@@ -1,1 +1,32 @@
-<h1>PuzzleBubble</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Bobble</title>
+    <link rel="stylesheet" type="text/css" href="../../node_modules/bootswatch/dist/cerulean/bootstrap.min.css">
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module; module = undefined
+        }
+    </script>
+    <!-- normal script imports etc  -->
+    <script src="../../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../../view/data/infoJuegos.js"></script>
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+</head>
+<body>
+    <h1>Puzzle Bobble</h1>
+    <div id="container"></div>
+    <script src="../../node_modules/phaser/dist/phaser.min.js"></script>
+</body>
+
+</html>
