@@ -31,6 +31,14 @@ function creacionStorage(juego) {
             {
                 "nombre": "asd",
                 "puntuacion": 5673
+            },
+            {
+                "nombre": "asd",
+                "puntuacion": 5673
+            },
+            {
+                "nombre": "asd",
+                "puntuacion": 5673
             }
         ]
     ));
