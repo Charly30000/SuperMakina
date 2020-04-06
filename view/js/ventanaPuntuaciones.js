@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron');
         let nombreJuego;
         ipcRenderer.on('juego', (evt, juego) => {
-            //creacionStorage(juego);
+            creacionStorage(juego);
             creacionTabla(juego);
             document.getElementById("tituloJuego").textContent = juego;
         });
@@ -17,8 +17,20 @@ const { ipcRenderer } = require('electron');
                         "puntuacion": 123123123
                     },
                     {
-                        "nombre": "and",
-                        "puntuacion": 4567867
+                        "nombre": "dfb",
+                        "puntuacion": 13123
+                    },
+                    {
+                        "nombre": "mjm",
+                        "puntuacion": 6573
+                    },
+                    {
+                        "nombre": "nbc",
+                        "puntuacion": 242352
+                    },
+                    {
+                        "nombre": "asd",
+                        "puntuacion": 5673
                     }
                 ]
             ));
@@ -42,10 +54,10 @@ const { ipcRenderer } = require('electron');
                     }
                 });
                 let tabla = document.getElementById("tabla");
-                $(`<tr><th scope="col">Puesto</th><th scope="col">Nombre</th><th scope="col">Puntuacion</th></tr>`).appendTo("#tabla");
+                $(`<tr><th scope="col"></th><th scope="col">Nombre</th><th scope="col">Puntuacion</th></tr>`).appendTo("#tabla");
                 $("<tbody></tbody>").appendTo("#tabla");
                 for (let i = 1; i < objeto.length + 1; i++) {
-                    $(`<tr><th scope="row">${i}</th><td>${objeto[i - 1].nombre}</td><td>${objeto[i - 1].puntuacion}</td></tr>`).appendTo("tbody");
+                    $(`<tr><th scope="row">${i}º</th><td>${objeto[i - 1].nombre}</td><td>${objeto[i - 1].puntuacion}</td></tr>`).appendTo("tbody");
                 }
             }
         }

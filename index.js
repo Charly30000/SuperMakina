@@ -36,6 +36,7 @@ app.on('ready', function () {
     mainWindow.maximize();
 })
 
+// *****no se puede quitar, el menu debe tener al menos una pestaña, rol o tipo
 const templateMenu = [
     {
         label: 'Exit',
@@ -45,7 +46,7 @@ const templateMenu = [
     }
 ];
 
-//Pantalla puntuaciones
+// Pantalla puntuaciones
 let ventanaPuntuaciones;
 
 // Funcion que crea una ventana con las puntuaciones del juego que el usuario pida
@@ -97,7 +98,6 @@ if (process.env.NODE_ENV !== 'production') {
 ipcMain.on('puntuaciones', (evt, juego) => {
     crearVentanaPuntuaciones();
     ventanaPuntuaciones.once('ready-to-show', ()=>{
-        console.log(juego)
         ventanaPuntuaciones.webContents.send('juego', juego);
         ventanaPuntuaciones.show();
         mainWindow.setEnabled(false);
