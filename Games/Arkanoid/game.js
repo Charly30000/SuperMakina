@@ -14,4 +14,6 @@ var config = {
     backgroundColor: 0x000000
 }
 
+var nivel = 1;
+
 var game = new Phaser.Game(config);

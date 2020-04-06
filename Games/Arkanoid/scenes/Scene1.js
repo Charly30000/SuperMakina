@@ -93,6 +93,6 @@ class Scene1 extends Phaser.Scene {
         // Carga animaciones....
 
         // Iniciar Scene2
-        //this.scene.start("playGame");
+        this.scene.start("playGame");
     }
 }
