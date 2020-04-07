@@ -62,7 +62,7 @@ function creacionTabla(juego) {
             }
         });
         let tabla = document.getElementById("tabla");
-        $(`<tr class="table-info"><th scope="col"></th><th scope="col">Nombre</th><th scope="col">Puntuación</th></tr>`).appendTo("#tabla");
+        $(`<tr class="table-info tableFixHead"><th scope="col"></th><th scope="col">Nombre</th><th scope="col">Puntuación</th></tr>`).appendTo("#tabla");
         $("<tbody></tbody>").appendTo("#tabla");
         for (let i = 1; i < objeto.length + 1; i++) {
             if (i == 1) {

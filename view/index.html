@@ -2,77 +2,132 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuperMakina</title>
-  <link rel="stylesheet" type="text/css" href="../node_modules/bootswatch/dist/spacelab/bootstrap.min.css">
-  <!-- Insert this line above script imports  -->
-  <script>
-    if (typeof module === 'object') {
-      window.module = module; module = undefined
-    }
-  </script>
-  <!-- normal script imports etc  -->
-  <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
-  <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="data/infoJuegos.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperMakina</title>
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootswatch/dist/spacelab/bootstrap.min.css">
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module; module = undefined
+        }
+    </script>
+    <!-- normal script imports etc  -->
+    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="data/infoJuegos.js"></script>
 
-  <!-- Insert this line after script imports -->
-  <script>
-    if (window.module) module = window.module;
-  </script>
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
 </head>
 
 <body>
-  <h1>SuperMakina</h1>
-  <div id="container">
-    <div class="card-group mx-3">
-      <div class="card">
-        <img src="assets/images/puzzleBobble.png" class="card-img-top w-25" alt="puzzle-bobble">
-        <div class="card-body">
-          <h5 class="card-title">Puzzle Bobble</h5>
-          <a class="btn btn-success" href="../Games/PuzzleBobble/index.html">Jugar</a>
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
-            id="botonDescripcionPuzzleBobble">Descripcion</button>
-          <button type="button" class="btn btn-info" id="botonPuntuacionesPuzzleBobble">Puntuaciones</button>
+    <img src="assets/images/SuperMakinaLogo.png" class="img-fluid rounded mx-auto d-block">
+    <div class="row mx-5 border-primary border-top">
+        <!-- Puzzle Bobble -->
+        <div class="card col-md-3 py-3 border-0">
+            <img src="assets/images/puzzleBobble.png" class="card-img-top img-fluid" alt="puzzle-bobble">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+            </div>
+            <div class="card-footer d-flex justify-content-around flex-wrap">
+                <a class="btn btn-success" href="../Games/PuzzleBobble/index.html">Jugar</a>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+                    id="botonDescripcionPuzzleBobble">Descripción</button>
+                <button type="button" class="btn btn-info" id="botonPuntuacionesPuzzleBobble">Puntuaciones</button>
+            </div>
         </div>
-      </div>
-      <div class="card">
-        <img src="assets/images/arkanoid.png" class="card-img-top w-25" alt="arkanoid">
-        <div class="card-body">
-          <h5 class="card-title">Arkanoid</h5>
-          <a class="btn btn-success" href="../Games/Arkanoid/index.html">Jugar</a>
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
-            id="botonDescripcionArkanoid">Descripcion</button>
-          <button type="button" class="btn btn-info" id="botonPuntuacionesArkanoid">Puntuaciones</button>
+        <!-- Arkanoid -->
+        <div class="card col-md-3 py-3 border-0">
+            <img src="assets/images/arkanoid.png" class="card-img-top img-fluid" alt="arkanoid">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+            </div>
+            <div class="card-footer d-flex justify-content-around flex-wrap">
+                <a class="btn btn-success" href="../Games/Arkanoid/index.html">Jugar</a>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+                    id="botonDescripcionArkanoid">Descripción</button>
+                <button type="button" class="btn btn-info" id="botonPuntuacionesArkanoid">Puntuaciones</button>
+            </div>
         </div>
-      </div>
+
+        <!-- de prueba -->
+        <div class="card col-md-3 py-3 border-0">
+            <img src="assets/images/puzzleBobble.png" class="card-img-top img-fluid" alt="puzzle-bobble">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+            </div>
+            <div class="card-footer d-flex justify-content-around flex-wrap">
+                <a class="btn btn-success" href="../Games/PuzzleBobble/index.html">Jugar</a>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+                    id="botonDescripcionPuzzleBobble">Descripción</button>
+                <button type="button" class="btn btn-info" id="botonPuntuacionesPuzzleBobble">Puntuaciones</button>
+            </div>
+        </div>
+        <div class="card col-md-3 py-3 border-0">
+            <img src="assets/images/arkanoid.png" class="card-img-top img-fluid" alt="arkanoid">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+            </div>
+            <div class="card-footer d-flex justify-content-around flex-wrap">
+                <a class="btn btn-success" href="../Games/Arkanoid/index.html">Jugar</a>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+                    id="botonDescripcionArkanoid">Descripción</button>
+                <button type="button" class="btn btn-info" id="botonPuntuacionesArkanoid">Puntuaciones</button>
+            </div>
+        </div>
+        <div class="card col-md-3 py-3 border-0">
+            <img src="assets/images/arkanoid.png" class="card-img-top img-fluid" alt="arkanoid">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+            </div>
+            <div class="card-footer d-flex justify-content-around flex-wrap">
+                <a class="btn btn-success" href="../Games/Arkanoid/index.html">Jugar</a>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+                    id="botonDescripcionArkanoid">Descripción</button>
+                <button type="button" class="btn btn-info" id="botonPuntuacionesArkanoid">Puntuaciones</button>
+            </div>
+        </div>
+        <div class="card col-md-3 py-3 border-0">
+            <img src="assets/images/puzzleBobble.png" class="card-img-top img-fluid" alt="puzzle-bobble">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+            </div>
+            <div class="card-footer d-flex justify-content-around flex-wrap">
+                <a class="btn btn-success" href="../Games/PuzzleBobble/index.html">Jugar</a>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+                    id="botonDescripcionPuzzleBobble">Descripción</button>
+                <button type="button" class="btn btn-info" id="botonPuntuacionesPuzzleBobble">Puntuaciones</button>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="modal fade" id="modalDescripcion" tabindex="-1" role="dialog" aria-labelledby="modalDescripcion"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="tituloJuego">
-            <!-- Nombre del juego -->
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <!-- Descripción Modal -->
+    <div class="modal fade" id="modalDescripcion" tabindex="-1" role="dialog" aria-labelledby="modalDescripcion"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloJuego">
+                        <!-- Nombre del juego -->
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="descripcionJuego">
+                    <!-- Descripcion -->
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-success" id="modalBotonJugar" href="#">Jugar</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body" id="descripcionJuego">
-          <!-- Descripcion -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <a type="button" class="btn btn-primary" id="modalBotonJugar" href="#">Jugar</a>
-        </div>
-      </div>
     </div>
-  </div>
-  <script src="js/indice.js"></script>
+    <script src="js/indice.js"></script>
 </body>
 
 </html>
