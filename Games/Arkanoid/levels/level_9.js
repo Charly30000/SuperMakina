@@ -4,7 +4,7 @@ var level_9 =
     background: "",
     music: "",
     ladrillos: [
-        [{color: "", movement: false}, {color: "", movement: false},], // Primera fila
-        [{color: "", movement: false}, {color: "", movement: false},], // Segunda fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
     ]
 }

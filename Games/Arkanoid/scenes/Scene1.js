@@ -6,7 +6,7 @@ class Scene1 extends Phaser.Scene {
     preload() {
         var loadingBar = this.add.graphics({
             fillStyle: {
-                color: 0xfcd422 // white
+                color: 0xfcd422 // yellow
             }
         });
         this.load.on("progress", (percent) => {
@@ -48,15 +48,12 @@ class Scene1 extends Phaser.Scene {
         });
 
         // Carga del directorio de las mejoras
-        /*************************************************************
-            HAY QUE DETALLAR BIEN EL ANCHO Y EL ALTO DE LAS MEJORAS
-        **************************************************************/
         var mejoras = fs.readdirSync(`${__dirname}/assets/images/mejoras`);
         mejoras.forEach(element => {
             let nombreSinFormato = element.slice(0, element.indexOf("."));
             this.load.spritesheet(nombreSinFormato, `assets/images/mejoras/${element}`, {
                 frameWidth: 16,
-                frameHeight: 16
+                frameHeight: 8
             });
         });
 
@@ -91,7 +88,18 @@ class Scene1 extends Phaser.Scene {
 
     create() {
         // Carga animaciones....
-
+        // Animacion de las mejoras
+        var fs = require('fs');
+        var mejoras = fs.readdirSync(`${__dirname}/assets/images/mejoras`);
+        mejoras.forEach(element => {
+            let nombreSinFormato = element.slice(0, element.indexOf("."));
+            this.anims.create({
+                key: `anim_${nombreSinFormato}`,
+                frames: this.anims.generateFrameNumbers(nombreSinFormato),
+                frameRate: 20,
+                repeat: -1
+            });
+        });
         // Iniciar Scene2
         this.scene.start("playGame");
     }
