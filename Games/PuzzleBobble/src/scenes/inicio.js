@@ -15,4 +15,3 @@ class Inicio extends Phaser.Scene {
 
     }
 }
-export default Inicio;

@@ -21,9 +21,9 @@ class Bootloader extends Phaser.Scene {
         this.load.image("fondo7-9", "./assets/images/Backgrounds/Background 7-9.bmp");
         this.load.image("fondo10-12", "./assets/images/Backgrounds/Background 10-12.bmp");
         this.load.image("borde1-3", "./assets/images/Backgrounds/Borders 1-3.png");
-        this.load.image("borde4-6", "./assets/images/Backgrounds/Borders 4-6.bmp");
-        this.load.image("borde7-9", "./assets/images/Backgrounds/Borders 7-9.bmp");
-        this.load.image("borde10-12", "./assets/images/Backgrounds/Borders 10-12.bmp");
+        this.load.image("borde4-6", "./assets/images/Backgrounds/Borders 4-6.png");
+        this.load.image("borde7-9", "./assets/images/Backgrounds/Borders 7-9.bmp");// problemas con este
+        this.load.image("borde10-12", "./assets/images/Backgrounds/Borders 10-12.bmp"); // problemas con este
 
         var loadingBar = this.add.graphics({
             fillStyle: {
@@ -32,9 +32,8 @@ class Bootloader extends Phaser.Scene {
         });
         this.load.on("progress", (percent)=> {
             this.add.text(20, 20, "Loading game...");
-            console.log(percent * 100);
+            //console.log(percent * 100);
             loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 50);
         })
     }
 }
-export default Bootloader;
