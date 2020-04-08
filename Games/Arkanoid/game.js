@@ -14,6 +14,13 @@ var config = {
     backgroundColor: 0x000000
 }
 
-var nivel = 1;
+var gameConfig = {
+    nivel : 11,
+    puntos: 0,
+    velocidadPelotaY: -200,
+    velocidadJugadorX: 300,
+    posicionJugadorX: config.width / 2,
+    posicionJugadorY: config.height - 50
+};
 
 var game = new Phaser.Game(config);

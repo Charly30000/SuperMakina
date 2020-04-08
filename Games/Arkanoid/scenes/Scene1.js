@@ -39,6 +39,13 @@ class Scene1 extends Phaser.Scene {
         // Carga del directorio del jugador
         var jugador = fs.readdirSync(`${__dirname}/assets/images/jugador`);
         /* Por hacer, hay que hacer cargas de los spritesheet que aun no estan puestos para que tenga animacion */
+        jugador.forEach(element => {
+            let nombreSinFormato = element.slice(0, element.indexOf("."));
+            this.load.spritesheet(nombreSinFormato, `assets/images/jugador/${element}`, {
+                frameWidth: 64,
+                frameHeight: 16
+            });
+        });
 
         // Carga del directorio de los ladrillos
         var ladrillos = fs.readdirSync(`${__dirname}/assets/images/ladrillos`);
@@ -48,8 +55,8 @@ class Scene1 extends Phaser.Scene {
         });
 
         // Carga del directorio de las mejoras
-        var mejoras = fs.readdirSync(`${__dirname}/assets/images/mejoras`);
-        mejoras.forEach(element => {
+        this.nombreMejoras = fs.readdirSync(`${__dirname}/assets/images/mejoras`);
+        this.nombreMejoras.forEach(element => {
             let nombreSinFormato = element.slice(0, element.indexOf("."));
             this.load.spritesheet(nombreSinFormato, `assets/images/mejoras/${element}`, {
                 frameWidth: 16,
@@ -89,9 +96,7 @@ class Scene1 extends Phaser.Scene {
     create() {
         // Carga animaciones....
         // Animacion de las mejoras
-        var fs = require('fs');
-        var mejoras = fs.readdirSync(`${__dirname}/assets/images/mejoras`);
-        mejoras.forEach(element => {
+        this.nombreMejoras.forEach(element => {
             let nombreSinFormato = element.slice(0, element.indexOf("."));
             this.anims.create({
                 key: `anim_${nombreSinFormato}`,
