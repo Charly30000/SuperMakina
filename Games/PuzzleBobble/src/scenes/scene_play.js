@@ -6,6 +6,7 @@ class Scene_play extends Phaser.Scene {
     create() {
         // variable que guarda los datos del nivel actual 
         var nivel;
+        //comprueba en la variable global del init en que numero de nivel nos encontramos y coge del nivel(numero).js toda la informacion
         switch (numeronivel) {
             case 1:
                 nivel = nivel1;
@@ -43,46 +44,80 @@ class Scene_play extends Phaser.Scene {
         }
         // se carga el fondo y el borde segun el nivel en el que estas
         this.add.image(450, 300, nivel.fondo).setScale(3);
-        this.add.image(this.sys.game.config.width/2, 300, nivel.borde).setScale(3);
+        this.add.image(this.sys.game.config.width / 2, 300, nivel.borde).setScale(3);
+        // crea el array de todas las filas del nivel para guardar las referencias de las burbujas
+        var arrayburbujas = new Array([], [], [], [], [], [], [], [], [], [], []);
 
-        var arrayburbujas = new Array(new Array(),new Array());
-        console.log(nivel.burbuja);
-        for(var i=0; i<nivel.burbuja.length; i++) {
-            for(var j=0; j<nivel.burbuja[i].length; j++) {
+        let x = 0;
+        let y = 0;
+        // recorre todo array de burbujas del nivel , y segun la letra que ponga crea una burbuja de ese color, o deja un espacio vacio
+        // en el arrayburbujas
+        for (let i = 0; i < nivel.burbuja.length; i++) {
+            y = this.sys.game.config.width / 15 + i * 47;
+            for (let j = 0; j < nivel.burbuja[i].length; j++) {
+                if (i % 2 == 0) {
+                    if (j == 0) {
+                        x = this.sys.game.config.width / 3.2;
+                    } else {
+                        x = x + 48;
+                    }
+                } else {
+                    if (j == 0) {
+                        x = this.sys.game.config.width / 3;
+                    } else {
+                        x = x + 49;
+
+                    }
+                }
                 console.log(nivel.burbuja[i][j]);
 
                 switch (nivel.burbuja[i][j]) {
                     case "Am":
-                        arrayburbujas[i][j] = new Burbuja(this, 280, 60, "burbujaAm").setScale(3);
+                        arrayburbujas[i][j] = new Burbuja(this, x, y, "burbujaAm").setScale(3);
+                        // les pongo de name al objeto la inicial de su color , para saber su color
+                        arrayburbujas[i][j].name = "Am";
                         break;
                     case "Bl":
-                        arrayburbujas[i][j] = new Burbuja(this, 280, 100, "burbujaBl").setScale(3);
+                        arrayburbujas[i][j] = new Burbuja(this, x, y, "burbujaBl").setScale(3);
+                        arrayburbujas[i][j].name = "Bl";
                         break;
                     case "Gr":
-                        arrayburbujas[i][j] = new Burbuja(this, 60, 90, "burbujaGr").setScale(3);
+                        arrayburbujas[i][j] = new Burbuja(this, x, y, "burbujaGr").setScale(3);
+                        arrayburbujas[i][j].name = "Gr";
                         break;
                     case "Mo":
-                        arrayburbujas[i][j] = new Burbuja(this, 60, 90, "burbujaMo").setScale(3);
+                        arrayburbujas[i][j] = new Burbuja(this, x, y, "burbujaMo").setScale(3);
+                        arrayburbujas[i][j].name = "Mo";
                         break;
                     case "Na":
-                        arrayburbujas[i][j] = new Burbuja(this, 60, 90, "burbujaNa").setScale(3);
+                        arrayburbujas[i][j] = new Burbuja(this, x, y, "burbujaNa").setScale(3);
+                        arrayburbujas[i][j].name = "Na";
                         break;
-                    case "Ro" :
-                        arrayburbujas[i][j] = new Burbuja(this, 60, 90, "burbujaRo").setScale(3);
+                    case "Ro":
+                        arrayburbujas[i][j] = new Burbuja(this, x, y, "burbujaRo").setScale(3);
+                        arrayburbujas[i][j].name = "Ro";
                         break;
                     case "Ve":
-                        arrayburbujas[i][j] = new Burbuja(this, 60, 90, "burbujaVe").setScale(3);
-                        break;
-                    case " ":
-                        arrayburbujas[i][j] = " ";
+                        arrayburbujas[i][j] = new Burbuja(this, x, y, "burbujaVe").setScale(3);
+                        arrayburbujas[i][j].name = "Ve";
                         break;
                     default:
-                        
+                        arrayburbujas[i][j] = " ";
                         break;
                 }
             }
         }
-        console.log(arrayburbujas);
+
+
+    }
+    // sin terminar
+    crearbolalanzar() {
+        let arrrayburbujaslanzar = new Array();
+        for (let i = 0; i < arrayburbujas.length; i++) {
+            for (let j = 0; j < arrayburbujas[i].length; j++) {
+                
+            }
+        }
     }
 
     update() {

@@ -4,6 +4,7 @@ class Bootloader extends Phaser.Scene {
     }
 
     preload() {
+        // cuando se terminan de cargar todas las imagenes y los sprite se cambia de escena a la de Inicio
         this.load.on("complete", () => {
             this.scene.start("Inicio");
         })
@@ -24,12 +25,13 @@ class Bootloader extends Phaser.Scene {
         this.load.image("borde4-6", "./assets/images/Backgrounds/Borders 4-6.png");
         this.load.image("borde7-9", "./assets/images/Backgrounds/Borders 7-9.bmp");// problemas con este
         this.load.image("borde10-12", "./assets/images/Backgrounds/Borders 10-12.bmp"); // problemas con este
-
+        // crea la barra de porcentaje
         var loadingBar = this.add.graphics({
             fillStyle: {
                 color: 0xfcd422 // white
             }
         });
+        // mientras esta cargandose todo va mostrando una barra con un procentaje
         this.load.on("progress", (percent)=> {
             this.add.text(20, 20, "Loading game...");
             //console.log(percent * 100);

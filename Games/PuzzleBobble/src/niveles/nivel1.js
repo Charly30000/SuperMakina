@@ -4,7 +4,7 @@ var nivel1 =
     borde: "borde1-3",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Ro"," ","Mo","Na","Ro"," ","Am"],
+        ["Am","Bl","Gr","Mo","Na","Am","Ve","Am"],
+        ["Ro","Bl","Mo","Na","Ro","Bl","Am"],
     ]
 }
