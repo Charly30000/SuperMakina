@@ -13,3 +13,102 @@ var level_1 =
         [{ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false}, {ladrillo: "ladrillo_verde", movement: false},], // Septima fila
     ]
 }
+
+var level_2 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "azul", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
+
+var level_3 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
+
+var level_4 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
+
+var level_5 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
+
+var level_6 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
+
+var level_7 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
+
+var level_8 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
+
+var level_9 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
+
+var level_10 = 
+{
+    enemy_type: "",
+    background: "",
+    music: "",
+    ladrillos: [
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Primera fila
+        [{ladrillo: "", movement: false}, {ladrillo: "", movement: false},], // Segunda fila
+    ]
+}
