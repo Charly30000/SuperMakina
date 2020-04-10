@@ -4,10 +4,10 @@ var nivel1 =
     borde: "borde1-3",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Az"," ","Am"],
-        ["Ro","Bl","Mo","Na","Ro","Bl","Am"],
-        ["Am","Bl","Gr","Mo","Na","Az"," ","Am"],
-        ["Ro","Bl","Mo","Na","Ro","Bl","Am"],
+            [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+            [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+            [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+            [" ", {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
     ]
 }
 var nivel2= 
@@ -16,9 +16,11 @@ var nivel2=
     borde: "borde1-3",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
-    ]
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+]
 }
 var nivel3 = 
 {
@@ -26,9 +28,11 @@ var nivel3 =
     borde: "borde1-3",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
-    ]
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+]
 }
 var nivel4 = 
 {
@@ -36,9 +40,11 @@ var nivel4 =
     borde: "borde4-6",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
-    ]
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+]
 }
 var nivel5 = 
 {
@@ -46,9 +52,11 @@ var nivel5 =
     borde: "borde4-6",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
-    ]
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+]
 }
 var nivel6 = 
 {
@@ -56,9 +64,11 @@ var nivel6 =
     borde: "borde4-6",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
-    ]
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+]
 }
 var nivel7 = 
 {
@@ -66,9 +76,11 @@ var nivel7 =
     borde: "borde7-9",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
-    ]
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+]
 }
 var nivel8 = 
 {
@@ -76,8 +88,10 @@ var nivel8 =
     borde: "borde7-9",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
     ]
 }
 var nivel9 = 
@@ -86,8 +100,10 @@ var nivel9 =
     borde: "borde7-9",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
     ]
 }
 var nivel10 = 
@@ -96,7 +112,9 @@ var nivel10 =
     borde: "borde10-12",
     musica: "",
     burbuja: [
-        ["Am","Bl","Gr","Mo","Na","Ro","Ve","Am"],
-        ["Am"," ","Mo","Na","Ro"," ","Am"],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
+        [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
     ]
 }
