@@ -51,8 +51,10 @@ class Scene2 extends Phaser.Scene {
         // Colocacion de barras
         this.listaBarras = this.physics.add.staticGroup();
         this.listaBarras.add(this.add.sprite(30, 48, "barra_arriba").setOrigin(0, 0));
-        this.listaBarras.add(this.add.sprite(0, 68, "barra_lateralizda").setOrigin(0, 0));
-        this.listaBarras.add(this.add.sprite(376, 68, "barra_lateraldcha").setOrigin(0, 0));
+        this.barraLateralIzda = this.add.sprite(0, 68, "barra_lateralizda").setOrigin(0, 0);
+        this.listaBarras.add(this.barraLateralIzda);
+        this.barraLateralDcha = this.add.sprite(376, 68, "barra_lateraldcha").setOrigin(0, 0);
+        this.listaBarras.add(this.barraLateralDcha);
         this.add.sprite(366, 49, "barra_girodcha").setOrigin(0, 0);
         this.add.sprite(0, 49, "barra_giroizda").setOrigin(0, 0);
 
@@ -60,6 +62,7 @@ class Scene2 extends Phaser.Scene {
         var graphics = this.add.graphics();
         graphics.fillStyle("Black");
         graphics.fillRect(0, 0, config.width, 48);
+        this.scoreLabel = this.add.text(16, 8, "SCORE: 000000");
 
         // Sistema de colocacion de ladrillos por el nivel
         var posX = 40;
@@ -120,21 +123,24 @@ class Scene2 extends Phaser.Scene {
         /* this.listaLadrillos.getChildren().forEach(ladrillo => {
             ladrillo.update();
         }); */
-        this.listaPelotas.getChildren().forEach(element => {
-            element.update();
+        this.listaPelotas.getChildren().forEach(pelota => {
+            pelota.update();
         });
         
         // Añadimos el movimiento del jugador
         this.movimientoJugador();
-        this.listaJugador.getChildren().forEach(jugador => {
-            
-        });
     }
 
     colisionPelotaLadrillo(pelota, ladrillo) {
         this.reponerVelocidadPelota(pelota);
+        /* console.log(ladrillo.body.touching.down);
+        console.log(ladrillo.body.x) */
+        // Comprobar que no tenga ladrillos en el orden: abajo-izquierda-derecha-arriba
         ladrillo.destroy();
         this.click.play();
+        gameConfig.puntos += ladrillo.puntos;
+        let scoreFormated = this.zeroPad(gameConfig.puntos, 6);
+        this.scoreLabel.text = `SCORE: ${scoreFormated}`;
     }
 
     /**
@@ -163,15 +169,22 @@ class Scene2 extends Phaser.Scene {
 
     movimientoJugador() {
         this.listaJugador.getChildren().forEach(jugador => {
-            if (this.cursorKeys.left.isDown) {
+            if (this.cursorKeys.left.isDown && jugador.body.x > (this.barraLateralIzda.body.x + this.barraLateralIzda.body.width)) {
                 jugador.body.setVelocityX(gameConfig.velocidadJugadorX * -1);
-            } else if (this.cursorKeys.right.isDown) {
+            } else if (this.cursorKeys.right.isDown && (jugador.body.x + jugador.body.width) < this.barraLateralDcha.x) {
                 jugador.body.setVelocityX(gameConfig.velocidadJugadorX);
             } else {
                 jugador.body.setVelocityX(0);
             }
         });
-        
+    }
+
+    zeroPad(number, size) {
+        let stringNumber = String(number);
+        while (stringNumber.length < (size || 2)) {
+            stringNumber = "0" + stringNumber;
+        }
+        return stringNumber;
     }
 
 }

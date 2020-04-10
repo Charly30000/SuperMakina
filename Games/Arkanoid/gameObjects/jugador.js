@@ -4,6 +4,7 @@ class Jugador extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         scene.physics.world.enable(this);
         this.body.setCollideWorldBounds(true);
+        this.body.immovable = true;
 
         this.modoPegajoso = false;
         this.modoPistolero = false;

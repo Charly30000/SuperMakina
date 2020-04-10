@@ -5,6 +5,8 @@ class Ladrillo extends Phaser.GameObjects.Sprite {
         scene.physics.world.enable(this);
         this.body.immovable = true;
         this.body.setCollideWorldBounds(true);
+        
         this.movement = movement;
+        this.puntos = 20;
     }
 }
