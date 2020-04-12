@@ -1,36 +1,14 @@
 var gradosx;
 var arrayburbujas;
 var nivel;
+var cursors;
+var flechagirada = false;
+var animacionactual = 0;
 class Scene_play extends Phaser.Scene {
     constructor() {
         super({ key: "Scene_play" })
     }
     create() {
-        // esta mal revisar
-        this.flecha = this.add.sprite(this.sys.game.config.width / 2, 500, 'flechas');
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 57 }),
-            frameRate: 10,
-            // revisar esto por que hace que se repita desde el principio
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'turn',
-            frames: [{ key: 'dude', frame: 4 }],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-
-
         //comprueba en la variable global del init en que numero de nivel nos encontramos y coge del nivel(numero).js toda la informacion
         switch (numeronivel) {
             case 1:
@@ -74,6 +52,27 @@ class Scene_play extends Phaser.Scene {
         this.add.image(450, 300, nivel.fondo).setScale(3);
         this.add.image(this.sys.game.config.width / 2, 300, nivel.borde).setScale(3);
 
+        this.flecha = this.physics.add.sprite(this.sys.game.config.width / 2, 520, 'flecha').setScale(3);
+        this.anims.create({ 
+            key: 'left', 
+            frames: this.anims.generateFrameNumbers('flecha', { start: 0, end: 55 }),
+            frameRate: 10,
+            // revisar esto por que hace que se repita desde el principio
+        });
+
+        this.anims.create({
+            key: 'turn',
+            frames: [{ key: 'flecha', frame:  animacionactual}],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('flecha', { start: 0, end: 55 }),
+            frameRate: 10,
+            repeat : 0
+        });
+
 
         // crea el array de todas las filas del nivel para guardar las referencias de las burbujas
         arrayburbujas = new Array(this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7),
@@ -100,7 +99,7 @@ class Scene_play extends Phaser.Scene {
                     }
                     if (elemento != " ") {
                         arrayburbujas[fila][columna] = fila + "-" + columna;
-                        this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color).setScale(3));
+                        this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color, fila + "-" + columna).setScale(3));
                     }
                     //la fila es de 7
                 } else {
@@ -111,7 +110,7 @@ class Scene_play extends Phaser.Scene {
                     }
                     if (elemento != " ") {
                         arrayburbujas[fila][columna] = fila + "-" + columna;
-                        this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color).setScale(3));
+                        this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color, fila + "-" + columna).setScale(3));
                     }
                 }
                 columna++;
@@ -124,7 +123,8 @@ class Scene_play extends Phaser.Scene {
         this.lanzarbola = this.crearbolalanzar(this.sys.game.config.width / 2, 525);
         this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
         this.cursor_space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas,null,this);
+        this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
+        cursors = this.input.keyboard.createCursorKeys();
 
     }
 
@@ -155,14 +155,66 @@ class Scene_play extends Phaser.Scene {
     // crea una nueva bola con el color que le pasa colorbolanueva
     crearbolalanzar(x, y) {
         let colorlanzar = this.colorbolanueva();
-        console.log(colorlanzar);
-        return new BurbujaMovil(this, x, y, "burbuja" + colorlanzar, colorlanzar).setScale(3);
+        return new Burbuja(this, x, y, "burbuja" + colorlanzar, colorlanzar, " ").setScale(3);
     }
 
 
-
-    colisionPelotas() {
-        console.log("siiii");
+    //revisar
+    colisionPelotas(burbujamovil, burbuja) {
+        let color = burbujamovil.name;
+        let coordenadas = burbuja.posicion.split("-");
+        coordenadas[0] = parseInt(coordenadas[0]);
+        coordenadas[1] = parseInt(coordenadas[1]);
+        let xocho = this.sys.game.config.width / 3.2;
+        let xsiete = this.sys.game.config.width / 2.95;
+        let y = this.sys.game.config.height / 10;
+        if (burbujamovil.body.touching.up) {
+            if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0) {
+                coordenadas[1] = coordenadas[1] + 1;
+            }
+            coordenadas[0] = coordenadas[0] + 1;
+            if (coordenadas[0] % 2 == 0) {
+                this.burbujasNivel.add(new Burbuja(this, xocho + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
+            } else {
+                this.burbujasNivel.add(new Burbuja(this, xsiete + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
+            }
+            burbujamovil.destroy();
+            arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1];
+            this.modificarbolasmoviles();
+        } else if (burbujamovil.body.touching.right) {
+            burbujamovil.destroy();
+            coordenadas[1] = coordenadas[1] - 1;
+            if (coordenadas[0] % 2 == 0) {
+                this.lanzarbola.x = xocho + coordenadas[1] * 48;
+                this.burbujasNivel.add(new Burbuja(this, xocho + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
+            } else {
+                this.burbujasNivel.add(new Burbuja(this, xsiete + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
+            }
+            this.lanzarbola.y = y + coordenadas[0] * 45;
+            this.modificarbolasmoviles();
+            arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1];
+            console.log("derecha");
+            console.log(coordenadas[0], coordenadas[1]);
+            console.log(arrayburbujas);
+        } else if (burbujamovil.body.touching.left) {
+            burbujamovil.destroy();
+            coordenadas[1] = coordenadas[1] + 1;
+            if (coordenadas[0] % 2 == 0) {
+                this.burbujasNivel.add(new Burbuja(this, xocho + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
+            } else {
+                this.burbujasNivel.add(new Burbuja(this, xsiete + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
+            }
+            arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1];
+            this.modificarbolasmoviles();
+            console.log("izquierda");
+        }
+    }
+    modificarbolasmoviles() {
+        this.lanzarbola = this.lanzarbolasegunda;
+        this.lanzarbola.x = this.sys.game.config.width / 2,
+            this.lanzarbola.y = 525;
+        this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
+        this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
     }
     update() {
 
@@ -175,11 +227,30 @@ class Scene_play extends Phaser.Scene {
         }
         // para cambiar la velocidad si choca con el lado izquierdo
         if (this.lanzarbola.x < this.sys.game.config.width / 3.2) {
-        this.lanzarbola.body.velocity.set(gradosx, this.lanzarbola.body.velocity.y);
-        // para cambiar la velocidad si choca con el lado derecho
+            this.lanzarbola.body.velocity.set(gradosx, this.lanzarbola.body.velocity.y);
+            // para cambiar la velocidad si choca con el lado derecho
         } else if (this.lanzarbola.x > this.sys.game.config.width / 3.2 + 335) {
-        this.lanzarbola.body.velocity.set(-gradosx, this.lanzarbola.body.velocity.y);
+            this.lanzarbola.body.velocity.set(-gradosx, this.lanzarbola.body.velocity.y);
         }
+        if (cursors.left.isDown) {
+            if(!flechagirada) {
+                this.flecha.flipX =true;
+                flechagirada = true;
+            } 
+            this.flecha.anims.play('left', true);
+            animacionactual = 20;
+        }
+        else if (cursors.right.isDown) {
+            if(flechagirada) {
+                this.flecha.flipX =false;
+                flechagirada = false;
+            } 
+            this.flecha.anims.play('right', true);
+        }
+        else {
+            this.flecha.anims.play('turn');
+        }
+
         //this.scene.restart();
     }
 }
