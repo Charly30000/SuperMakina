@@ -157,6 +157,9 @@ class Scene2 extends Phaser.Scene {
         } else if (pelota.body.velocity.y <= 0) {
             pelota.body.velocity.y = gameConfig.velocidadPelotaY;
         }
+        if (pelota.body.velocity.x > gameConfig.velocidadJugadorX) {
+            pelota.body.velocity.x = gameConfig.velocidadJugadorX;
+        }
     }
 
     colisionPelotaBarras(pelota, barra) {
