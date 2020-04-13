@@ -17,11 +17,13 @@ class Pelota extends Phaser.GameObjects.Sprite {
         this.modoPelotaLenta = false;
     }
 
-    update() {
-        if (this.body.y > config.height) {
-            this.body.y = config.height/2;
-            this.body.x = config.width/2;
-            this.scene.quitarVida();
-        }
+
+}
+
+Pelota.prototype.update = function() {
+    if (this.body.y > config.height) {
+        this.body.y = config.height / 2;
+        this.body.x = config.width / 2;
+        this.scene.quitarVida();
     }
 }

@@ -130,6 +130,7 @@ class Scene2 extends Phaser.Scene {
                 }
                 return false;
         }, this);
+        
         this.physics.add.overlap(this.listaPelotas, this.listaLadrillosRegenerativos, this.overlapPelotaLadrilloRegenerativo, 
             function(pelota, ladrillo){
                 if (ladrillo.golpes <= 0) {
