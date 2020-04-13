@@ -17,7 +17,7 @@ class Bootloader extends Phaser.Scene {
         this.load.image("burbujaNa", "./assets/images/bolas/bolanaranja.png");
         this.load.image("burbujaRo", "./assets/images/bolas/bolaroja.png");
         this.load.image("burbujaVe", "./assets/images/bolas/bolaverde.png");
-        this.load.spritesheet('flecha','./assets/images/flechas/flecha.png',{ frameWidth: 64, frameHeight: 66});
+        this.load.image('flecha','./assets/images/flechas/flecha.png');
         this.load.image("inicio", "./assets/images/pantallainicial/titulo.jpg");
         this.load.image("fondo1-3", "./assets/images/Backgrounds/Background 1-3.png");
         this.load.image("fondo4-6", "./assets/images/Backgrounds/Background 4-6.png");

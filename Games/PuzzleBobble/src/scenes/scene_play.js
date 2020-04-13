@@ -1,9 +1,12 @@
-var gradosx;
+var movx;
 var arrayburbujas;
 var nivel;
 var cursors;
-var flechagirada = false;
-var animacionactual = 0;
+var flecha;
+var angulox = 0;
+var anguloy = - 900;
+var chocaizquierda = false;
+var chocaderecha = false;
 class Scene_play extends Phaser.Scene {
     constructor() {
         super({ key: "Scene_play" })
@@ -51,27 +54,7 @@ class Scene_play extends Phaser.Scene {
         // se carga el fondo y el borde segun el nivel en el que estas
         this.add.image(450, 300, nivel.fondo).setScale(3);
         this.add.image(this.sys.game.config.width / 2, 300, nivel.borde).setScale(3);
-
-        this.flecha = this.physics.add.sprite(this.sys.game.config.width / 2, 520, 'flecha').setScale(3);
-        this.anims.create({ 
-            key: 'left', 
-            frames: this.anims.generateFrameNumbers('flecha', { start: 0, end: 55 }),
-            frameRate: 10,
-            // revisar esto por que hace que se repita desde el principio
-        });
-
-        this.anims.create({
-            key: 'turn',
-            frames: [{ key: 'flecha', frame:  animacionactual}],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('flecha', { start: 0, end: 55 }),
-            frameRate: 10,
-            repeat : 0
-        });
+        this.flecha = this.add.image(this.sys.game.config.width / 1.99, 510, 'flecha').setScale(3);
 
 
         // crea el array de todas las filas del nivel para guardar las referencias de las burbujas
@@ -125,8 +108,8 @@ class Scene_play extends Phaser.Scene {
         this.cursor_space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
         cursors = this.input.keyboard.createCursorKeys();
-        let adyacentes = this.burbujasAdyacentes("0-0");
-        console.log(adyacentes);
+        //let adyacentes = this.burbujasAdyacentes("0-0");
+        //console.log(adyacentes);
     }
 
 
@@ -194,9 +177,6 @@ class Scene_play extends Phaser.Scene {
             this.lanzarbola.y = y + coordenadas[0] * 45;
             this.modificarbolasmoviles();
             arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1];
-            console.log("derecha");
-            console.log(coordenadas[0], coordenadas[1]);
-            console.log(arrayburbujas);
         } else if (burbujamovil.body.touching.left) {
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] + 1;
@@ -207,16 +187,27 @@ class Scene_play extends Phaser.Scene {
             }
             arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1];
             this.modificarbolasmoviles();
-            console.log("izquierda");
-        }
+            }
     }
     modificarbolasmoviles() {
         this.lanzarbola = this.lanzarbolasegunda;
         this.lanzarbola.x = this.sys.game.config.width / 2,
-            this.lanzarbola.y = 525;
+        this.lanzarbola.y = 525;
         this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
+        chocaizquierda = false;
+        chocaderecha = false;
     }
+
+
+
+
+
+
+
+
+
+
 
     // primero se detectan las burbujas del techo y luego por descarte las aisladas para borrarlas después
     detectarBurbujasAisladas() {
@@ -253,8 +244,8 @@ class Scene_play extends Phaser.Scene {
         });
         return arrayBurbujasAisladas;
     }
-	
-	// dado referencia "fila-columna"
+
+    // dado referencia "fila-columna"
     burbujasAdyacentes(posicion) {
         let coordenadas = posicion.split("-");
         let fila = parseInt(coordenadas[0]);
@@ -308,41 +299,60 @@ class Scene_play extends Phaser.Scene {
         }
         return arrayAdyacentes;
     }
-    update() {
 
+
+
+
+
+
+
+
+
+ 
+
+    update() {
         if (this.cursor_space.isDown) {
             // para darle velocidad si la pelota aun no ha sido lanzada
             if (this.lanzarbola.body.velocity.x == 0 && this.lanzarbola.body.velocity.y == 0) {
-                this.lanzarbola.body.velocity.set(-500, -100);
-                gradosx = -this.lanzarbola.body.velocity.x;
+                this.lanzarbola.body.velocity.set(angulox, anguloy);
+                movx = -this.lanzarbola.body.velocity.x;
             }
         }
         // para cambiar la velocidad si choca con el lado izquierdo
         if (this.lanzarbola.x < this.sys.game.config.width / 3.2) {
-            this.lanzarbola.body.velocity.set(gradosx, this.lanzarbola.body.velocity.y);
+            if(chocaderecha) {
+                movx = -movx;
+            }
+            this.lanzarbola.body.velocity.set(movx, this.lanzarbola.body.velocity.y);
+            chocaizquierda = true;
+            chocaderecha = false;
             // para cambiar la velocidad si choca con el lado derecho
         } else if (this.lanzarbola.x > this.sys.game.config.width / 3.2 + 335) {
-            this.lanzarbola.body.velocity.set(-gradosx, this.lanzarbola.body.velocity.y);
+            if(chocaizquierda) {
+                movx = -movx;
+            }
+            this.lanzarbola.body.velocity.set(movx, this.lanzarbola.body.velocity.y);
+            chocaizquierda = false;
+            chocaderecha = true;
         }
         if (cursors.left.isDown) {
-            if(!flechagirada) {
-                this.flecha.flipX =true;
-                flechagirada = true;
-            } 
-            this.flecha.anims.play('left', true);
-            animacionactual = 20;
-        }
-        else if (cursors.right.isDown) {
-            if(flechagirada) {
-                this.flecha.flipX =false;
-                flechagirada = false;
-            } 
-            this.flecha.anims.play('right', true);
-        }
-        else {
-            this.flecha.anims.play('turn');
-        }
+                if(angulox > 0) {
+                    anguloy -= 10;
+                }else {
+                    anguloy += 10;
+                }
+                angulox -= 10;
+                this.flecha.angle--; 
 
+        } else if (cursors.right.isDown) {
+                if(angulox > 0) {
+                    anguloy -= 10;
+                }else {
+                    anguloy += 10;
+                }
+                angulox += 10;
+                this.flecha.angle++; 
+            }
         //this.scene.restart();
     }
 }
