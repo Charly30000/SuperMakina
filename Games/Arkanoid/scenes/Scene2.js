@@ -62,16 +62,40 @@ class Scene2 extends Phaser.Scene {
         var graphics = this.add.graphics();
         graphics.fillStyle("Black");
         graphics.fillRect(0, 0, config.width, 48);
-        this.scoreLabel = this.add.text(16, 8, "SCORE: 000000");
+        this.scoreLabel = this.add.text(16, 8, `SCORE: ${this.zeroPad(gameConfig.puntos, 6)}`);
+        this.vidasLabel = this.add.text(16, 28, `Vidas: ${gameConfig.vidas}`);
+        this.nivelLabel = this.add.text(config.width - 100, 28, `Nivel: ${gameConfig.nivel}`);
 
         // Sistema de colocacion de ladrillos por el nivel
         var posX = 40;
         var posY = 80;
         this.listaLadrillos = this.add.group();
+        this.listaLadrillosIndestructibles = this.add.group();
+        this.listaLadrillosRegenerativos = this.add.group();
+        this.listaLadrillosDuros = this.add.group();
         cargaNivel.ladrillos.forEach(arrayLadrillos => {
             arrayLadrillos.forEach(element => {
                 if (element.ladrillo) {
-                    this.listaLadrillos.add(new Ladrillo(this, posX, posY, element.ladrillo, element.movement));
+                    switch (element.ladrillo) {
+                        case "ladrillo_indestructible":
+                            this.listaLadrillosIndestructibles.add(
+                                new LadrilloIndestructible(this, posX, posY, element.ladrillo, 
+                                    element.movement));
+                            break;
+                        case "ladrillo_regenerativo":
+                            this.listaLadrillosRegenerativos.add(
+                                new LadrilloRegenerativo(this, posX, posY, element.ladrillo, 
+                                    element.movement));
+                            break;
+                        case "ladrillo_duro":
+                            this.listaLadrillosDuros.add(
+                                new LadrilloDuro(this, posX, posY, element.ladrillo, element.movement));
+                            break;
+                        default:
+                            this.listaLadrillos.add(
+                                new Ladrillo(this, posX, posY, element.ladrillo, element.movement));
+                            break;
+                    }
                 }
                 posX += 32;
             });
@@ -90,8 +114,31 @@ class Scene2 extends Phaser.Scene {
         /**************** 
             COLISIONES
         *****************/
+        //Colision con izquierda, derecha, arriba, abajo
+        this.physics.world.setBoundsCollision(true, true, true, false);
         // Colision pelota - ladrillos
         this.physics.add.collider(this.listaPelotas, this.listaLadrillos, this.colisionPelotaLadrillo, null, this);
+        // Colision pelota - ladrillos indestructibles
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillosIndestructibles, this.colisionPelotaLadrilloIndestructible, null, this);
+        // Colision pelota - ladrillos regenerativos
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillosRegenerativos, this.colisionPelotaLadrilloRegenerativo, 
+            function(pelota, ladrillo){
+                ladrillo.golpes -= 1;
+                console.log("Golpes restantes del ladrillo regenerativo: " + ladrillo.golpes)
+                if (ladrillo.golpes > 0) {
+                    return true;
+                }
+                return false;
+        }, this);
+        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosRegenerativos, this.overlapPelotaLadrilloRegenerativo, 
+            function(pelota, ladrillo){
+                if (ladrillo.golpes <= 0) {
+                    return true;
+                }
+                return false;
+        }, this);
+        // Colision pelota - ladrillos duros
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillosDuros, this.colisionPelotaLadrilloDuro, null, this);
         // Colision pelota - barras
         this.physics.add.collider(this.listaPelotas, this.listaBarras, this.colisionPelotaBarras, null, this);
         // Colision pelota - jugador
@@ -126,21 +173,59 @@ class Scene2 extends Phaser.Scene {
         this.listaPelotas.getChildren().forEach(pelota => {
             pelota.update();
         });
-        
+
         // Añadimos el movimiento del jugador
         this.movimientoJugador();
+        if (this.cursorKeys.up.isDown) {
+            gameConfig.vidas += 1;
+            this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
+        }
     }
 
     colisionPelotaLadrillo(pelota, ladrillo) {
         this.reponerVelocidadPelota(pelota);
-        /* console.log(ladrillo.body.touching.down);
-        console.log(ladrillo.body.x) */
-        // Comprobar que no tenga ladrillos en el orden: abajo-izquierda-derecha-arriba
         ladrillo.destroy();
         this.click.play();
-        gameConfig.puntos += ladrillo.puntos;
-        let scoreFormated = this.zeroPad(gameConfig.puntos, 6);
-        this.scoreLabel.text = `SCORE: ${scoreFormated}`;
+        this.aumentarPuntos(ladrillo);
+        // Sistema de cambio de nivel
+        this.comprobarCambiarNivel();
+    }
+
+    colisionPelotaLadrilloIndestructible(pelota, ladrillo) {
+        this.reponerVelocidadPelota(pelota);
+        this.click.play();
+        this.comprobarCambiarNivel();
+    }
+
+    colisionPelotaLadrilloRegenerativo(pelota, ladrillo) {
+        this.reponerVelocidadPelota(pelota);
+        this.click.play();
+    }
+
+    overlapPelotaLadrilloRegenerativo(pelota, ladrillo) {
+        let posX = ladrillo.body.x;
+        let posY = ladrillo.body.y;
+        let movement = ladrillo.movement;
+        this.aumentarPuntos(ladrillo);
+        ladrillo.destroy();
+        this.time.addEvent({
+            delay: 1000,
+            callback: this.reponerLadrilloRegenerativo,
+            callbackScope: this,
+            loop: false,
+            args: [posX, posY, movement]
+        });
+    }
+
+    colisionPelotaLadrilloDuro(pelota, ladrillo) {
+        this.reponerVelocidadPelota(pelota);
+        this.click.play();
+        ladrillo.golpes -= 1;
+        if (ladrillo.golpes <= 0) {
+            ladrillo.destroy();
+        }
+        this.aumentarPuntos(ladrillo);
+        this.comprobarCambiarNivel();
     }
 
     /**
@@ -152,13 +237,17 @@ class Scene2 extends Phaser.Scene {
      * @param {*} pelota Pasar el objeto de la pelota para reponerle la velocidad original marcada
      */
     reponerVelocidadPelota(pelota) {
+        // Comprobacion para que no supere la velocidad en Y
         if (pelota.body.velocity.y > 0) {
             pelota.body.velocity.y = gameConfig.velocidadPelotaY * -1;
         } else if (pelota.body.velocity.y <= 0) {
             pelota.body.velocity.y = gameConfig.velocidadPelotaY;
         }
+        // Comprobacion para que no supere la velocidad en X del jugador
         if (pelota.body.velocity.x > gameConfig.velocidadJugadorX) {
             pelota.body.velocity.x = gameConfig.velocidadJugadorX;
+        } else if (pelota.body.velocity.x < gameConfig.velocidadJugadorX * -1) {
+            pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
         }
     }
 
@@ -188,6 +277,39 @@ class Scene2 extends Phaser.Scene {
             stringNumber = "0" + stringNumber;
         }
         return stringNumber;
+    }
+
+    quitarVida() {
+        gameConfig.vidas -= 1;
+        this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
+        if (gameConfig.vidas <= 0) {
+            this.resetearJuego();
+        }
+    }
+
+    resetearJuego() {
+        gameConfig.vidas = 3;
+        gameConfig.nivel = 1;
+        gameConfig.puntos = 0;
+        this.scene.restart();
+    }
+
+    /* Comprueba si los ladrillos que quedan, si no quedan ladrillos por destruir, cambia de nivel */
+    comprobarCambiarNivel() {
+        if (this.listaLadrillos.getLength() <= 0 && this.listaLadrillosDuros.getLength() <= 0) {
+            gameConfig.nivel += 1;
+            this.scene.restart();
+        }
+    }
+
+    reponerLadrilloRegenerativo(posX, posY, movement) {
+        this.listaLadrillosRegenerativos.add(new LadrilloRegenerativo(this, posX, posY, "ladrillo_regenerativo", movement).setOrigin(0, 0));
+    }
+
+    aumentarPuntos(ladrillo) {
+        gameConfig.puntos += ladrillo.puntos;
+        let scoreFormated = this.zeroPad(gameConfig.puntos, 6);
+        this.scoreLabel.text = `SCORE: ${scoreFormated}`;
     }
 
 }

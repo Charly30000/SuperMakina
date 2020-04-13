@@ -17,6 +17,7 @@ var config = {
 var gameConfig = {
     nivel : 1,
     puntos: 0,
+    vidas: 3,
     velocidadPelotaY: -200,
     velocidadJugadorX: 300,
     posicionJugadorX: config.width / 2,
