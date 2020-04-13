@@ -125,7 +125,8 @@ class Scene_play extends Phaser.Scene {
         this.cursor_space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
         cursors = this.input.keyboard.createCursorKeys();
-
+        let adyacentes = this.burbujasAdyacentes("0-0");
+        console.log(adyacentes);
     }
 
 
@@ -215,6 +216,97 @@ class Scene_play extends Phaser.Scene {
             this.lanzarbola.y = 525;
         this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
+    }
+
+    // primero se detectan las burbujas del techo y luego por descarte las aisladas para borrarlas después
+    detectarBurbujasAisladas() {
+        let arrayBurbujasAisladas = [];
+        let setBurbujasVisitadas = new Set();
+        let burbujasAVisitar = []; // lo que usaremos a modo de pila
+        for (let i = 0; i < arrayburbujas[0].length; i++) {
+            if (arrayburbujas[0][i] != " ") {
+                burbujasAVisitar.push(arrayburbujas[0][i]);
+                setBurbujasVisitadas.add(arrayburbujas[0][i]);
+            }
+        }
+        let burbuja;
+        let adyacentes;
+        while (burbujasAVisitar.length != 0) {
+            burbuja = burbujasAVisitar.pop();
+            adyacentes = this.burbujasAdyacentes(burbuja);
+            adyacentes.forEach(adyacente => {
+                if (!setBurbujasVisitadas.has(adyacente)) {
+                    burbujasAVisitar.push(adyacente);
+                    setBurbujasVisitadas.add(adyacente);
+                }
+            });
+        }
+
+        arrayburbujas.forEach(fila => {
+            fila.forEach(burbuja => {
+                if (burbuja != " ") {
+                    if (!setBurbujasVisitadas.has(burbuja)) {
+                        arrayBurbujasAisladas.push(burbuja);
+                    }
+                }
+            });
+        });
+        return arrayBurbujasAisladas;
+    }
+	
+	// dado referencia "fila-columna"
+    burbujasAdyacentes(posicion) {
+        let coordenadas = posicion.split("-");
+        let fila = parseInt(coordenadas[0]);
+        let columna = parseInt(coordenadas[1]);
+        let arrayAdyacentes = [];
+        // fila de 8
+        if (fila % 2 == 0) {
+            // burbujas superiores
+            if (fila - 1 >= 0) {
+                if ((columna - 1 >= 0) && (arrayburbujas[fila - 1][columna - 1] != " ")) {
+                    arrayAdyacentes.push(arrayburbujas[fila - 1][columna - 1]);
+                }
+                if ((columna <= arrayburbujas[fila - 1].length - 1) && (arrayburbujas[fila - 1][columna] != " ")) {
+                    arrayAdyacentes.push(arrayburbujas[fila - 1][columna]);
+                }
+            }
+            // burbujas inferiores
+            if (fila + 1 <= arrayburbujas.length) {
+                if ((columna - 1 >= 0) && (arrayburbujas[fila + 1][columna - 1] != " ")) {
+                    arrayAdyacentes.push(arrayburbujas[fila + 1][columna - 1]);
+                }
+                if ((columna <= arrayburbujas[fila + 1].length - 1) && (arrayburbujas[fila + 1][columna] != " ")) {
+                    arrayAdyacentes.push(arrayburbujas[fila + 1][columna]);
+                }
+            }
+            // fila de 7
+        } else {
+            // burbujas superiores
+            if (arrayburbujas[fila - 1][columna] != " ") {
+                arrayAdyacentes.push(arrayburbujas[fila - 1][columna]);
+            }
+            if (arrayburbujas[fila - 1][columna + 1] != " ") {
+                arrayAdyacentes.push(arrayburbujas[fila - 1][columna + 1]);
+            }
+            // burbujas inferiores
+            if (fila + 1 <= arrayburbujas.length) {
+                if (arrayburbujas[fila + 1][columna] != " ") {
+                    arrayAdyacentes.push(arrayburbujas[fila + 1][columna]);
+                }
+                if (arrayburbujas[fila + 1][columna + 1] != " ") {
+                    arrayAdyacentes.push(arrayburbujas[fila + 1][columna + 1]);
+                }
+            }
+        }
+        // burbujas laterales
+        if ((columna - 1 >= 0) && (arrayburbujas[fila][columna - 1] != " ")) {
+            arrayAdyacentes.push(arrayburbujas[fila][columna - 1]);
+        }
+        if ((columna < arrayburbujas[fila].length - 1) && (arrayburbujas[fila][columna + 1] != " ")) {
+            arrayAdyacentes.push(arrayburbujas[fila][columna + 1]);
+        }
+        return arrayAdyacentes;
     }
     update() {
 
