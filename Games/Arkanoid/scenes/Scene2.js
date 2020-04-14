@@ -105,8 +105,7 @@ class Scene2 extends Phaser.Scene {
 
         // Pelotas
         this.listaPelotas = this.add.group();
-        this.listaPelotas.add(new Pelota(this, config.width / 2, config.height / 2, "bola_blanca"));
-
+        this.listaPelotas.add(new Pelota(this, gameConfig.posicionPelotaX, gameConfig.posicionPelotaY, "bola_blanca"));
         // Jugador
         this.listaJugador = this.add.group();
         this.listaJugador.add(
@@ -162,6 +161,7 @@ class Scene2 extends Phaser.Scene {
             TECLADO
         *************/
         this.cursorKeys = this.input.keyboard.createCursorKeys();
+        this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     }
 
@@ -182,6 +182,17 @@ class Scene2 extends Phaser.Scene {
 
         // Añadimos el movimiento del jugador
         this.movimientoJugador();
+        // Hago que si la pelota está por empezar en el juego, se pueda disparar
+        // Funciona en caso de que empiece la partida o el jugador pierda una vida
+        if (gameConfig.inicioPelota) {
+            if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
+                gameConfig.inicioPelota = false;
+                this.listaPelotas.getChildren().forEach(pelota => {
+                    //pelota.body.velocity.set(Phaser.Math.Between(-120, 120), gameConfig.velocidadPelotaY);
+                    pelota.body.velocity.set(gameConfig.velocidadJugadorX, gameConfig.velocidadPelotaY);
+                });
+            }
+        }
         if (this.cursorKeys.up.isDown) {
             gameConfig.vidas += 1;
             this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
@@ -268,10 +279,28 @@ class Scene2 extends Phaser.Scene {
         this.listaJugador.getChildren().forEach(jugador => {
             if (this.cursorKeys.left.isDown && jugador.body.x > (this.barraLateralIzda.body.x + this.barraLateralIzda.body.width)) {
                 jugador.body.setVelocityX(gameConfig.velocidadJugadorX * -1);
+                // Funciona en caso de que empiece la partida o el jugador pierda una vida
+                if (gameConfig.inicioPelota) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
+                    });
+                }
             } else if (this.cursorKeys.right.isDown && (jugador.body.x + jugador.body.width) < this.barraLateralDcha.x) {
                 jugador.body.setVelocityX(gameConfig.velocidadJugadorX);
+                // Funciona en caso de que empiece la partida o el jugador pierda una vida
+                if (gameConfig.inicioPelota) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        pelota.body.velocity.x = gameConfig.velocidadJugadorX;
+                    });
+                }
             } else {
                 jugador.body.setVelocityX(0);
+                // Funciona en caso de que empiece la partida o el jugador pierda una vida
+                if (gameConfig.inicioPelota) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        pelota.body.velocity.x = 0;
+                    });
+                }
             }
         });
     }
@@ -318,4 +347,24 @@ class Scene2 extends Phaser.Scene {
         this.scoreLabel.text = `SCORE: ${scoreFormated}`;
     }
 
+    /* 
+        Funcion que elimina todos los objetos de la listaJugador y listaPelotas,
+        generando asi un "inicio de juego", con una pelota y un jugador nuevos
+        hecha principalmente para cuando el jugador pierde una vida
+    */
+    colocarPelotaYJugador() {
+        gameConfig.inicioPelota = true;
+        this.listaJugador.getChildren().forEach(jugador => {
+            jugador.destroy();
+        });
+
+        this.listaPelotas.getChildren().forEach(pelota => {
+            pelota.destroy();
+        });
+
+        this.listaPelotas.add(
+            new Pelota(this, gameConfig.posicionPelotaX, gameConfig.posicionPelotaY, "bola_blanca"));
+        this.listaJugador.add(
+            new Jugador(this, gameConfig.posicionJugadorX, gameConfig.posicionJugadorY, "jugador_normal"));
+    }
 }

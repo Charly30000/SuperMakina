@@ -18,10 +18,13 @@ var gameConfig = {
     nivel : 1,
     puntos: 0,
     vidas: 3,
+    inicioPelota: true,
     velocidadPelotaY: -200,
     velocidadJugadorX: 300,
     posicionJugadorX: config.width / 2,
-    posicionJugadorY: config.height - 50
+    posicionJugadorY: config.height - 50,
+    posicionPelotaX: config.width / 2,
+    posicionPelotaY: config.height - 50 - 16
 };
 
 var game = new Phaser.Game(config);
