@@ -109,7 +109,8 @@ class Scene2 extends Phaser.Scene {
 
         // Jugador
         this.listaJugador = this.add.group();
-        this.listaJugador.add(new Jugador(this, gameConfig.posicionJugadorX, gameConfig.posicionJugadorY, "jugador_normal"));
+        this.listaJugador.add(
+            new Jugador(this, gameConfig.posicionJugadorX, gameConfig.posicionJugadorY, "jugador_normal"));
 
         /**************** 
             COLISIONES
@@ -117,11 +118,14 @@ class Scene2 extends Phaser.Scene {
         //Colision con izquierda, derecha, arriba, abajo
         this.physics.world.setBoundsCollision(true, true, true, false);
         // Colision pelota - ladrillos
-        this.physics.add.collider(this.listaPelotas, this.listaLadrillos, this.colisionPelotaLadrillo, null, this);
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillos, 
+            this.colisionPelotaLadrillo, null, this);
         // Colision pelota - ladrillos indestructibles
-        this.physics.add.collider(this.listaPelotas, this.listaLadrillosIndestructibles, this.colisionPelotaLadrilloIndestructible, null, this);
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillosIndestructibles, 
+            this.colisionPelotaLadrilloIndestructible, null, this);
         // Colision pelota - ladrillos regenerativos
-        this.physics.add.collider(this.listaPelotas, this.listaLadrillosRegenerativos, this.colisionPelotaLadrilloRegenerativo, 
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillosRegenerativos, 
+            this.colisionPelotaLadrilloRegenerativo, 
             function(pelota, ladrillo){
                 ladrillo.golpes -= 1;
                 console.log("Golpes restantes del ladrillo regenerativo: " + ladrillo.golpes)
@@ -131,7 +135,8 @@ class Scene2 extends Phaser.Scene {
                 return false;
         }, this);
         
-        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosRegenerativos, this.overlapPelotaLadrilloRegenerativo, 
+        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosRegenerativos, 
+            this.overlapPelotaLadrilloRegenerativo, 
             function(pelota, ladrillo){
                 if (ladrillo.golpes <= 0) {
                     return true;
@@ -195,7 +200,6 @@ class Scene2 extends Phaser.Scene {
     colisionPelotaLadrilloIndestructible(pelota, ladrillo) {
         this.reponerVelocidadPelota(pelota);
         this.click.play();
-        this.comprobarCambiarNivel();
     }
 
     colisionPelotaLadrilloRegenerativo(pelota, ladrillo) {
@@ -304,7 +308,8 @@ class Scene2 extends Phaser.Scene {
     }
 
     reponerLadrilloRegenerativo(posX, posY, movement) {
-        this.listaLadrillosRegenerativos.add(new LadrilloRegenerativo(this, posX, posY, "ladrillo_regenerativo", movement).setOrigin(0, 0));
+        this.listaLadrillosRegenerativos.add(
+            new LadrilloRegenerativo(this, posX, posY, "ladrillo_regenerativo", movement).setOrigin(0, 0));
     }
 
     aumentarPuntos(ladrillo) {
