@@ -11,7 +11,10 @@ class Scene_play extends Phaser.Scene {
     constructor() {
         super({ key: "Scene_play" })
     }
+
+
     create() {
+
         //comprueba en la variable global del init en que numero de nivel nos encontramos y coge del nivel(numero).js toda la informacion
         switch (numeronivel) {
             case 1:
@@ -54,12 +57,15 @@ class Scene_play extends Phaser.Scene {
         // se carga el fondo y el borde segun el nivel en el que estas
         this.add.image(450, 300, nivel.fondo).setScale(3);
         this.add.image(this.sys.game.config.width / 2, 300, nivel.borde).setScale(3);
+
+        //se crea la flecha
         this.flecha = this.add.image(this.sys.game.config.width / 1.99, 510, 'flecha').setScale(3);
 
 
         // crea el array de todas las filas del nivel para guardar las referencias de las burbujas
         arrayburbujas = new Array(this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7),
             this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7), this.crearfila(8));
+
 
         // se crean las bolas del nivel, guardandolas en un grupo de phaser y guardando una referencia es su lugar del
         // mapa en el array
@@ -81,8 +87,8 @@ class Scene_play extends Phaser.Scene {
                         x = x + 48;
                     }
                     if (elemento != " ") {
-                        arrayburbujas[fila][columna] = fila + "-" + columna;
-                        this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color, fila + "-" + columna).setScale(3));
+                        arrayburbujas[fila][columna] = fila + "-" + columna + "-" + elemento.color;
+                        this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color, fila + "-" + columna + "-" + elemento.color).setScale(3));
                     }
                     //la fila es de 7
                 } else {
@@ -92,8 +98,8 @@ class Scene_play extends Phaser.Scene {
                         x = x + 48;
                     }
                     if (elemento != " ") {
-                        arrayburbujas[fila][columna] = fila + "-" + columna;
-                        this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color, fila + "-" + columna).setScale(3));
+                        arrayburbujas[fila][columna] = fila + "-" + columna + "-" + elemento.color;
+                        this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color, fila + "-" + columna + "-" + elemento.color).setScale(3));
                     }
                 }
                 columna++;
@@ -101,13 +107,19 @@ class Scene_play extends Phaser.Scene {
         });
 
 
-        this.colorbolanueva();
+
         // se crean las dos bolas de lanzar
         this.lanzarbola = this.crearbolalanzar(this.sys.game.config.width / 2, 525);
         this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
+
+
         this.cursor_space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
         cursors = this.input.keyboard.createCursorKeys();
+
+
+        // colision entre burbuja movil y el grupo de burbujas
+        this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
+
         //let adyacentes = this.burbujasAdyacentes("0-0");
         //console.log(adyacentes);
     }
@@ -149,50 +161,57 @@ class Scene_play extends Phaser.Scene {
         let coordenadas = burbuja.posicion.split("-");
         coordenadas[0] = parseInt(coordenadas[0]);
         coordenadas[1] = parseInt(coordenadas[1]);
-        let xocho = this.sys.game.config.width / 3.2;
-        let xsiete = this.sys.game.config.width / 2.95;
-        let y = this.sys.game.config.height / 10;
         if (burbujamovil.body.touching.up) {
+            burbujamovil.destroy();
             if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0) {
                 coordenadas[1] = coordenadas[1] + 1;
             }
             coordenadas[0] = coordenadas[0] + 1;
-            if (coordenadas[0] % 2 == 0) {
-                this.burbujasNivel.add(new Burbuja(this, xocho + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
-            } else {
-                this.burbujasNivel.add(new Burbuja(this, xsiete + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
-            }
-            burbujamovil.destroy();
-            arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1];
-            this.modificarbolasmoviles();
+            this.posicionarpelota(coordenadas, color);
+
+
         } else if (burbujamovil.body.touching.right) {
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] - 1;
-            if (coordenadas[0] % 2 == 0) {
-                this.lanzarbola.x = xocho + coordenadas[1] * 48;
-                this.burbujasNivel.add(new Burbuja(this, xocho + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
-            } else {
-                this.burbujasNivel.add(new Burbuja(this, xsiete + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
-            }
-            this.lanzarbola.y = y + coordenadas[0] * 45;
-            this.modificarbolasmoviles();
-            arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1];
+            this.posicionarpelota(coordenadas, color);
+
         } else if (burbujamovil.body.touching.left) {
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] + 1;
-            if (coordenadas[0] % 2 == 0) {
-                this.burbujasNivel.add(new Burbuja(this, xocho + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
-            } else {
-                this.burbujasNivel.add(new Burbuja(this, xsiete + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1]).setScale(3));
-            }
-            arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1];
-            this.modificarbolasmoviles();
-            }
+            this.posicionarpelota(coordenadas, color);
+        }
     }
+
+
+    posicionarpelota(coordenadas, color) {
+        let xocho = this.sys.game.config.width / 3.2;
+        let xsiete = this.sys.game.config.width / 2.95;
+        let y = this.sys.game.config.height / 10;
+        if (coordenadas[0] % 2 == 0) {
+            this.burbujasNivel.add(new Burbuja(this, xocho + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1] + "-" + color).setScale(3));
+        } else {
+            this.burbujasNivel.add(new Burbuja(this, xsiete + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1] + "-" + color).setScale(3));
+        }
+        arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1] + "-" + color;
+        let choquebolas = this.detectarsiexplosion(coordenadas[0] + "-" + coordenadas[1] + "-" + color);
+        if (choquebolas.length > 3) {
+            this.eliminarbolas(choquebolas);
+            let aisladas = this.detectarBurbujasAisladas();
+            if (aisladas.length > 0) {
+                console.log("hola");
+                this.eliminarbolas(aisladas);
+            }
+        }
+        this.modificarbolasmoviles();
+    }
+
+
+
+
     modificarbolasmoviles() {
         this.lanzarbola = this.lanzarbolasegunda;
         this.lanzarbola.x = this.sys.game.config.width / 2,
-        this.lanzarbola.y = 525;
+            this.lanzarbola.y = 525;
         this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
         chocaizquierda = false;
@@ -200,9 +219,55 @@ class Scene_play extends Phaser.Scene {
     }
 
 
+    eliminarbolas(array) {
+        while (array.length != 0) {
+            let burbujaarray = array.pop();
+            this.burbujasNivel.getChildren().forEach(burbuja => {
+                if(burbuja.posicion == burbujaarray) {
+                    burbuja.destroy();
+                }
+            });
+            for (let i = 0; i < arrayburbujas.length; i++) {
+                for (let j = 0; j < arrayburbujas[i].length; j++) {
+                    if(arrayburbujas[i][j] == burbujaarray) {
+                        arrayburbujas[i][j] = " ";
+                    } 
+                }
+             
+             }
+        }
+    }
 
 
 
+    detectarsiexplosion(posicion) {
+        let arrayBurbujasAisladas = [];
+        let setBurbujasVisitadas = new Set();
+        let burbujasAVisitar = []; // lo que usaremos a modo de pila
+        let burbujapasada = posicion.split("-");
+        let colorBurbuja = burbujapasada[2];
+        burbujasAVisitar.push(posicion);
+        setBurbujasVisitadas.add(posicion);
+        arrayBurbujasAisladas.push(posicion);
+        let burbuja;
+        let adyacentes;
+
+        while (burbujasAVisitar.length != 0) {
+            burbuja = burbujasAVisitar.pop();
+            adyacentes = this.burbujasAdyacentes(burbuja);
+            adyacentes.forEach(adyacente => {
+                let coordenadas = adyacente.split("-");
+                if (!setBurbujasVisitadas.has(adyacente)) {
+                    if (colorBurbuja == coordenadas[2]) {
+                        burbujasAVisitar.push(adyacente);
+                        setBurbujasVisitadas.add(adyacente);
+                        arrayBurbujasAisladas.push(adyacente);
+                    }
+                }
+            });
+        }
+        return arrayBurbujasAisladas;
+    }
 
 
 
@@ -244,6 +309,10 @@ class Scene_play extends Phaser.Scene {
         });
         return arrayBurbujasAisladas;
     }
+
+
+
+
 
     // dado referencia "fila-columna"
     burbujasAdyacentes(posicion) {
@@ -308,7 +377,7 @@ class Scene_play extends Phaser.Scene {
 
 
 
- 
+
 
     update() {
         if (this.cursor_space.isDown) {
@@ -320,7 +389,7 @@ class Scene_play extends Phaser.Scene {
         }
         // para cambiar la velocidad si choca con el lado izquierdo
         if (this.lanzarbola.x < this.sys.game.config.width / 3.2) {
-            if(chocaderecha) {
+            if (chocaderecha) {
                 movx = -movx;
             }
             this.lanzarbola.body.velocity.set(movx, this.lanzarbola.body.velocity.y);
@@ -328,7 +397,7 @@ class Scene_play extends Phaser.Scene {
             chocaderecha = false;
             // para cambiar la velocidad si choca con el lado derecho
         } else if (this.lanzarbola.x > this.sys.game.config.width / 3.2 + 335) {
-            if(chocaizquierda) {
+            if (chocaizquierda) {
                 movx = -movx;
             }
             this.lanzarbola.body.velocity.set(movx, this.lanzarbola.body.velocity.y);
@@ -336,23 +405,25 @@ class Scene_play extends Phaser.Scene {
             chocaderecha = true;
         }
         if (cursors.left.isDown) {
-                if(angulox > 0) {
-                    anguloy -= 10;
-                }else {
-                    anguloy += 10;
-                }
-                angulox -= 10;
-                this.flecha.angle--; 
+            if (angulox < 0) {
+                anguloy += 10;
+            } else {
+                anguloy -= 10;
+            }
+            angulox -= 10;
+            this.flecha.angle--;
 
         } else if (cursors.right.isDown) {
-                if(angulox > 0) {
-                    anguloy -= 10;
-                }else {
-                    anguloy += 10;
-                }
-                angulox += 10;
-                this.flecha.angle++; 
+            //derecha
+            if (angulox > 0) {
+                anguloy += 10;
+            } else {
+                anguloy -= 10;
             }
+            angulox += 10;
+            this.flecha.angle++;
+
+        }
         //this.scene.restart();
     }
 }
