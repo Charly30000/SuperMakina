@@ -162,7 +162,7 @@ class Scene2 extends Phaser.Scene {
         *************/
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
+        console.log(Phaser.Input.Keyboard.KeyCodes);
     }
 
     update() {
@@ -197,6 +197,7 @@ class Scene2 extends Phaser.Scene {
             gameConfig.vidas += 1;
             this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
         }
+        
     }
 
     colisionPelotaLadrillo(pelota, ladrillo) {
@@ -332,6 +333,7 @@ class Scene2 extends Phaser.Scene {
     comprobarCambiarNivel() {
         if (this.listaLadrillos.getLength() <= 0 && this.listaLadrillosDuros.getLength() <= 0) {
             gameConfig.nivel += 1;
+            gameConfig.inicioPelota = true;
             this.scene.restart();
         }
     }
