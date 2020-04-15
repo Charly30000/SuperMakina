@@ -209,23 +209,9 @@ class Scene2 extends Phaser.Scene {
         this.listaJugador.getChildren().forEach(jugador => {
             // Parte izda amarillo
             this.graphicos.fillStyle(0xfcd422);
-            this.graphicos.fillRect(jugador.body.x, jugador.body.y, 4, 4);
+            this.graphicos.fillRect(jugador.body.x, jugador.body.y, 14, 4);
             // Parte dcha amarillo
-            this.graphicos.fillRect(jugador.body.x + jugador.body.width, jugador.body.y, -4, 4);
-
-            // Parte medio-izda morado
-            this.graphicos.fillStyle(0xfb1edd);
-            this.graphicos.fillRect(jugador.body.x + 4, jugador.body.y, 
-                Math.floor(jugador.body.width / 5), 4);
-            // Parte medio-dcha morado
-            this.graphicos.fillRect(jugador.body.x + jugador.body.width - 4, jugador.body.y, 
-                Math.floor(jugador.body.width / 5) * -1, 4);
-
-            // Parte centro-izda rojo
-            this.graphicos.fillStyle(0xf20517);
-            this.graphicos.fillRect(jugador.body.x + 4 + 12, jugador.body.y, 12, 4)
-            // Parte centro-dcha rojo
-            this.graphicos.fillRect(jugador.body.x + jugador.body.width - 4 - 12, jugador.body.y, -12, 4);
+            this.graphicos.fillRect(jugador.body.x + jugador.body.width, jugador.body.y, -14, 4);
 
         });
         /* --------------------------------------------------------------------------------------- */
@@ -309,27 +295,31 @@ class Scene2 extends Phaser.Scene {
             console.log("Toca en la IZDA del jugador");
             if (pelota.body.velocity.x > 0) {
                 console.log("voy a la dcha");
-                if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 4 /* Es el pico del lado izdo */) {
+                if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 14 /* Zona naranja lado izdo */) {
                     pelota.body.velocity.x *= -1
                 } else {
                     // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
-                    pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) + 40;
+                    pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) 
+                    + Phaser.Math.Between(30, 45);
                 }
             } else {
                 console.log("voy a la izda");
-                pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) - 40;
+                pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) 
+                - Phaser.Math.Between(30, 45);
             }
         } else {
             console.log("Toca en la DCHA del jugador");
             if (pelota.body.velocity.x > 0) {
                 console.log("voy a la dcha");
-                pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) + 40;
+                pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) 
+                + Phaser.Math.Between(30, 45);
             } else {
                 console.log("voy a la izda");
-                if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 4) /* Es el pico del lado dcho */) {
+                if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 14) /* Zona naranja lado dcho */) {
                     pelota.body.velocity.x *= -1;
                 } else {
-                    pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) - 40;
+                    pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) 
+                    - Phaser.Math.Between(30, 45);
                 }
             }
         }
