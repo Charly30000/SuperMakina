@@ -209,9 +209,9 @@ class Scene2 extends Phaser.Scene {
         this.listaJugador.getChildren().forEach(jugador => {
             // Parte izda amarillo
             this.graphicos.fillStyle(0xfcd422);
-            this.graphicos.fillRect(jugador.body.x, jugador.body.y, 14, 4);
+            this.graphicos.fillRect(jugador.body.x, jugador.body.y, 7, 4);
             // Parte dcha amarillo
-            this.graphicos.fillRect(jugador.body.x + jugador.body.width, jugador.body.y, -14, 4);
+            this.graphicos.fillRect(jugador.body.x + jugador.body.width, jugador.body.y, -7, 4);
 
         });
         /* --------------------------------------------------------------------------------------- */
@@ -295,7 +295,7 @@ class Scene2 extends Phaser.Scene {
             console.log("Toca en la IZDA del jugador");
             if (pelota.body.velocity.x > 0) {
                 console.log("voy a la dcha");
-                if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 14 /* Zona naranja lado izdo */) {
+                if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 7 /* Zona naranja lado izdo */) {
                     pelota.body.velocity.x *= -1
                 } else {
                     // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
@@ -315,7 +315,7 @@ class Scene2 extends Phaser.Scene {
                 + Phaser.Math.Between(30, 45);
             } else {
                 console.log("voy a la izda");
-                if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 14) /* Zona naranja lado dcho */) {
+                if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 7) /* Zona naranja lado dcho */) {
                     pelota.body.velocity.x *= -1;
                 } else {
                     pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) 
