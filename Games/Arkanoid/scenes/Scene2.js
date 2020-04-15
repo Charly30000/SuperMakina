@@ -166,7 +166,7 @@ class Scene2 extends Phaser.Scene {
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Linea a borrar debido a que es para ver donde hacer el cambio de rumbo de la pelota
-        this.graphicos = this.add.graphics();
+        /* this.graphicos = this.add.graphics(); */
     }
 
     update() {
@@ -205,7 +205,7 @@ class Scene2 extends Phaser.Scene {
 
         /* --------------------------------------------------------------------------------------- */
         /* A borrar en cuanto se termine de hacer la decision del cambio de direccion de la pelota */
-        this.graphicos.clear();
+        /* this.graphicos.clear();
         this.listaJugador.getChildren().forEach(jugador => {
             // Parte izda amarillo
             this.graphicos.fillStyle(0xfcd422);
@@ -213,7 +213,7 @@ class Scene2 extends Phaser.Scene {
             // Parte dcha amarillo
             this.graphicos.fillRect(jugador.body.x + jugador.body.width, jugador.body.y, -7, 4);
 
-        });
+        }); */
         /* --------------------------------------------------------------------------------------- */
 
     }
@@ -311,15 +311,17 @@ class Scene2 extends Phaser.Scene {
             console.log("Toca en la DCHA del jugador");
             if (pelota.body.velocity.x > 0) {
                 console.log("voy a la dcha");
-                pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) 
-                - Phaser.Math.Between(30, 45);
+                pelota.body.velocity.x = pelota.body.velocity.x - 
+                    (pelota.body.x - jugador.body.x - jugador.body.width) 
+                        - Phaser.Math.Between(30, 45);
             } else {
                 console.log("voy a la izda");
                 if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 7) /* Zona naranja lado dcho */) {
                     pelota.body.velocity.x *= -1;
                 } else {
-                    pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) 
-                    + Phaser.Math.Between(30, 45);
+                    pelota.body.velocity.x = pelota.body.velocity.x + 
+                        (pelota.body.x - jugador.body.x - jugador.body.width) 
+                            + Phaser.Math.Between(30, 45);
                 }
             }
         }
