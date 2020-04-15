@@ -79,12 +79,12 @@ class Scene2 extends Phaser.Scene {
                     switch (element.ladrillo) {
                         case "ladrillo_indestructible":
                             this.listaLadrillosIndestructibles.add(
-                                new LadrilloIndestructible(this, posX, posY, element.ladrillo, 
+                                new LadrilloIndestructible(this, posX, posY, element.ladrillo,
                                     element.movement));
                             break;
                         case "ladrillo_regenerativo":
                             this.listaLadrillosRegenerativos.add(
-                                new LadrilloRegenerativo(this, posX, posY, element.ladrillo, 
+                                new LadrilloRegenerativo(this, posX, posY, element.ladrillo,
                                     element.movement));
                             break;
                         case "ladrillo_duro":
@@ -105,7 +105,8 @@ class Scene2 extends Phaser.Scene {
 
         // Pelotas
         this.listaPelotas = this.add.group();
-        this.listaPelotas.add(new Pelota(this, gameConfig.posicionPelotaX, gameConfig.posicionPelotaY, "bola_blanca"));
+        this.listaPelotas.add(
+            new Pelota(this, gameConfig.posicionPelotaX, gameConfig.posicionPelotaY, "bola_blanca"));
         // Jugador
         this.listaJugador = this.add.group();
         this.listaJugador.add(
@@ -117,33 +118,34 @@ class Scene2 extends Phaser.Scene {
         //Colision con izquierda, derecha, arriba, abajo
         this.physics.world.setBoundsCollision(true, true, true, false);
         // Colision pelota - ladrillos
-        this.physics.add.collider(this.listaPelotas, this.listaLadrillos, 
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillos,
             this.colisionPelotaLadrillo, null, this);
         // Colision pelota - ladrillos indestructibles
-        this.physics.add.collider(this.listaPelotas, this.listaLadrillosIndestructibles, 
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillosIndestructibles,
             this.colisionPelotaLadrilloIndestructible, null, this);
         // Colision pelota - ladrillos regenerativos
-        this.physics.add.collider(this.listaPelotas, this.listaLadrillosRegenerativos, 
-            this.colisionPelotaLadrilloRegenerativo, 
-            function(pelota, ladrillo){
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillosRegenerativos,
+            this.colisionPelotaLadrilloRegenerativo,
+            function (pelota, ladrillo) {
                 ladrillo.golpes -= 1;
                 console.log("Golpes restantes del ladrillo regenerativo: " + ladrillo.golpes)
                 if (ladrillo.golpes > 0) {
                     return true;
                 }
                 return false;
-        }, this);
-        
-        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosRegenerativos, 
-            this.overlapPelotaLadrilloRegenerativo, 
-            function(pelota, ladrillo){
+            }, this);
+
+        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosRegenerativos,
+            this.overlapPelotaLadrilloRegenerativo,
+            function (pelota, ladrillo) {
                 if (ladrillo.golpes <= 0) {
                     return true;
                 }
                 return false;
-        }, this);
+            }, this);
         // Colision pelota - ladrillos duros
-        this.physics.add.collider(this.listaPelotas, this.listaLadrillosDuros, this.colisionPelotaLadrilloDuro, null, this);
+        this.physics.add.collider(this.listaPelotas, this.listaLadrillosDuros,
+            this.colisionPelotaLadrilloDuro, null, this);
         // Colision pelota - barras
         this.physics.add.collider(this.listaPelotas, this.listaBarras, this.colisionPelotaBarras, null, this);
         // Colision pelota - jugador
@@ -162,7 +164,9 @@ class Scene2 extends Phaser.Scene {
         *************/
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        console.log(Phaser.Input.Keyboard.KeyCodes);
+
+        // Linea a borrar debido a que es para ver donde hacer el cambio de rumbo de la pelota
+        this.graphicos = this.add.graphics();
     }
 
     update() {
@@ -188,8 +192,9 @@ class Scene2 extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
                 gameConfig.inicioPelota = false;
                 this.listaPelotas.getChildren().forEach(pelota => {
-                    //pelota.body.velocity.set(Phaser.Math.Between(-120, 120), gameConfig.velocidadPelotaY);
-                    pelota.body.velocity.set(gameConfig.velocidadJugadorX, gameConfig.velocidadPelotaY);
+                    pelota.body.velocity.set(
+                        Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                        gameConfig.velocidadPelotaY);
                 });
             }
         }
@@ -197,7 +202,34 @@ class Scene2 extends Phaser.Scene {
             gameConfig.vidas += 1;
             this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
         }
-        
+
+        /* --------------------------------------------------------------------------------------- */
+        /* A borrar en cuanto se termine de hacer la decision del cambio de direccion de la pelota */
+        this.graphicos.clear();
+        this.listaJugador.getChildren().forEach(jugador => {
+            // Parte izda amarillo
+            this.graphicos.fillStyle(0xfcd422);
+            this.graphicos.fillRect(jugador.body.x, jugador.body.y, 4, 4);
+            // Parte dcha amarillo
+            this.graphicos.fillRect(jugador.body.x + jugador.body.width, jugador.body.y, -4, 4);
+
+            // Parte medio-izda morado
+            this.graphicos.fillStyle(0xfb1edd);
+            this.graphicos.fillRect(jugador.body.x + 4, jugador.body.y, 
+                Math.floor(jugador.body.width / 5), 4);
+            // Parte medio-dcha morado
+            this.graphicos.fillRect(jugador.body.x + jugador.body.width - 4, jugador.body.y, 
+                Math.floor(jugador.body.width / 5) * -1, 4);
+
+            // Parte centro-izda rojo
+            this.graphicos.fillStyle(0xf20517);
+            this.graphicos.fillRect(jugador.body.x + 4 + 12, jugador.body.y, 12, 4)
+            // Parte centro-dcha rojo
+            this.graphicos.fillRect(jugador.body.x + jugador.body.width - 4 - 12, jugador.body.y, -12, 4);
+
+        });
+        /* --------------------------------------------------------------------------------------- */
+
     }
 
     colisionPelotaLadrillo(pelota, ladrillo) {
@@ -249,8 +281,8 @@ class Scene2 extends Phaser.Scene {
      * Este metodo unicamente repone la velocidad de la pelota en caso de que su velocidad en Y cambie.
      * Este metodo ha sido creado debido a que cuando la pelota choca con varios objetos simultaneamente,
      * esta, por el funcionamiento de Phaser, hace que se reduzca su velocidad.
-     * La velocidad en X si se modifica, pero no es cambiada ya que no parece afectar al funcionamiento normal del
-     * juego, unicamente le da un efecto más realista
+     * La velocidad en X si se modifica, pero no es cambiada ya que no parece afectar al funcionamiento 
+     * normal del juego, unicamente le da un efecto más realista
      * @param {*} pelota Pasar el objeto de la pelota para reponerle la velocidad original marcada
      */
     reponerVelocidadPelota(pelota) {
@@ -273,12 +305,45 @@ class Scene2 extends Phaser.Scene {
     }
 
     colisionPelotaJugador(pelota, jugador) {
+        if (pelota.body.x + (pelota.body.width / 2) < jugador.body.x + (jugador.body.width / 2)) {
+            console.log("Toca en la IZDA del jugador");
+            if (pelota.body.velocity.x > 0) {
+                console.log("voy a la dcha");
+                if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 4 /* Es el pico del lado izdo */) {
+                    pelota.body.velocity.x *= -1
+                } else {
+                    // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
+                    pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) + 40;
+                }
+                console.log(pelota.body.velocity.x)
+            } else {
+                console.log("voy a la izda");
+                pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) - 40;
+                console.log(pelota.body.velocity.x)
+            }
+        } else {
+            console.log("Toca en la DCHA del jugador");
+            if (pelota.body.velocity.x > 0) {
+                console.log("voy a la dcha");
+                pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) + 40;
+                console.log(pelota.body.velocity.x)
+            } else {
+                console.log("voy a la izda");
+                if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 4) /* Es el pico del lado dcho */) {
+                    pelota.body.velocity.x *= -1;
+                } else {
+                    pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) - 40;
+                }
+                console.log(pelota.body.velocity.x)
+            }
+        }
         this.reponerVelocidadPelota(pelota);
     }
 
     movimientoJugador() {
         this.listaJugador.getChildren().forEach(jugador => {
-            if (this.cursorKeys.left.isDown && jugador.body.x > (this.barraLateralIzda.body.x + this.barraLateralIzda.body.width)) {
+            if (this.cursorKeys.left.isDown &&
+                jugador.body.x > (this.barraLateralIzda.body.x + this.barraLateralIzda.body.width)) {
                 jugador.body.setVelocityX(gameConfig.velocidadJugadorX * -1);
                 // Funciona en caso de que empiece la partida o el jugador pierda una vida
                 if (gameConfig.inicioPelota) {
@@ -286,7 +351,8 @@ class Scene2 extends Phaser.Scene {
                         pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
                     });
                 }
-            } else if (this.cursorKeys.right.isDown && (jugador.body.x + jugador.body.width) < this.barraLateralDcha.x) {
+            } else if (this.cursorKeys.right.isDown &&
+                (jugador.body.x + jugador.body.width) < this.barraLateralDcha.x) {
                 jugador.body.setVelocityX(gameConfig.velocidadJugadorX);
                 // Funciona en caso de que empiece la partida o el jugador pierda una vida
                 if (gameConfig.inicioPelota) {
