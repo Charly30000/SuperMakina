@@ -62,7 +62,7 @@ function creacionTabla(juego) {
             }
         });
         let tabla = document.getElementById("tabla");
-        $(`<tr class="table-info tableFixHead"><th scope="col"></th><th scope="col">Nombre</th><th scope="col">Puntuación</th></tr>`).appendTo("#tabla");
+        $(`<tr class="table-dark tableFixHead"><th scope="col"></th><th scope="col">Nombre</th><th scope="col">Puntuación</th></tr>`).appendTo("#tabla");
         $("<tbody></tbody>").appendTo("#tabla");
         for (let i = 1; i < objeto.length + 1; i++) {
             if (i == 1) {
@@ -70,7 +70,7 @@ function creacionTabla(juego) {
             } else if (i == 2) {
                 $(`<tr class="table-primary"><th scope="row">${i}º</th><td>${objeto[i - 1].nombre}</td><td>${objeto[i - 1].puntuacion}</td></tr>`).appendTo("tbody");
             } else if (i == 3) {
-                $(`<tr class="table-secondary"><th scope="row">${i}º</th><td>${objeto[i - 1].nombre}</td><td>${objeto[i - 1].puntuacion}</td></tr>`).appendTo("tbody");
+                $(`<tr class="table-info"><th scope="row">${i}º</th><td>${objeto[i - 1].nombre}</td><td>${objeto[i - 1].puntuacion}</td></tr>`).appendTo("tbody");
             } else {
                 $(`<tr><th scope="row">${i}º</th><td>${objeto[i - 1].nombre}</td><td>${objeto[i - 1].puntuacion}</td></tr>`).appendTo("tbody");
             }
