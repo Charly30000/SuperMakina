@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -28,34 +28,92 @@
     <img src="assets/images/SuperMakinaLogo.png" class="img-fluid rounded mx-auto d-block w-25">
     <div class="row mx-5 border-primary border-top">
         <!-- Puzzle Bobble -->
-        <div class="card col-md-4 py-3 border-0">
-            <img src="assets/images/puzzleBobble.png" class="card-img-top img-fluid" alt="puzzle-bobble">
+        <div class="card col-md-4 py-3 border-0 bg-transparent">
+            <!-- <img src="assets/images/puzzleBobble.png" class="card-img-top img-fluid" alt="puzzle-bobble"> -->
+            <div id="imagenesPuzzleBobble" class="carousel slide carousel-fade" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#imagenesPuzzleBobble" data-slide-to="0" class="active"></li>
+                    <li data-target="#imagenesPuzzleBobble" data-slide-to="1"></li>
+                    <li data-target="#imagenesPuzzleBobble" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-interval="10000">
+                        <img src="assets/images/Puzzle Bobble/logoPuzzleBobble.png" class="d-block w-100"
+                            alt="logo-Puzzle-Bobble">
+                    </div>
+                    <div class="carousel-item w-75" data-interval="5000">
+                        <img src="assets/images/Puzzle Bobble/puzzleBobble1.png" class="d-block w-100"
+                            alt="imagen del juego Puzzle Bobble">
+                    </div>
+                    <div class="carousel-item w-75" data-interval="5000">
+                        <img src="assets/images/Puzzle Bobble/puzzleBobble2.png" class="d-block w-100"
+                            alt="imagen del juego Puzzle Bobble">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#imagenesPuzzleBobble" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                </a>
+                <a class="carousel-control-next" href="#imagenesPuzzleBobble" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Siguiente</span>
+                </a>
+            </div>
             <div class="card-body">
                 <h5 class="card-title"></h5>
             </div>
             <div class="card-footer d-flex justify-content-around flex-wrap">
                 <a class="btn btn-success" href="../Games/PuzzleBobble/index.html">Jugar</a>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDescripcion"
                     id="botonDescripcionPuzzleBobble">Descripción</button>
                 <button type="button" class="btn btn-info" id="botonPuntuacionesPuzzleBobble">Puntuaciones</button>
             </div>
         </div>
         <!-- Arkanoid -->
-        <div class="card col-md-4 py-3 border-0">
-            <img src="assets/images/arkanoid.png" class="card-img-top img-fluid" alt="arkanoid">
+        <div class="card col-md-4 py-3 border-0 bg-transparent">
+            <!-- <img src="assets/images/arkanoid.png" class="card-img-top img-fluid" alt="arkanoid"> -->
+            <div id="imagenesArkanoid" class="carousel slide carousel-fade" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#imagenesArkanoid" data-slide-to="0" class="active"></li>
+                    <li data-target="#imagenesArkanoid" data-slide-to="1"></li>
+                    <li data-target="#imagenesArkanoid" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-interval="10000">
+                        <img src="assets/images/Arkanoid/logoArkanoid.png" class="d-block w-100"
+                            alt="logo-Arkanoid">
+                    </div>
+                    <div class="carousel-item w-50" data-interval="5000">
+                        <img src="assets/images/Arkanoid/arkanoid1.png" class="d-block w-100"
+                            alt="imagen del juego Arkanoid">
+                    </div>
+                    <div class="carousel-item w-50" data-interval="5000">
+                        <img src="assets/images/Arkanoid/arkanoid2.png" class="d-block w-100"
+                            alt="imagen del juego Arkanoid">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#imagenesArkanoid" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                </a>
+                <a class="carousel-control-next" href="#imagenesArkanoid" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Siguiente</span>
+                </a>
+            </div>
             <div class="card-body">
                 <h5 class="card-title"></h5>
             </div>
             <div class="card-footer d-flex justify-content-around flex-wrap">
                 <a class="btn btn-success" href="../Games/Arkanoid/index.html">Jugar</a>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalDescripcion"
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDescripcion"
                     id="botonDescripcionArkanoid">Descripción</button>
                 <button type="button" class="btn btn-info" id="botonPuntuacionesArkanoid">Puntuaciones</button>
             </div>
         </div>
 
         <!-- 3º juego -->
-        
+
     </div>
     <!-- Descripción Modal -->
     <div class="modal fade" id="modalDescripcion" tabindex="-1" role="dialog" aria-labelledby="modalDescripcion"
@@ -75,7 +133,7 @@
                 </div>
                 <div class="modal-footer">
                     <a type="button" class="btn btn-success" id="modalBotonJugar" href="#">Jugar</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
