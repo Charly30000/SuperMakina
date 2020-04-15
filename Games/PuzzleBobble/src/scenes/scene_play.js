@@ -273,7 +273,6 @@ class Scene_play extends Phaser.Scene {
 
 
 
-
     // primero se detectan las burbujas del techo y luego por descarte las aisladas para borrarlas después
     detectarBurbujasAisladas() {
         let arrayBurbujasAisladas = [];
@@ -309,8 +308,6 @@ class Scene_play extends Phaser.Scene {
         });
         return arrayBurbujasAisladas;
     }
-
-
 
 
 
@@ -368,14 +365,6 @@ class Scene_play extends Phaser.Scene {
         }
         return arrayAdyacentes;
     }
-
-
-
-
-
-
-
-
 
 
 
