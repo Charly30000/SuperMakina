@@ -7,6 +7,9 @@ var angulox = 0;
 var anguloy = - 900;
 var chocaizquierda = false;
 var chocaderecha = false;
+var ladoizquierdoflecha = false;
+var ladoderechaflecha = false;
+
 class Scene_play extends Phaser.Scene {
     constructor() {
         super({ key: "Scene_play" })
@@ -162,20 +165,26 @@ class Scene_play extends Phaser.Scene {
         coordenadas[0] = parseInt(coordenadas[0]);
         coordenadas[1] = parseInt(coordenadas[1]);
         if (burbujamovil.body.touching.up) {
+            console.log("arriba");
             burbujamovil.destroy();
-            if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0) {
-                coordenadas[1] = coordenadas[1] + 1;
-            }
+
+            ///aqui esta el problema de colocacion de las bolas y los bug
+            //if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0) {
+                //coordenadas[1] = coordenadas[1] + 1;
+                //console.log(coordenadas[1]);
+            //}
             coordenadas[0] = coordenadas[0] + 1;
             this.posicionarpelota(coordenadas, color);
 
 
         } else if (burbujamovil.body.touching.right) {
+            console.log("izquierda");
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] - 1;
             this.posicionarpelota(coordenadas, color);
 
         } else if (burbujamovil.body.touching.left) {
+            console.log("derecha");
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] + 1;
             this.posicionarpelota(coordenadas, color);
@@ -194,11 +203,10 @@ class Scene_play extends Phaser.Scene {
         }
         arrayburbujas[coordenadas[0]][coordenadas[1]] = coordenadas[0] + "-" + coordenadas[1] + "-" + color;
         let choquebolas = this.detectarsiexplosion(coordenadas[0] + "-" + coordenadas[1] + "-" + color);
-        if (choquebolas.length > 3) {
+        if (choquebolas.length >= 3) {
             this.eliminarbolas(choquebolas);
             let aisladas = this.detectarBurbujasAisladas();
             if (aisladas.length > 0) {
-                console.log("hola");
                 this.eliminarbolas(aisladas);
             }
         }
@@ -223,18 +231,18 @@ class Scene_play extends Phaser.Scene {
         while (array.length != 0) {
             let burbujaarray = array.pop();
             this.burbujasNivel.getChildren().forEach(burbuja => {
-                if(burbuja.posicion == burbujaarray) {
+                if (burbuja.posicion == burbujaarray) {
                     burbuja.destroy();
                 }
             });
             for (let i = 0; i < arrayburbujas.length; i++) {
                 for (let j = 0; j < arrayburbujas[i].length; j++) {
-                    if(arrayburbujas[i][j] == burbujaarray) {
+                    if (arrayburbujas[i][j] == burbujaarray) {
                         arrayburbujas[i][j] = " ";
-                    } 
+                    }
                 }
-             
-             }
+
+            }
         }
     }
 
@@ -393,25 +401,36 @@ class Scene_play extends Phaser.Scene {
             chocaizquierda = false;
             chocaderecha = true;
         }
-        if (cursors.left.isDown) {
-            if (angulox < 0) {
-                anguloy += 10;
-            } else {
-                anguloy -= 10;
-            }
-            angulox -= 10;
-            this.flecha.angle--;
 
+
+
+        if (cursors.left.isDown) {
+
+            if ((angulox > -900 && anguloy < 0) || ladoderechaflecha) {
+                if (angulox < 0) {
+                    anguloy += 10;
+                } else {
+                    anguloy -= 10;
+                }
+                angulox -= 10;
+                this.flecha.angle--;
+            }
+            ladoizquierdoflecha = true;
+            ladoderechaflecha = false;
         } else if (cursors.right.isDown) {
             //derecha
-            if (angulox > 0) {
-                anguloy += 10;
-            } else {
-                anguloy -= 10;
+            if ((angulox < 900 && anguloy < 0) || ladoizquierdoflecha) {
+                if (angulox > 0) {
+                    anguloy += 10;
+                } else {
+                    anguloy -= 10;
+                }
+                angulox += 10;
+                this.flecha.angle++;
             }
-            angulox += 10;
-            this.flecha.angle++;
-
+        } else {
+            ladoizquierdoflecha = false;
+            ladoderechaflecha = true;
         }
         //this.scene.restart();
     }
