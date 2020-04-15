@@ -315,18 +315,15 @@ class Scene2 extends Phaser.Scene {
                     // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
                     pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) + 40;
                 }
-                console.log(pelota.body.velocity.x)
             } else {
                 console.log("voy a la izda");
                 pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) - 40;
-                console.log(pelota.body.velocity.x)
             }
         } else {
             console.log("Toca en la DCHA del jugador");
             if (pelota.body.velocity.x > 0) {
                 console.log("voy a la dcha");
                 pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x) + 40;
-                console.log(pelota.body.velocity.x)
             } else {
                 console.log("voy a la izda");
                 if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 4) /* Es el pico del lado dcho */) {
@@ -334,10 +331,10 @@ class Scene2 extends Phaser.Scene {
                 } else {
                     pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x) - 40;
                 }
-                console.log(pelota.body.velocity.x)
             }
         }
         this.reponerVelocidadPelota(pelota);
+        console.log(pelota.body.velocity.x)
     }
 
     movimientoJugador() {
