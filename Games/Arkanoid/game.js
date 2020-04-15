@@ -24,7 +24,8 @@ var gameConfig = {
     posicionJugadorX: config.width / 2,
     posicionJugadorY: config.height - 50,
     posicionPelotaX: config.width / 2,
-    posicionPelotaY: config.height - 50 - 16
+    posicionPelotaY: config.height - 50 - 16,
+    velocidadMinimaPelotaX: 70
 };
 
 var game = new Phaser.Game(config);

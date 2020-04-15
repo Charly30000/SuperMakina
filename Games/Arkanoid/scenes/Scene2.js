@@ -284,6 +284,12 @@ class Scene2 extends Phaser.Scene {
         } else if (pelota.body.velocity.x < gameConfig.velocidadJugadorX * -1) {
             pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
         }
+
+        if (pelota.body.velocity.x < gameConfig.velocidadMinimaPelotaX && pelota.body.velocity.x > 0) {
+            pelota.body.velocity.x = gameConfig.velocidadMinimaPelotaX;
+        } else if (pelota.body.velocity.x > -gameConfig.velocidadMinimaPelotaX && pelota.body.velocity.x <= 0) {
+            pelota.body.velocity.x = -gameConfig.velocidadMinimaPelotaX;
+        }
     }
 
     colisionPelotaBarras(pelota, barra) {
