@@ -4,8 +4,7 @@ var nivel1 =
     borde: "borde1-3",
     musica: "",
     burbuja: [
-            [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}], 
-            [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
+            
             [{burbuja: "burbujaAm", color :  "Am"}, {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}, {burbuja: "burbujaVe", color :  "Ve"}],
             [" ", {burbuja: "burbujaBl", color :  "Bl"}, {burbuja: "burbujaAz", color :  "Az"}, {burbuja: "burbujaGr", color :  "Gr"}, {burbuja: "burbujaMo", color :  "Mo"}, {burbuja: "burbujaNa", color :  "Na"}, {burbuja: "burbujaRo", color :  "Ro"}],
     ]

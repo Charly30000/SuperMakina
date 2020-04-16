@@ -167,12 +167,20 @@ class Scene_play extends Phaser.Scene {
         if (burbujamovil.body.touching.up) {
             console.log("arriba");
             burbujamovil.destroy();
+            console.log(burbujamovil.x);
+            console.log(burbuja.x);
+            if (arrayburbujas[coordenadas[0]].length == coordenadas[1] + 1 && coordenadas[0] % 2 == 0) {
+                coordenadas[1] = coordenadas[1] - 1;
+            } else if (burbujamovil.x < burbuja.x && coordenadas[0] % 2 == 0 && arrayburbujas[coordenadas[0] + 1][coordenadas[1] - 1] == " ") {
+                coordenadas[1] = coordenadas[1] - 1;
+                console.log(coordenadas[1]);
+            }
 
-            ///aqui esta el problema de colocacion de las bolas y los bug
-            //if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0) {
-                //coordenadas[1] = coordenadas[1] + 1;
-                //console.log(coordenadas[1]);
-            //}
+            if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0 && arrayburbujas[coordenadas[0] + 1][coordenadas[1] + 1] == " ") {
+                coordenadas[1] = coordenadas[1] + 1;
+                console.log(coordenadas[1]);
+            }
+
             coordenadas[0] = coordenadas[0] + 1;
             this.posicionarpelota(coordenadas, color);
 
@@ -403,35 +411,68 @@ class Scene_play extends Phaser.Scene {
         }
 
 
+        if (this.sys.game.config.height / 10 > this.lanzarbola.y) {
+            let x = this.sys.game.config.width / 3.2;
+            let color = this.lanzarbola.name;
+            let contador = 0;
+            let encontrado = false;
+            while (!encontrado || contador > 8) {
+                x = x + contador * 48;
+                if (this.lanzarbola.x <= x) {
+                    console.log(contador);
+                    arrayburbujas[0][contador] = 0 + "-" + contador + "-" + color;
+                    this.burbujasNivel.add(new Burbuja(this, this.sys.game.config.width / 3.2 + 48 * contador, this.sys.game.config.height / 10,
+                        "burbuja" + color, color, 0 + "-" + contador + "-" + color).setScale(3));
+                    this.lanzarbola.destroy();
+                    let choquebolas = this.detectarsiexplosion(0 + "-" + contador + "-" + color);
+                    if (choquebolas.length >= 3) {
+                        this.eliminarbolas(choquebolas);
+                        let aisladas = this.detectarBurbujasAisladas();
+                        if (aisladas.length > 0) {
+                            this.eliminarbolas(aisladas);
+                        }
+                    }
+                        this.modificarbolasmoviles();
+                        encontrado = true;
 
-        if (cursors.left.isDown) {
+                    } else {
+                        contador++;
+                    }
+                }
+            }
 
-            if ((angulox > -900 && anguloy < 0) || ladoderechaflecha) {
-                if (angulox < 0) {
-                    anguloy += 10;
-                } else {
-                    anguloy -= 10;
+
+
+
+
+            if (cursors.left.isDown) {
+
+                if ((angulox > -900 && anguloy < 0) || ladoderechaflecha) {
+                    if (angulox < 0) {
+                        anguloy += 10;
+                    } else {
+                        anguloy -= 10;
+                    }
+                    angulox -= 10;
+                    this.flecha.angle--;
                 }
-                angulox -= 10;
-                this.flecha.angle--;
-            }
-            ladoizquierdoflecha = true;
-            ladoderechaflecha = false;
-        } else if (cursors.right.isDown) {
-            //derecha
-            if ((angulox < 900 && anguloy < 0) || ladoizquierdoflecha) {
-                if (angulox > 0) {
-                    anguloy += 10;
-                } else {
-                    anguloy -= 10;
+                ladoizquierdoflecha = true;
+                ladoderechaflecha = false;
+            } else if (cursors.right.isDown) {
+                //derecha
+                if ((angulox < 900 && anguloy < 0) || ladoizquierdoflecha) {
+                    if (angulox > 0) {
+                        anguloy += 10;
+                    } else {
+                        anguloy -= 10;
+                    }
+                    angulox += 10;
+                    this.flecha.angle++;
                 }
-                angulox += 10;
-                this.flecha.angle++;
+            } else {
+                ladoizquierdoflecha = false;
+                ladoderechaflecha = true;
             }
-        } else {
-            ladoizquierdoflecha = false;
-            ladoderechaflecha = true;
+            //this.scene.restart();
         }
-        //this.scene.restart();
     }
-}
