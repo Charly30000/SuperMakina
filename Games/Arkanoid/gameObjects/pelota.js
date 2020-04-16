@@ -21,6 +21,13 @@ class Pelota extends Phaser.GameObjects.Sprite {
 }
 
 Pelota.prototype.update = function() {
+    // Comprobacion de que la pelota no se meta dentro de las barras
+    if (this.body.x < this.scene.barraLateralIzda.body.x + this.scene.barraLateralIzda.body.width) {
+        this.body.x = this.scene.barraLateralIzda.body.x + this.scene.barraLateralIzda.body.width;
+    } else if (this.body.x + this.body.width > this.scene.barraLateralDcha.body.x) {
+        this.body.x = this.scene.barraLateralDcha.body.x - this.body.width;
+    }
+
     if (this.body.y > config.height && !this.hayPelotasEnPantalla()) {
         this.scene.quitarVida();
         this.scene.colocarPelotaYJugador();

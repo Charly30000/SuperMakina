@@ -299,9 +299,9 @@ class Scene2 extends Phaser.Scene {
     colisionPelotaJugador(pelota, jugador) {
         if (jugador.body.touching.up) {
             if (pelota.body.x + (pelota.body.width / 2) < jugador.body.x + (jugador.body.width / 2)) {
-                console.log("Toca en la IZDA del jugador");
+                //console.log("Toca en la IZDA del jugador");
                 if (pelota.body.velocity.x > 0) {
-                    console.log("voy a la dcha");
+                    //console.log("voy a la dcha");
                     if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 7 /* Zona naranja lado izdo */) {
                         pelota.body.velocity.x *= -1
                     } else {
@@ -310,20 +310,20 @@ class Scene2 extends Phaser.Scene {
                             + Phaser.Math.Between(30, 45);
                     }
                 } else {
-                    console.log("voy a la izda");
+                    //console.log("voy a la izda");
                     pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
                         - Phaser.Math.Between(30, 45);
                 }
 
             } else {
-                console.log("Toca en la DCHA del jugador");
+                //console.log("Toca en la DCHA del jugador");
                 if (pelota.body.velocity.x > 0) {
-                    console.log("voy a la dcha");
+                    //console.log("voy a la dcha");
                     pelota.body.velocity.x = pelota.body.velocity.x -
                         (pelota.body.x - jugador.body.x - jugador.body.width)
                         - Phaser.Math.Between(30, 45);
                 } else {
-                    console.log("voy a la izda");
+                    //console.log("voy a la izda");
                     if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 7) /* Zona naranja lado dcho */) {
                         pelota.body.velocity.x *= -1;
                     } else {
@@ -336,7 +336,7 @@ class Scene2 extends Phaser.Scene {
         }
 
         this.reponerVelocidadPelota(pelota);
-        console.log(pelota.body.velocity.x)
+        //console.log(pelota.body.velocity.x)
     }
 
     movimientoJugador() {
