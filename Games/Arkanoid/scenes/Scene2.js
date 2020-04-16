@@ -297,9 +297,9 @@ class Scene2 extends Phaser.Scene {
     }
 
     colisionPelotaJugador(pelota, jugador) {
-        if (pelota.body.x + (pelota.body.width / 2) < jugador.body.x + (jugador.body.width / 2)) {
-            console.log("Toca en la IZDA del jugador");
-            if (jugador.body.touching.up) {
+        if (jugador.body.touching.up) {
+            if (pelota.body.x + (pelota.body.width / 2) < jugador.body.x + (jugador.body.width / 2)) {
+                console.log("Toca en la IZDA del jugador");
                 if (pelota.body.velocity.x > 0) {
                     console.log("voy a la dcha");
                     if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 7 /* Zona naranja lado izdo */) {
@@ -314,11 +314,9 @@ class Scene2 extends Phaser.Scene {
                     pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
                         - Phaser.Math.Between(30, 45);
                 }
-            }
 
-        } else {
-            console.log("Toca en la DCHA del jugador");
-            if (jugador.body.touching.up) {
+            } else {
+                console.log("Toca en la DCHA del jugador");
                 if (pelota.body.velocity.x > 0) {
                     console.log("voy a la dcha");
                     pelota.body.velocity.x = pelota.body.velocity.x -
@@ -336,6 +334,7 @@ class Scene2 extends Phaser.Scene {
                 }
             }
         }
+
         this.reponerVelocidadPelota(pelota);
         console.log(pelota.body.velocity.x)
     }
