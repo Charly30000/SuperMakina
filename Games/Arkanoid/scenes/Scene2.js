@@ -164,22 +164,11 @@ class Scene2 extends Phaser.Scene {
         *************/
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-        // Linea a borrar debido a que es para ver donde hacer el cambio de rumbo de la pelota
-        /* this.graphicos = this.add.graphics(); */
+        
     }
 
     update() {
-        /* 
-            Para cambiar de nivel:
-            nivel += 1;
-            this.scene.restart();
-        */
-
-        // Activador del update de los ladrillos
-        /* this.listaLadrillos.getChildren().forEach(ladrillo => {
-            ladrillo.update();
-        }); */
+        // Actualizador de los objetos Pelota
         this.listaPelotas.getChildren().forEach(pelota => {
             pelota.update();
         });
@@ -202,19 +191,6 @@ class Scene2 extends Phaser.Scene {
             gameConfig.vidas += 1;
             this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
         }
-
-        /* --------------------------------------------------------------------------------------- */
-        /* A borrar en cuanto se termine de hacer la decision del cambio de direccion de la pelota */
-        /* this.graphicos.clear();
-        this.listaJugador.getChildren().forEach(jugador => {
-            // Parte izda amarillo
-            this.graphicos.fillStyle(0xfcd422);
-            this.graphicos.fillRect(jugador.body.x, jugador.body.y, 7, 4);
-            // Parte dcha amarillo
-            this.graphicos.fillRect(jugador.body.x + jugador.body.width, jugador.body.y, -7, 4);
-
-        }); */
-        /* --------------------------------------------------------------------------------------- */
 
     }
 
@@ -284,7 +260,7 @@ class Scene2 extends Phaser.Scene {
         } else if (pelota.body.velocity.x < gameConfig.velocidadJugadorX * -1) {
             pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
         }
-
+        // Comprobacion para que la pelota no reduzca su velocidad en X del limite establecido
         if (pelota.body.velocity.x < gameConfig.velocidadMinimaPelotaX && pelota.body.velocity.x > 0) {
             pelota.body.velocity.x = gameConfig.velocidadMinimaPelotaX;
         } else if (pelota.body.velocity.x > -gameConfig.velocidadMinimaPelotaX && pelota.body.velocity.x <= 0) {
@@ -394,7 +370,7 @@ class Scene2 extends Phaser.Scene {
         this.scene.restart();
     }
 
-    /* Comprueba si los ladrillos que quedan, si no quedan ladrillos por destruir, cambia de nivel */
+    /* Comprueba los ladrillos que quedan, si no quedan ladrillos por destruir, cambia de nivel */
     comprobarCambiarNivel() {
         if (this.listaLadrillos.getLength() <= 0 && this.listaLadrillosDuros.getLength() <= 0) {
             gameConfig.nivel += 1;
@@ -416,8 +392,8 @@ class Scene2 extends Phaser.Scene {
 
     /* 
         Funcion que elimina todos los objetos de la listaJugador y listaPelotas,
-        generando asi un "inicio de juego", con una pelota y un jugador nuevos
-        hecha principalmente para cuando el jugador pierde una vida
+        generando asi un "inicio de juego", con una pelota y un jugador nuevos.
+        Hecha principalmente para cuando el jugador pierde una vida
     */
     colocarPelotaYJugador() {
         gameConfig.inicioPelota = true;
