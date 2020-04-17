@@ -96,6 +96,9 @@ class Scene2 extends Phaser.Scene {
                                 new Ladrillo(this, posX, posY, element.ladrillo, element.movement));
                             break;
                     }
+                    if (element.movement) {
+                        //ladrillo.body.velocity.x = 30;
+                    }
                 }
                 posX += 32;
             });
@@ -128,7 +131,6 @@ class Scene2 extends Phaser.Scene {
             this.colisionPelotaLadrilloRegenerativo,
             function (pelota, ladrillo) {
                 ladrillo.golpes -= 1;
-                console.log("Golpes restantes del ladrillo regenerativo: " + ladrillo.golpes)
                 if (ladrillo.golpes > 0) {
                     return true;
                 }
@@ -206,11 +208,17 @@ class Scene2 extends Phaser.Scene {
     colisionPelotaLadrilloIndestructible(pelota, ladrillo) {
         this.reponerVelocidadPelota(pelota);
         this.click.play();
+        ladrillo.play("anim_ladrillo_indestructible");
     }
 
     colisionPelotaLadrilloRegenerativo(pelota, ladrillo) {
         this.reponerVelocidadPelota(pelota);
         this.click.play();
+        if (ladrillo.golpes == 2) {
+            ladrillo.setTexture("ladrillo_regenerativo_2");
+        } else if (ladrillo.golpes == 1) {
+            ladrillo.setTexture("ladrillo_regenerativo_3");
+        }
     }
 
     overlapPelotaLadrilloRegenerativo(pelota, ladrillo) {
@@ -232,10 +240,15 @@ class Scene2 extends Phaser.Scene {
         this.reponerVelocidadPelota(pelota);
         this.click.play();
         ladrillo.golpes -= 1;
+        if (ladrillo.golpes == 2) {
+            ladrillo.setTexture("ladrillo_duro_2");
+        } else if (ladrillo.golpes == 1) {
+            ladrillo.setTexture("ladrillo_duro_3");
+        }
         if (ladrillo.golpes <= 0) {
+            this.aumentarPuntos(ladrillo);
             ladrillo.destroy();
         }
-        this.aumentarPuntos(ladrillo);
         this.comprobarCambiarNivel();
     }
 
@@ -381,7 +394,8 @@ class Scene2 extends Phaser.Scene {
 
     reponerLadrilloRegenerativo(posX, posY, movement) {
         this.listaLadrillosRegenerativos.add(
-            new LadrilloRegenerativo(this, posX, posY, "ladrillo_regenerativo", movement).setOrigin(0, 0));
+            new LadrilloRegenerativo(this, posX, posY, "ladrillo_regenerativo", movement)
+                .setOrigin(0, 0).play("anim_ladrillo_regenerativo"));
     }
 
     aumentarPuntos(ladrillo) {

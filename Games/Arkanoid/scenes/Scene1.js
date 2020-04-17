@@ -14,7 +14,7 @@ class Scene1 extends Phaser.Scene {
             /* console.log(percent * 100); */
             loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 50);
         });
-        
+
         //this.load.image("ladrillo_amarillo", "assets/images/ladrillos/amarillo.png");
 
         var fs = require('fs');
@@ -50,8 +50,17 @@ class Scene1 extends Phaser.Scene {
         // Carga del directorio de los ladrillos
         var ladrillos = fs.readdirSync(`${__dirname}/assets/images/ladrillos`);
         ladrillos.forEach(element => {
-                let nombreSinFormato = element.slice(0, element.indexOf("."));
+            let nombreSinFormato = element.slice(0, element.indexOf("."));
+            if (nombreSinFormato === "ladrillo_regenerativo" ||
+                nombreSinFormato === "ladrillo_indestructible") {
+                this.load.spritesheet(nombreSinFormato, `assets/images/ladrillos/${element}`, {
+                    frameWidth: 32,
+                    frameHeight: 16
+                });
+            } else {
                 this.load.image(nombreSinFormato, `assets/images/ladrillos/${element}`);
+            }
+
         });
 
         // Carga del directorio de las mejoras
@@ -100,10 +109,33 @@ class Scene1 extends Phaser.Scene {
             let nombreSinFormato = element.slice(0, element.indexOf("."));
             this.anims.create({
                 key: `anim_${nombreSinFormato}`,
-                frames: this.anims.generateFrameNumbers(nombreSinFormato),
+                frames: this.anims.generateFrameNumbers(nombreSinFormato, {
+                    start: 0,
+                    end: 8
+                }),
                 frameRate: 20,
                 repeat: -1
             });
+        });
+        // Animacion ladrillo regenerativo
+        this.anims.create({
+            key: "anim_ladrillo_regenerativo",
+            frames: this.anims.generateFrameNumbers("ladrillo_regenerativo", {
+                start: 5,
+                end: 0
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+        // Animacion ladrillo indestructible
+        this.anims.create({
+            key: "anim_ladrillo_indestructible",
+            frames: this.anims.generateFrameNumbers("ladrillo_indestructible", {
+                start: 11,
+                end: 0
+            }),
+            frameRate: 35,
+            repeat: 0
         });
         // Iniciar Scene2
         this.scene.start("playGame");
