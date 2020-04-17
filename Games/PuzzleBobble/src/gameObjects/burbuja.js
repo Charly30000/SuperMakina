@@ -9,5 +9,6 @@ class Burbuja extends Phaser.GameObjects.Sprite {
         this.x = x;
         this.y = y;
         this.posicion = sitio;
+        this.body.setCircle(9);
     }
 }
