@@ -73,39 +73,45 @@ class Scene2 extends Phaser.Scene {
         this.listaLadrillosIndestructibles = this.add.group();
         this.listaLadrillosRegenerativos = this.add.group();
         this.listaLadrillosDuros = this.add.group();
+        this.listaTodosLadrillos = [];
+        let contador = 0;
         cargaNivel.ladrillos.forEach(arrayLadrillos => {
             arrayLadrillos.forEach(element => {
                 if (element.ladrillo) {
+                    let ladrillo;
                     switch (element.ladrillo) {
                         case "ladrillo_indestructible":
-                            this.listaLadrillosIndestructibles.add(
-                                new LadrilloIndestructible(this, posX, posY, element.ladrillo,
-                                    element.movement));
+                            ladrillo = new LadrilloIndestructible(this, posX, posY, element.ladrillo,
+                                element.movement);
+                            this.listaLadrillosIndestructibles.add(ladrillo);
                             break;
                         case "ladrillo_regenerativo":
-                            this.listaLadrillosRegenerativos.add(
-                                new LadrilloRegenerativo(this, posX, posY, element.ladrillo,
-                                    element.movement));
+                            ladrillo = new LadrilloRegenerativo(this, posX, posY, element.ladrillo,
+                                element.movement);
+                            this.listaLadrillosRegenerativos.add(ladrillo);
                             break;
                         case "ladrillo_duro":
-                            this.listaLadrillosDuros.add(
-                                new LadrilloDuro(this, posX, posY, element.ladrillo, element.movement));
+                            ladrillo = new LadrilloDuro(this, posX, posY, element.ladrillo, element.movement);
+                            this.listaLadrillosDuros.add(ladrillo);
                             break;
                         default:
-                            this.listaLadrillos.add(
-                                new Ladrillo(this, posX, posY, element.ladrillo, element.movement));
+                            ladrillo = new Ladrillo(this, posX, posY, element.ladrillo, element.movement);
+                            this.listaLadrillos.add(ladrillo);
                             break;
                     }
-                    if (element.movement) {
-                        //ladrillo.body.velocity.x = 30;
-                    }
+                    this.listaTodosLadrillos.push(ladrillo.body.name = `l-${contador}`);
+                    contador += 1;
                 }
                 posX += 32;
             });
             posX = 40;
             posY += 16;
         });
-
+        
+        // Hacer mover a los ladrillos desde el inicio si estos no tienen ladrillos a los lados
+        this.listaLadrillos.getChildren().forEach(element => {
+            //console.log(element.body.name)
+        });
         // Pelotas
         this.listaPelotas = this.add.group();
         this.listaPelotas.add(
@@ -154,7 +160,22 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.listaPelotas, this.listaJugador, this.colisionPelotaJugador, null, this);
         // Colision jugador - barras
         this.physics.add.collider(this.listaJugador, this.listaBarras);
-
+        // Colision ladrillo - ladrillo
+        this.physics.add.collider(this.listaLadrillos, this.listaLadrillos, this.colisionLadrilloLadrillo, null, this);
+        // Colision ladrillo - ladrillo duro
+        this.physics.add.collider(this.listaLadrillos, this.listaLadrillosDuros, this.colisionLadrilloLadrillo, null, this);
+        // Colision ladrillo - ladrillo indestructible
+        this.physics.add.collider(this.listaLadrillos, this.listaLadrillosIndestructibles, this.colisionLadrilloLadrillo, null, this);
+        // Colision ladrillo - ladrillo regenerativo
+        this.physics.add.collider(this.listaLadrillos, this.listaLadrillosRegenerativos, this.colisionLadrilloLadrillo, null, this);
+        // Colision ladrillo - barras
+        this.physics.add.collider(this.listaLadrillos, this.listaBarras, this.colisionLadrilloBarra, null, this);
+        // Colision ladrillo duro - barra
+        this.physics.add.collider(this.listaLadrillosDuros, this.listaBarras, this.colisionLadrilloBarra, null, this);
+        // Colision ladrillo indestructible - barra
+        this.physics.add.collider(this.listaLadrillosIndestructibles, this.listaBarras, this.colisionLadrilloBarra, null, this);
+        // Colision ladrillo regenerativo - barra
+        this.physics.add.collider(this.listaLadrillosRegenerativos, this.listaBarras, this.colisionLadrilloBarra, null, this);
         /************
             SONIDOS
         *************/
@@ -198,6 +219,7 @@ class Scene2 extends Phaser.Scene {
 
     colisionPelotaLadrillo(pelota, ladrillo) {
         this.reponerVelocidadPelota(pelota);
+        this.hacerMoverseAlLadrillo(ladrillo);
         ladrillo.destroy();
         this.click.play();
         this.aumentarPuntos(ladrillo);
@@ -247,6 +269,7 @@ class Scene2 extends Phaser.Scene {
         }
         if (ladrillo.golpes <= 0) {
             this.aumentarPuntos(ladrillo);
+            this.hacerMoverseAlLadrillo(ladrillo);
             ladrillo.destroy();
         }
         this.comprobarCambiarNivel();
@@ -423,5 +446,112 @@ class Scene2 extends Phaser.Scene {
             new Pelota(this, gameConfig.posicionPelotaX, gameConfig.posicionPelotaY, "bola_blanca"));
         this.listaJugador.add(
             new Jugador(this, gameConfig.posicionJugadorX, gameConfig.posicionJugadorY, "jugador_normal"));
+    }
+
+    /**
+     * Esta funcion comprueba en la lista de los ladrillos, si tiene ladrillos a los lados,
+     * si tiene ladrillos a los lados (independientemente de su distancia en x), estos empezaran
+     * a moverse, siempre y cuando tengan la capacidad de moverse.
+     * @param {*} ladrillo 
+     */
+    hacerMoverseAlLadrillo(ladrillo) {
+
+        /* console.log(ladrillo.body.name);
+        console.log(this.listaTodosLadrillos.indexOf(ladrillo.body.name));
+        this.listaTodosLadrillos.splice(this.listaTodosLadrillos.indexOf(ladrillo.body.name), 1);
+        console.log(this.listaTodosLadrillos.indexOf(ladrillo.body.name)); */
+
+        let nameLadIzda = `l-${this.listaTodosLadrillos.indexOf(ladrillo.body.name) - 1}`;
+        let nameLadDcha = `l-${this.listaTodosLadrillos.indexOf(ladrillo.body.name) + 1}`;
+        console.log(nameLadIzda);
+        
+        // busco el ladrillo de la izquierda
+        let ladIzda = this.obtenerLadrillo(nameLadIzda);
+        // busco el ladrillo de la derecha
+        let ladDcha = this.obtenerLadrillo(nameLadDcha);
+
+        if (!(ladrillo.body.name === "ladrillo_indestructible" || ladrillo.body.name === "ladrillo_regenerativo")){
+            this.listaTodosLadrillos.splice(this.listaTodosLadrillos.indexOf(ladrillo.body.name), 1)
+        }
+        
+        console.log("--------------------------------------------------");
+
+        if (ladIzda) {
+            if (ladIzda.body.y == ladrillo.body.y && ladIzda.movement && !ladIzda.body.velocity.x) {
+                if (ladIzda.body.x >= config.width / 2) {
+                    ladIzda.body.velocity.x = 60;
+                } else {
+                    ladIzda.body.velocity.x = -60;
+                }
+            }
+        }
+
+        if (ladDcha) {
+            if (ladDcha.body.y == ladrillo.body.y && ladDcha.movement && !ladDcha.body.velocity.x) {
+                if (ladDcha.body.x >= config.width / 2) {
+                    ladDcha.body.velocity.x = 60;
+                } else {
+                    ladDcha.body.velocity.x = -60;
+                }
+            }
+        }
+    }
+
+    /**
+     * El metodo busca en todos los arrays de ladrillos el ladrillo buscado, si lo encuentra, lo devuelve,
+     * si no lo encuentra, devuelve un null
+     * @param {*} nombreLadrillo nombre del ladrillo buscado
+     */
+    obtenerLadrillo(nombreLadrillo) {
+        var retorno = null;
+        for (const ladrillo of this.listaLadrillos.getChildren()) {
+            if (nombreLadrillo === ladrillo.body.name) {
+                retorno = ladrillo;
+                break;
+            }
+        }
+        if (retorno) {
+            return retorno;
+        }
+        for (const ladrillo of this.listaLadrillosDuros.getChildren()) {
+            if (nombreLadrillo === ladrillo.body.name) {
+                retorno = ladrillo;
+                break;
+            }
+        }
+        if (retorno) {
+            return retorno;
+        }
+        for (const ladrillo of this.listaLadrillosIndestructibles.getChildren()) {
+            if (nombreLadrillo === ladrillo.body.name) {
+                retorno = ladrillo;
+                break;
+            }
+        }
+        if (retorno) {
+            return retorno;
+        }
+        for (const ladrillo of this.listaLadrillosRegenerativos.getChildren()) {
+            if (nombreLadrillo === ladrillo.body.name) {
+                retorno = ladrillo;
+                break;
+            }
+        }
+        return retorno;
+    }
+
+    colisionLadrilloLadrillo(ladrillo1, ladrillo2) {
+        if (ladrillo1.movement) {
+            ladrillo1.body.velocity.x *= -1;
+        }
+        if (ladrillo2.movement && ladrillo2.texture.key !== ladrillo2.texture.key) {
+            ladrillo2.body.velocity.x *= -1;
+        }
+    }
+
+    colisionLadrilloBarra(ladrillo, barra) {
+        if (ladrillo.movement) {
+            ladrillo.body.velocity.x *= -1;
+        }
     }
 }
