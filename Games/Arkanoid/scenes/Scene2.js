@@ -106,10 +106,48 @@ class Scene2 extends Phaser.Scene {
             posX = 40;
             posY += 16;
         });
-        
+
         // Hacer mover a los ladrillos desde el inicio si estos no tienen ladrillos a los lados
-        this.listaLadrillos.getChildren().forEach(element => {
-            //console.log(element.body.name)
+        /* Si el nivel solo tiene un ladrillo, y este tiene movimiento, no se va a mover */
+        this.listaTodosLadrillos.getChildren().forEach(ladrillo => {
+            if (ladrillo.movement) {
+                // Obtengo el ladrillo de la izquierda segun el array de objetos
+                let ladIzda = this.listaTodosLadrillos.getChildren()
+                    [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) - 1];
+                // Obtengo el ladrillo de la derecha segun el array de objetos
+                let ladDcha = this.listaTodosLadrillos.getChildren()
+                    [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) + 1];
+                
+                if (ladIzda && ladDcha) {
+                    // Para el caso en el que tenga ladrillo izquierdo y derecho
+                    if (ladIzda.body.y == ladrillo.body.y && ladDcha.body.y == ladrillo.body.y) {
+                        // Para el caso de que tengan la misma altura
+                        if (ladIzda.body.x != ladrillo.body.x - 32 || ladDcha.body.x != ladrillo.body.x + 32) {
+                            this.movimientoLadrilloCargaJuego(ladrillo);
+                        }
+                    } else if (ladIzda.body.y != ladrillo.body.y && ladDcha.body.y == ladrillo.body.y) {
+                        // Para el caso en el que el ladrillo de la izquierda tenga otra altura
+                        if (ladrillo.body.x > 40) {
+                            this.movimientoLadrilloCargaJuego(ladrillo);
+                        }
+                    } else if (ladIzda.body.y == ladrillo.body.y && ladDcha.body.y != ladrillo.body.y) {
+                        // Para el caso en el que el ladrillo de la derecha tenga otra altura
+                        if (ladrillo.body.x < 360) {
+                            this.movimientoLadrilloCargaJuego(ladrillo);
+                        }
+                    }
+                } else if (!ladIzda && ladDcha) {
+                    // Si no tiene lado izquierdo pero si tiene lado derecho
+                    if (ladrillo.body.x > 40) {
+                        this.movimientoLadrilloCargaJuego(ladrillo);
+                    }
+                } else if (ladIzda && !ladDcha) {
+                    // Si Tiene lado izquierdo pero no tiene lado derecho
+                    if (ladrillo.body.x < 360) {
+                        this.movimientoLadrilloCargaJuego(ladrillo);
+                    }
+                }
+            }
         });
         // Pelotas
         this.listaPelotas = this.add.group();
@@ -175,7 +213,7 @@ class Scene2 extends Phaser.Scene {
         *************/
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        
+
     }
 
     update() {
@@ -443,12 +481,12 @@ class Scene2 extends Phaser.Scene {
      * @param {*} ladrillo 
      */
     hacerMoverseAlLadrillo(ladrillo) {
-        // busco el ladrillo de la izquierda
+        // Obtengo el ladrillo de la izquierda
         let ladIzda = this.listaTodosLadrillos.getChildren()
-            [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) - 1];
-        // busco el ladrillo de la derecha
+        [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) - 1];
+        // Obtengo el ladrillo de la derecha
         let ladDcha = this.listaTodosLadrillos.getChildren()
-            [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) + 1];
+        [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) + 1];
 
         if (ladIzda) {
             if (ladIzda.body.y == ladrillo.body.y && ladIzda.movement && !ladIzda.body.velocity.x) {
@@ -480,6 +518,14 @@ class Scene2 extends Phaser.Scene {
     colisionLadrilloBarra(ladrillo, barra) {
         if (ladrillo.movement) {
             ladrillo.body.velocity.x *= -1;
+        }
+    }
+
+    movimientoLadrilloCargaJuego(ladrillo) {
+        if (ladrillo.body.x >= config.width / 2) {
+            ladrillo.body.velocity.x = 60;
+        } else {
+            ladrillo.body.velocity.x = -60;
         }
     }
 }
