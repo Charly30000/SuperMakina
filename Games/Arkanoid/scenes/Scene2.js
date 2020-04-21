@@ -358,7 +358,7 @@ class Scene2 extends Phaser.Scene {
                 if (pelota.body.velocity.x > 0) {
                     //console.log("voy a la dcha");
                     pelota.body.velocity.x = pelota.body.velocity.x -
-                        (pelota.body.x - jugador.body.x - jugador.body.width)
+                        (pelota.body.x - jugador.body.x + jugador.body.width)
                         - Phaser.Math.Between(30, 45);
                 } else {
                     //console.log("voy a la izda");
@@ -366,7 +366,7 @@ class Scene2 extends Phaser.Scene {
                         pelota.body.velocity.x *= -1;
                     } else {
                         pelota.body.velocity.x = pelota.body.velocity.x +
-                            (pelota.body.x - jugador.body.x - jugador.body.width)
+                            (pelota.body.x - jugador.body.x + jugador.body.width)
                             + Phaser.Math.Between(30, 45);
                     }
                 }
