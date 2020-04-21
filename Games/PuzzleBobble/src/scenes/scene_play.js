@@ -7,9 +7,9 @@ var angulox = 0;
 var anguloy = - 900;
 var chocaizquierda = false;
 var chocaderecha = false;
-var ladoizquierdoflecha = false;
-var ladoderechaflecha = false;
-
+var contador = 0;
+var altura = 0;
+var graphics;
 class Scene_play extends Phaser.Scene {
     constructor() {
         super({ key: "Scene_play" })
@@ -62,7 +62,7 @@ class Scene_play extends Phaser.Scene {
         this.add.image(this.sys.game.config.width / 2, 300, nivel.borde).setScale(3);
 
         //se crea la flecha
-        this.flecha = this.add.image(this.sys.game.config.width / 1.99, 510, 'flecha').setScale(3);
+        this.flecha = this.add.image(this.sys.game.config.width / 2, 525, 'flecha').setScale(3);
 
 
         // crea el array de todas las filas del nivel para guardar las referencias de las burbujas
@@ -123,8 +123,6 @@ class Scene_play extends Phaser.Scene {
         // colision entre burbuja movil y el grupo de burbujas
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
 
-        //let adyacentes = this.burbujasAdyacentes("0-0");
-        //console.log(adyacentes);
     }
 
 
@@ -137,61 +135,37 @@ class Scene_play extends Phaser.Scene {
         }
     }
 
-
-    // mira el bloque de burbujas y devuelve un array con los colores que tiene el bloque
-    colorbolanueva() {
-        let arrayburbujaslanzar = new Array();
-        this.burbujasNivel.children.entries.forEach(arrayElementos => {
-            if (!arrayburbujaslanzar.includes(arrayElementos.name)) {
-                arrayburbujaslanzar.push(arrayElementos.name);
-            }
-        });
-        let posicion = Math.floor(Math.random() * (arrayburbujaslanzar.length - 0)) + 0;
-        return arrayburbujaslanzar[posicion];
-    }
-
-
-    // crea una nueva bola con el color que le pasa colorbolanueva
-    crearbolalanzar(x, y) {
-        let colorlanzar = this.colorbolanueva();
-        return new Burbuja(this, x, y, "burbuja" + colorlanzar, colorlanzar, " ").setScale(3);
-    }
-
-
-    //revisar
     colisionPelotas(burbujamovil, burbuja) {
+        contador++;
         let color = burbujamovil.name;
         let coordenadas = burbuja.posicion.split("-");
         coordenadas[0] = parseInt(coordenadas[0]);
         coordenadas[1] = parseInt(coordenadas[1]);
-        if (burbujamovil.body.touching.up) {
-            console.log("arriba");
+        //burbujamovil.body.touching.left
+        if (burbuja.y + 23 <= burbujamovil.y) {
+            console.log("cabeza");
             burbujamovil.destroy();
-            console.log(burbujamovil.x);
-            console.log(burbuja.x);
             if (arrayburbujas[coordenadas[0]].length == coordenadas[1] + 1 && coordenadas[0] % 2 == 0) {
                 coordenadas[1] = coordenadas[1] - 1;
             } else if (burbujamovil.x < burbuja.x && coordenadas[0] % 2 == 0 && arrayburbujas[coordenadas[0] + 1][coordenadas[1] - 1] == " ") {
                 coordenadas[1] = coordenadas[1] - 1;
-                console.log(coordenadas[1]);
             }
 
             if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0 && arrayburbujas[coordenadas[0] + 1][coordenadas[1] + 1] == " ") {
                 coordenadas[1] = coordenadas[1] + 1;
-                console.log(coordenadas[1]);
             }
 
             coordenadas[0] = coordenadas[0] + 1;
             this.posicionarpelota(coordenadas, color);
 
 
-        } else if (burbujamovil.body.touching.right) {
+        } else if (burbujamovil.x < burbuja.x) {
             console.log("izquierda");
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] - 1;
             this.posicionarpelota(coordenadas, color);
 
-        } else if (burbujamovil.body.touching.left) {
+        } else {
             console.log("derecha");
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] + 1;
@@ -203,7 +177,7 @@ class Scene_play extends Phaser.Scene {
     posicionarpelota(coordenadas, color) {
         let xocho = this.sys.game.config.width / 3.2;
         let xsiete = this.sys.game.config.width / 2.95;
-        let y = this.sys.game.config.height / 10;
+        let y = this.sys.game.config.height / 10 + altura;
         if (coordenadas[0] % 2 == 0) {
             this.burbujasNivel.add(new Burbuja(this, xocho + coordenadas[1] * 48, y + coordenadas[0] * 45, "burbuja" + color, color, coordenadas[0] + "-" + coordenadas[1] + "-" + color).setScale(3));
         } else {
@@ -235,6 +209,27 @@ class Scene_play extends Phaser.Scene {
     }
 
 
+
+
+    // crea una nueva bola con el color que le pasa colorbolanueva
+    crearbolalanzar(x, y) {
+        let colorlanzar = this.colorbolanueva();
+        return new Burbuja(this, x, y, "burbuja" + colorlanzar, colorlanzar, " ").setScale(3);
+    }
+
+    // mira el bloque de burbujas y devuelve un array con los colores que tiene el bloque
+    colorbolanueva() {
+        let arrayburbujaslanzar = new Array();
+        this.burbujasNivel.children.entries.forEach(arrayElementos => {
+            if (!arrayburbujaslanzar.includes(arrayElementos.name)) {
+                arrayburbujaslanzar.push(arrayElementos.name);
+            }
+        });
+        let posicion = Math.floor(Math.random() * (arrayburbujaslanzar.length - 0)) + 0;
+        return arrayburbujaslanzar[posicion];
+    }
+
+
     eliminarbolas(array) {
         while (array.length != 0) {
             let burbujaarray = array.pop();
@@ -253,6 +248,7 @@ class Scene_play extends Phaser.Scene {
             }
         }
     }
+
 
 
 
@@ -382,7 +378,11 @@ class Scene_play extends Phaser.Scene {
         return arrayAdyacentes;
     }
 
-
+    moverburbujas() {
+        this.burbujasNivel.getChildren().forEach(burbuja => {
+            burbuja.y = burbuja.y + 45;
+        });
+    }
 
     update() {
         if (this.cursor_space.isDown) {
@@ -411,15 +411,16 @@ class Scene_play extends Phaser.Scene {
         }
 
 
-        if (this.sys.game.config.height / 10 > this.lanzarbola.y) {
-            let x = this.sys.game.config.width / 3.2;
+        if (this.sys.game.config.height / 10 + altura > this.lanzarbola.y) {
+            let x1 = 0;
+            let x2 = 0;
             let color = this.lanzarbola.name;
             let contador = 0;
             let encontrado = false;
             while (!encontrado || contador > 8) {
-                x = x + contador * 48;
-                if (this.lanzarbola.x <= x) {
-                    console.log(contador);
+                x1 = (this.sys.game.config.width / 3.2 - 24) + contador * 48;
+                x2 = (this.sys.game.config.width / 3.2 - 24) + (contador + 1) * 48;
+                if (this.lanzarbola.x >= x1 && this.lanzarbola.x <= x2) {
                     arrayburbujas[0][contador] = 0 + "-" + contador + "-" + color;
                     this.burbujasNivel.add(new Burbuja(this, this.sys.game.config.width / 3.2 + 48 * contador, this.sys.game.config.height / 10,
                         "burbuja" + color, color, 0 + "-" + contador + "-" + color).setScale(3));
@@ -432,47 +433,49 @@ class Scene_play extends Phaser.Scene {
                             this.eliminarbolas(aisladas);
                         }
                     }
-                        this.modificarbolasmoviles();
-                        encontrado = true;
+                    this.modificarbolasmoviles();
+                    encontrado = true;
 
-                    } else {
-                        contador++;
-                    }
+                } else {
+                    contador++;
                 }
             }
-
-
-
-
-
-            if (cursors.left.isDown) {
-
-                if ((angulox > -900 && anguloy < 0) || ladoderechaflecha) {
-                    if (angulox < 0) {
-                        anguloy += 10;
-                    } else {
-                        anguloy -= 10;
-                    }
-                    angulox -= 10;
-                    this.flecha.angle--;
-                }
-                ladoizquierdoflecha = true;
-                ladoderechaflecha = false;
-            } else if (cursors.right.isDown) {
-                //derecha
-                if ((angulox < 900 && anguloy < 0) || ladoizquierdoflecha) {
-                    if (angulox > 0) {
-                        anguloy += 10;
-                    } else {
-                        anguloy -= 10;
-                    }
-                    angulox += 10;
-                    this.flecha.angle++;
-                }
-            } else {
-                ladoizquierdoflecha = false;
-                ladoderechaflecha = true;
-            }
-            //this.scene.restart();
         }
+
+
+        if (cursors.left.isDown) {
+            if (angulox > -800 && anguloy < 0) {
+                if (angulox < 0) {
+                    anguloy += 10;
+                } else {
+                    anguloy -= 10;
+                }
+                angulox -= 10;
+                this.flecha.angle = this.flecha.angle - 1.00;
+            }
+
+        } else if (cursors.right.isDown) {
+            //derecha
+            if (angulox < 800 && anguloy < 0) {
+                if (angulox > 0) {
+                    anguloy += 10;
+                } else {
+                    anguloy -= 10;
+                }
+                angulox += 10;
+                this.flecha.angle = this.flecha.angle + 1.00;
+            }
+        }
+
+
+        if (contador > 500) {
+            graphics = this.add.graphics();
+            altura += 45;
+            graphics.fillRect(this.sys.game.config.width / 3.2 - 24, this.sys.game.config.height / 10 - 24, 384, altura);
+            this.moverburbujas();
+            contador = 0;
+            console.log(contador);
+        }
+        //this.scene.restart();
     }
+}
