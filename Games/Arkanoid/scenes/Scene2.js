@@ -73,8 +73,8 @@ class Scene2 extends Phaser.Scene {
         this.listaLadrillosIndestructibles = this.add.group();
         this.listaLadrillosRegenerativos = this.add.group();
         this.listaLadrillosDuros = this.add.group();
-        this.listaTodosLadrillos = [];
-        let contador = 0;
+        this.listaTodosLadrillos = this.add.group();
+
         cargaNivel.ladrillos.forEach(arrayLadrillos => {
             arrayLadrillos.forEach(element => {
                 if (element.ladrillo) {
@@ -99,8 +99,7 @@ class Scene2 extends Phaser.Scene {
                             this.listaLadrillos.add(ladrillo);
                             break;
                     }
-                    this.listaTodosLadrillos.push(ladrillo.body.name = `l-${contador}`);
-                    contador += 1;
+                    this.listaTodosLadrillos.add(ladrillo);
                 }
                 posX += 32;
             });
@@ -161,21 +160,10 @@ class Scene2 extends Phaser.Scene {
         // Colision jugador - barras
         this.physics.add.collider(this.listaJugador, this.listaBarras);
         // Colision ladrillo - ladrillo
-        this.physics.add.collider(this.listaLadrillos, this.listaLadrillos, this.colisionLadrilloLadrillo, null, this);
-        // Colision ladrillo - ladrillo duro
-        this.physics.add.collider(this.listaLadrillos, this.listaLadrillosDuros, this.colisionLadrilloLadrillo, null, this);
-        // Colision ladrillo - ladrillo indestructible
-        this.physics.add.collider(this.listaLadrillos, this.listaLadrillosIndestructibles, this.colisionLadrilloLadrillo, null, this);
-        // Colision ladrillo - ladrillo regenerativo
-        this.physics.add.collider(this.listaLadrillos, this.listaLadrillosRegenerativos, this.colisionLadrilloLadrillo, null, this);
+        this.physics.add.collider(this.listaTodosLadrillos, this.listaTodosLadrillos, this.colisionLadrilloLadrillo, null, this);
         // Colision ladrillo - barras
-        this.physics.add.collider(this.listaLadrillos, this.listaBarras, this.colisionLadrilloBarra, null, this);
-        // Colision ladrillo duro - barra
-        this.physics.add.collider(this.listaLadrillosDuros, this.listaBarras, this.colisionLadrilloBarra, null, this);
-        // Colision ladrillo indestructible - barra
-        this.physics.add.collider(this.listaLadrillosIndestructibles, this.listaBarras, this.colisionLadrilloBarra, null, this);
-        // Colision ladrillo regenerativo - barra
-        this.physics.add.collider(this.listaLadrillosRegenerativos, this.listaBarras, this.colisionLadrilloBarra, null, this);
+        this.physics.add.collider(this.listaTodosLadrillos, this.listaBarras, this.colisionLadrilloBarra, null, this);
+
         /************
             SONIDOS
         *************/
@@ -455,26 +443,12 @@ class Scene2 extends Phaser.Scene {
      * @param {*} ladrillo 
      */
     hacerMoverseAlLadrillo(ladrillo) {
-
-        /* console.log(ladrillo.body.name);
-        console.log(this.listaTodosLadrillos.indexOf(ladrillo.body.name));
-        this.listaTodosLadrillos.splice(this.listaTodosLadrillos.indexOf(ladrillo.body.name), 1);
-        console.log(this.listaTodosLadrillos.indexOf(ladrillo.body.name)); */
-
-        let nameLadIzda = `l-${this.listaTodosLadrillos.indexOf(ladrillo.body.name) - 1}`;
-        let nameLadDcha = `l-${this.listaTodosLadrillos.indexOf(ladrillo.body.name) + 1}`;
-        console.log(nameLadIzda);
-        
         // busco el ladrillo de la izquierda
-        let ladIzda = this.obtenerLadrillo(nameLadIzda);
+        let ladIzda = this.listaTodosLadrillos.getChildren()
+            [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) - 1];
         // busco el ladrillo de la derecha
-        let ladDcha = this.obtenerLadrillo(nameLadDcha);
-
-        if (!(ladrillo.body.name === "ladrillo_indestructible" || ladrillo.body.name === "ladrillo_regenerativo")){
-            this.listaTodosLadrillos.splice(this.listaTodosLadrillos.indexOf(ladrillo.body.name), 1)
-        }
-        
-        console.log("--------------------------------------------------");
+        let ladDcha = this.listaTodosLadrillos.getChildren()
+            [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) + 1];
 
         if (ladIzda) {
             if (ladIzda.body.y == ladrillo.body.y && ladIzda.movement && !ladIzda.body.velocity.x) {
@@ -497,55 +471,9 @@ class Scene2 extends Phaser.Scene {
         }
     }
 
-    /**
-     * El metodo busca en todos los arrays de ladrillos el ladrillo buscado, si lo encuentra, lo devuelve,
-     * si no lo encuentra, devuelve un null
-     * @param {*} nombreLadrillo nombre del ladrillo buscado
-     */
-    obtenerLadrillo(nombreLadrillo) {
-        var retorno = null;
-        for (const ladrillo of this.listaLadrillos.getChildren()) {
-            if (nombreLadrillo === ladrillo.body.name) {
-                retorno = ladrillo;
-                break;
-            }
-        }
-        if (retorno) {
-            return retorno;
-        }
-        for (const ladrillo of this.listaLadrillosDuros.getChildren()) {
-            if (nombreLadrillo === ladrillo.body.name) {
-                retorno = ladrillo;
-                break;
-            }
-        }
-        if (retorno) {
-            return retorno;
-        }
-        for (const ladrillo of this.listaLadrillosIndestructibles.getChildren()) {
-            if (nombreLadrillo === ladrillo.body.name) {
-                retorno = ladrillo;
-                break;
-            }
-        }
-        if (retorno) {
-            return retorno;
-        }
-        for (const ladrillo of this.listaLadrillosRegenerativos.getChildren()) {
-            if (nombreLadrillo === ladrillo.body.name) {
-                retorno = ladrillo;
-                break;
-            }
-        }
-        return retorno;
-    }
-
     colisionLadrilloLadrillo(ladrillo1, ladrillo2) {
         if (ladrillo1.movement) {
             ladrillo1.body.velocity.x *= -1;
-        }
-        if (ladrillo2.movement && ladrillo2.texture.key !== ladrillo2.texture.key) {
-            ladrillo2.body.velocity.x *= -1;
         }
     }
 
