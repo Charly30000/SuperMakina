@@ -207,6 +207,8 @@ class Scene2 extends Phaser.Scene {
         *************/
         // Añado los sonidos....
         this.click = this.sound.add("efecto_click");
+        this.inicioNivel = this.sound.add("musica_inicioNivel");
+        //this.inicioNivel.play();
 
         /************
             TECLADO
@@ -430,6 +432,8 @@ class Scene2 extends Phaser.Scene {
         gameConfig.nivel = 1;
         gameConfig.puntos = 0;
         this.scene.restart();
+        /* this.scene.stop();
+        this.scene.start("bootGame") */
     }
 
     /* Comprueba los ladrillos que quedan, si no quedan ladrillos por destruir, cambia de nivel */

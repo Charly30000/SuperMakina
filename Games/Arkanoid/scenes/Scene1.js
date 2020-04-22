@@ -137,6 +137,30 @@ class Scene1 extends Phaser.Scene {
             frameRate: 35,
             repeat: 0
         });
+
+        // Animacion jugador normal
+        this.anims.create({
+            key: "anim_jugador_normal",
+            frames: this.anims.generateFrameNumbers("jugador_normal", {
+                start: 0,
+                end: 16
+            }),
+            yoyo: true,
+            frameRate: 20,
+            repeat: -1
+        });
+
+        // Animacion jugador destruido
+        this.anims.create({
+            key: "anim_jugador_destruido",
+            frames: this.anims.generateFrameNumbers("jugador_destruido", {
+                start: 0,
+                end: 4
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+
         // Iniciar Scene2
         this.scene.start("playGame");
     }

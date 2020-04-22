@@ -27,10 +27,12 @@ Pelota.prototype.update = function() {
     } else if (this.body.x + this.body.width > this.scene.barraLateralDcha.body.x) {
         this.body.x = this.scene.barraLateralDcha.body.x - this.body.width;
     }
-
+    
     if (this.body.y > config.height && !this.hayPelotasEnPantalla()) {
-        this.scene.quitarVida();
-        this.scene.colocarPelotaYJugador();
+        if (gameConfig.vidas > 0){
+            this.scene.quitarVida();
+            this.scene.colocarPelotaYJugador();
+        }
     } else if (this.body.y > config.height && this.hayPelotasEnPantalla()) {
         // Elimina las pelotas que haya fuera de la pantalla en caso de que haya pelotas en la pantalla
         this.destroy();
