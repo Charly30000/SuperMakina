@@ -60,6 +60,8 @@ class Scene_play extends Phaser.Scene {
         // se carga el fondo y el borde segun el nivel en el que estas
         this.add.image(450, 300, nivel.fondo).setScale(3);
         this.add.image(this.sys.game.config.width / 2, 300, nivel.borde).setScale(3);
+        this.lineaGameOver = this.physics.add.image(this.sys.game.config.width / 2, 500, "lineago").setScale(3);
+
 
         //se crea la flecha
         this.flecha = this.add.image(this.sys.game.config.width / 2, 525, 'flecha').setScale(3);
@@ -67,7 +69,7 @@ class Scene_play extends Phaser.Scene {
 
         // crea el array de todas las filas del nivel para guardar las referencias de las burbujas
         arrayburbujas = new Array(this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7),
-            this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7), this.crearfila(8));
+            this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7), this.crearfila(8),this.crearfila(7));
 
 
         // se crean las bolas del nivel, guardandolas en un grupo de phaser y guardando una referencia es su lugar del
@@ -104,7 +106,7 @@ class Scene_play extends Phaser.Scene {
                         arrayburbujas[fila][columna] = fila + "-" + columna + "-" + elemento.color;
                         this.burbujasNivel.add(new Burbuja(this, x, y, elemento.burbuja, elemento.color, fila + "-" + columna + "-" + elemento.color).setScale(3));
                     }
-                }
+                } 
                 columna++;
             });
         });
@@ -191,12 +193,27 @@ class Scene_play extends Phaser.Scene {
             if (aisladas.length > 0) {
                 this.eliminarbolas(aisladas);
             }
+            if(this.burbujasNivel.getLength() == 0) {
+                this.ganarnivel();
+            }
+            
         }
+        this.physics.add.collider(this.lineaGameOver, this.burbujasNivel, this.gameover, null, this);
         this.modificarbolasmoviles();
     }
 
+    // añadir cuando se terminen los niveles
+    ganarnivel() {
+            numeronivel++;
+            this.scene.restart();
+            altura = 0;
+            this.flecha.angle = 0;
+    }
 
-
+    gameover() {
+        this.scene.stop();
+        console.log("muerto");
+    }
 
     modificarbolasmoviles() {
         this.lanzarbola = this.lanzarbolasegunda;
@@ -248,6 +265,7 @@ class Scene_play extends Phaser.Scene {
             }
         }
     }
+
 
 
 
@@ -422,7 +440,7 @@ class Scene_play extends Phaser.Scene {
                 x2 = (this.sys.game.config.width / 3.2 - 24) + (contador + 1) * 48;
                 if (this.lanzarbola.x >= x1 && this.lanzarbola.x <= x2) {
                     arrayburbujas[0][contador] = 0 + "-" + contador + "-" + color;
-                    this.burbujasNivel.add(new Burbuja(this, this.sys.game.config.width / 3.2 + 48 * contador, this.sys.game.config.height / 10,
+                    this.burbujasNivel.add(new Burbuja(this, this.sys.game.config.width / 3.2 + 48 * contador, this.sys.game.config.height / 10 + altura,
                         "burbuja" + color, color, 0 + "-" + contador + "-" + color).setScale(3));
                     this.lanzarbola.destroy();
                     let choquebolas = this.detectarsiexplosion(0 + "-" + contador + "-" + color);
@@ -468,7 +486,7 @@ class Scene_play extends Phaser.Scene {
         }
 
 
-        if (contador > 500) {
+        if (contador > 4) {
             graphics = this.add.graphics();
             altura += 45;
             graphics.fillRect(this.sys.game.config.width / 3.2 - 24, this.sys.game.config.height / 10 - 24, 384, altura);
