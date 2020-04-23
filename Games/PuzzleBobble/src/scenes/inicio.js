@@ -7,11 +7,12 @@ class Inicio extends Phaser.Scene {
 
     create() {
         this.add.image(450, 300, 'inicio').setScale(0.6);
-        this.cursor_S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        //this.cursor_S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.cursor_empezar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update() {
-        if (this.cursor_S.isDown) {
+        if (this.cursor_empezar.isDown) {
             this.scene.start("Scene_play");
         }
 
