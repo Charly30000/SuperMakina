@@ -9,5 +9,6 @@ class LadrilloRegenerativo extends Phaser.GameObjects.Sprite {
         this.movement = movement;
         this.puntos = 5;
         this.golpes = 3;
+        this.tieneMejora = false;
     }
 }

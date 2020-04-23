@@ -8,5 +8,6 @@ class LadrilloIndestructible extends Phaser.GameObjects.Sprite {
         
         this.movement = movement;
         this.puntos = 200;
+        this.tieneMejora = false;
     }
 }

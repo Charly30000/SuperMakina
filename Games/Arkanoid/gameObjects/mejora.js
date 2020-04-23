@@ -4,10 +4,10 @@ class Mejora extends Phaser.GameObjects.Sprite {
         // Se añade la escena de la mejora
         scene.add.existing(this);
         // Para que tenga fisicas el objeto
-        scene.physics.world.enableBody(true);
+        scene.physics.world.enable(this);
         // Activamos la animacion
         this.play(`anim_${type}`);
-        this.body.velocity.y = -100;
+        this.body.velocity.y = 60;
     }
 
     update() {

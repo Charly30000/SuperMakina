@@ -74,6 +74,7 @@ class Scene2 extends Phaser.Scene {
         this.listaLadrillosRegenerativos = this.add.group();
         this.listaLadrillosDuros = this.add.group();
         this.listaTodosLadrillos = this.add.group();
+        this.listaMejoras = this.add.group();
 
         cargaNivel.ladrillos.forEach(arrayLadrillos => {
             arrayLadrillos.forEach(element => {
@@ -100,6 +101,10 @@ class Scene2 extends Phaser.Scene {
                             break;
                     }
                     this.listaTodosLadrillos.add(ladrillo);
+                    // Le pongo si el objeto va a tener mejora (si sale un numero entre 0-4 tendra mejora)
+                    if (Math.floor(Math.random() * 11) < 4) {
+                        ladrillo.tieneMejora = true;
+                    }
                 }
                 posX += 32;
             });
@@ -113,11 +118,11 @@ class Scene2 extends Phaser.Scene {
             if (ladrillo.movement) {
                 // Obtengo el ladrillo de la izquierda segun el array de objetos
                 let ladIzda = this.listaTodosLadrillos.getChildren()
-                    [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) - 1];
+                [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) - 1];
                 // Obtengo el ladrillo de la derecha segun el array de objetos
                 let ladDcha = this.listaTodosLadrillos.getChildren()
-                    [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) + 1];
-                
+                [this.listaTodosLadrillos.getChildren().indexOf(ladrillo) + 1];
+
                 if (ladIzda && ladDcha) {
                     // Para el caso en el que tenga ladrillo izquierdo y derecho
                     if (ladIzda.body.y == ladrillo.body.y && ladDcha.body.y == ladrillo.body.y) {
@@ -201,7 +206,8 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.listaTodosLadrillos, this.listaTodosLadrillos, this.colisionLadrilloLadrillo, null, this);
         // Colision ladrillo - barras
         this.physics.add.collider(this.listaTodosLadrillos, this.listaBarras, this.colisionLadrilloBarra, null, this);
-
+        // Colision mejora - jugador
+        this.physics.add.collider(this.listaMejoras, this.listaJugador, this.colisionMejoraJugador, null, this);
         /************
             SONIDOS
         *************/
@@ -222,6 +228,11 @@ class Scene2 extends Phaser.Scene {
         // Actualizador de los objetos Pelota
         this.listaPelotas.getChildren().forEach(pelota => {
             pelota.update();
+        });
+
+        // Actualizador de los objetos Mejora
+        this.listaMejoras.getChildren().forEach(mejora => {
+            mejora.update();
         });
 
         // Añadimos el movimiento del jugador
@@ -248,6 +259,7 @@ class Scene2 extends Phaser.Scene {
     colisionPelotaLadrillo(pelota, ladrillo) {
         this.reponerVelocidadPelota(pelota);
         this.hacerMoverseAlLadrillo(ladrillo);
+        this.generarMejora(ladrillo);
         ladrillo.destroy();
         this.click.play();
         this.aumentarPuntos(ladrillo);
@@ -276,6 +288,7 @@ class Scene2 extends Phaser.Scene {
         let posY = ladrillo.body.y;
         let movement = ladrillo.movement;
         this.aumentarPuntos(ladrillo);
+        this.generarMejora(ladrillo);
         ladrillo.destroy();
         this.time.addEvent({
             delay: 1000,
@@ -298,6 +311,7 @@ class Scene2 extends Phaser.Scene {
         if (ladrillo.golpes <= 0) {
             this.aumentarPuntos(ladrillo);
             this.hacerMoverseAlLadrillo(ladrillo);
+            this.generarMejora(ladrillo);
             ladrillo.destroy();
         }
         this.comprobarCambiarNivel();
@@ -531,5 +545,106 @@ class Scene2 extends Phaser.Scene {
         } else {
             ladrillo.body.velocity.x = -60;
         }
+    }
+
+    generarMejora(ladrillo) {
+        if (ladrillo.tieneMejora) {
+            let xMejora = ladrillo.body.x + (ladrillo.body.width / 2);
+            let yMejora = ladrillo.body.y + ladrillo.body.height;
+            let mejora;
+            let numeroRandom = Math.floor(Math.random() * 8);
+            switch (numeroRandom) {
+                case 0:
+                    // Mejora roja - maximizar
+                    mejora = "mejora_roja";
+                    break;
+                case 1:
+                    // Mejora azul - minimizar
+                    mejora = "mejora_azul";
+                    break;
+                case 2:
+                    // Mejora blanca - multiple
+                    mejora = "mejora_blanca";
+                    break;
+                case 3:
+                    // Mejora naranja - bola roja
+                    mejora = "mejora_naranja";
+                    break;
+                case 4:
+                    // Mejora verde - pegajoso
+                    mejora = "mejora_verde";
+                    break;
+                case 5:
+                    // Mejora negra - pistolero
+                    mejora = "mejora_negra";
+                    break;
+                case 6:
+                    // Mejora fucsia - multipaleta
+                    mejora = "mejora_fucsia";
+                    break;
+                default:
+                    // Si no se llegase a generar un numero adecuado, se genera la mejora roja por defecto
+                    mejora = "mejora_roja";
+                    console.log("ha pasado por el default en la seleccion")
+                    break;
+            }
+            this.listaMejoras.add(new Mejora(this, xMejora, yMejora, mejora)
+                .setOrigin(0.5, 0).setScale(1.5));
+        }
+    }
+
+    colisionMejoraJugador(mejora, jugador) {
+        if (this.listaJugador.getChildren()[1]) {
+            this.listaJugador.getChildren()[1].destroy();
+        }
+        this.listaJugador.getChildren()[0].modoPegajoso = false;
+        this.listaJugador.getChildren()[0].modoPistolero = false;
+        this.listaJugador.getChildren()[0].modoMultipaleta = false;
+        this.listaJugador.getChildren()[0].modoMaximizar = false;
+        this.listaJugador.getChildren()[0].modoMinimizar = false;
+        if (this.listaJugador.getChildren()[0].mejoraActual !== mejora.texture.key) {
+            this.listaJugador.getChildren()[0].mejoraActual = mejora.texture.key;
+            switch (mejora.texture.key) {
+                case "mejora_roja":
+                    // Mejora roja - maximizar
+                    this.listaJugador.getChildren()[0].modoMaximizar = true;
+                    
+                    break;
+                case "mejora_azul":
+                    // Mejora azul - minimizar
+                    this.listaJugador.getChildren()[0].modoMinimizar = true;
+                    
+                    break;
+                case "mejora_blanca":
+                    // Mejora blanca - multiple
+                    
+                    break;
+                case "mejora_naranja":
+                    // Mejora naranja - bola roja
+                    
+                    break;
+                case "mejora_verde":
+                    // Mejora verde - pegajoso
+                    this.listaJugador.getChildren()[0].modoPegajoso = true;
+                    
+                    break;
+                case "mejora_negra":
+                    // Mejora negra - pistolero
+                    this.listaJugador.getChildren()[0].modoPistolero = true;
+                    
+                    break;
+                case "mejora_fucsia":
+                    // Mejora fucsia - multipaleta
+                    this.listaJugador.getChildren()[0].modoMultipaleta = true;
+                    
+                    break;
+                default:
+                    // Si no se llegase a generar un numero adecuado, se genera la mejora roja por defecto
+                    this.listaJugador.getChildren()[0].mejoraActual = "mejora_roja";
+                    console.log("Ha pasado por el default")
+                    break;
+            }
+        }
+        mejora.destroy();
     }
 }

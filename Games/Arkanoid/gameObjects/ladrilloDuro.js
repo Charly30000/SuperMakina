@@ -9,5 +9,6 @@ class LadrilloDuro extends Phaser.GameObjects.Sprite {
         this.movement = movement;
         this.puntos = 40;
         this.golpes = 3;
+        this.tieneMejora = false;
     }
 }

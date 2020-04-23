@@ -11,6 +11,7 @@ class Jugador extends Phaser.GameObjects.Sprite {
         this.modoMultipaleta = false;
         this.modoMaximizar = false;
         this.modoMinimizar = false;
+        this.mejoraActual = "";
 
         this.play("anim_jugador_normal");
     }
