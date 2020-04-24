@@ -460,9 +460,10 @@ class Scene2 extends Phaser.Scene {
     }
 
     reponerLadrilloRegenerativo(posX, posY, movement) {
-        this.listaLadrillosRegenerativos.add(
-            new LadrilloRegenerativo(this, posX, posY, "ladrillo_regenerativo", movement)
-                .setOrigin(0, 0).play("anim_ladrillo_regenerativo"));
+        let ladrillo = new LadrilloRegenerativo(this, posX, posY, "ladrillo_regenerativo", movement)
+        .setOrigin(0, 0).play("anim_ladrillo_regenerativo");
+        this.listaLadrillosRegenerativos.add(ladrillo);
+        this.listaTodosLadrillos.add(ladrillo);
     }
 
     aumentarPuntos(ladrillo) {
