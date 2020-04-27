@@ -49,9 +49,9 @@ class Scene_play extends Phaser.Scene {
         this.add.image(450, 300, gameConfig.nivel.fondo).setScale(3);
         this.add.image(this.sys.game.config.width / 2, 300, gameConfig.nivel.borde).setScale(3);
         this.lineaGameOver = this.physics.add.image(this.sys.game.config.width / 2, 505, "lineago").setScale(3);
-        this.scoreLabel = this.add.text(16, 100, `SCORE: ${gameConfig.puntos}`,{ fontSize: '32px', fill: 'yellow'});
-        this.nivelLabel = this.add.text(16, 130, `Nivel: ${gameConfig.numeronivel}`,{ fontSize: '32px', fill: 'yellow'});
-
+        this.physics.add.sprite(this.sys.game.config.width / 2.1,  550, 'maquinaria').setScale(3);
+        this.scoreLabel = this.add.text(10, 100, `SCORE: ${this.zeroPad(gameConfig.puntos, 6)}`,{ fontSize: '32px', fill: 'yellow'});
+        this.nivelLabel = this.add.text(10, 130, `Nivel: ${gameConfig.numeronivel}`,{ fontSize: '32px', fill: 'yellow'});
 
         //se crea la flecha
         this.flecha = this.add.image(this.sys.game.config.width / 2, 525, 'flecha').setScale(3);
@@ -115,8 +115,16 @@ class Scene_play extends Phaser.Scene {
         // colision entre burbuja movil y el grupo de burbujas
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
 
-    }
+        
 
+    }
+    zeroPad(number, size) {
+        let stringNumber = String(number);
+        while (stringNumber.length < (size || 2)) {
+            stringNumber = "0" + stringNumber;
+        }
+        return stringNumber;
+    }
 
     // crea un array con 7 o 8 sitios
     crearfila(numero) {
@@ -135,7 +143,6 @@ class Scene_play extends Phaser.Scene {
         coordenadas[1] = parseInt(coordenadas[1]);
         //burbujamovil.body.touching.left
         if (burbuja.y + 23 <= burbujamovil.y) {
-            console.log("cabeza");
             burbujamovil.destroy();
             if (gameConfig.arrayburbujas[coordenadas[0]].length == coordenadas[1] + 1 && coordenadas[0] % 2 == 0) {
                 coordenadas[1] = coordenadas[1] - 1;
@@ -152,13 +159,11 @@ class Scene_play extends Phaser.Scene {
 
 
         } else if (burbujamovil.x < burbuja.x) {
-            console.log("izquierda");
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] - 1;
             this.posicionarpelota(coordenadas, color);
 
         } else {
-            console.log("derecha");
             burbujamovil.destroy();
             coordenadas[1] = coordenadas[1] + 1;
             this.posicionarpelota(coordenadas, color);
@@ -184,31 +189,38 @@ class Scene_play extends Phaser.Scene {
                 this.eliminarbolas(aisladas);
             }
             if(this.burbujasNivel.getLength() == 0) {
+                gameConfig.crearbola = false;
                 this.ganarnivel();
             }
-            
         }
         this.physics.add.collider(this.lineaGameOver, this.burbujasNivel, this.gameover, null, this);
-        this.modificarbolasmoviles();
+            this.modificarbolasmoviles();
     }
 
     // añadir cuando se terminen los niveles
     ganarnivel() {
             gameConfig.numeronivel++;
-            this.scene.restart();
             gameConfig.altura = 0;
             this.flecha.angle = 0;
             gameConfig.velocidadburbujax = 0,
             gameConfig.velocidadburbujay = -900;
             gameConfig.contador = 0;
+            gameConfig.crearbola = true;
+            this.scene.restart();
     }
-
+    aumentarPuntos(numero) {
+        gameConfig.puntos += numero * 10;
+        let scoreFormated = this.zeroPad(gameConfig.puntos, 6);
+        this.scoreLabel.text = `SCORE: ${scoreFormated}`;
+    }
     gameover() {
-        this.scene.stop();
+        this.scene.pause();
+        //gameConfig.crearbola = false;
         console.log("muerto");
     }
 
     modificarbolasmoviles() {
+        if(gameConfig.crearbola) {
         this.lanzarbola = this.lanzarbolasegunda;
         this.lanzarbola.x = this.sys.game.config.width / 2,
             this.lanzarbola.y = 525;
@@ -216,6 +228,7 @@ class Scene_play extends Phaser.Scene {
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
         gameConfig.bolachocaizquierda = false;
         gameConfig.bolachocaderecha = false;
+        }
     }
 
 
@@ -241,11 +254,13 @@ class Scene_play extends Phaser.Scene {
 
 
     eliminarbolas(array) {
+        let contador = 0;
         while (array.length != 0) {
             let burbujaarray = array.pop();
             this.burbujasNivel.getChildren().forEach(burbuja => {
                 if (burbuja.posicion == burbujaarray) {
                     burbuja.destroy();
+                    contador++;
                 }
             });
             for (let i = 0; i < gameConfig.arrayburbujas.length; i++) {
@@ -257,6 +272,7 @@ class Scene_play extends Phaser.Scene {
 
             }
         }
+        this.aumentarPuntos(contador);
     }
 
 
@@ -485,7 +501,6 @@ class Scene_play extends Phaser.Scene {
             gameConfig.graphics.fillRect(this.sys.game.config.width / 3.2 - 24, this.sys.game.config.height / 10 - 24, 384, gameConfig.altura);
             this.moverburbujas();
             gameConfig.contador = 0;
-            console.log(gameConfig.contador);
         }
     }
 }

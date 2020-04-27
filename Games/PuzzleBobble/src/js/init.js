@@ -33,5 +33,6 @@ var gameConfig = {
     nivel: null,
     movimientox: null,
     altura: 0,
-    cursors: null
+    cursors: null,
+    crearbola: true
 };
