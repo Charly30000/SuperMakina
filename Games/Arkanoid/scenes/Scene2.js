@@ -212,7 +212,7 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.listaMejoras, this.listaJugador, this.colisionMejoraJugador, null, this);
         // Colision misil - ladrillos duros
         this.physics.add.collider(this.listaMisiles, this.listaLadrillos,
-            this.colisionzMisilLadrillo, null, this);
+            this.colisionMisilLadrillo, null, this);
         /************
             SONIDOS
         *************/
@@ -689,7 +689,7 @@ class Scene2 extends Phaser.Scene {
         //this.scene.pause()
     }
 
-    colisionzMisilLadrillo(misil, ladrillo) {
+    colisionMisilLadrillo(misil, ladrillo) {
         misil.destroy();
         this.hacerMoverseAlLadrillo(ladrillo);
         this.generarMejora(ladrillo);
