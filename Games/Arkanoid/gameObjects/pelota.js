@@ -46,11 +46,17 @@ Pelota.prototype.update = function() {
 */
 Pelota.prototype.hayPelotasEnPantalla = function() {
     let hayPelotas = false;
-    this.scene.listaPelotas.getChildren().forEach(pelota => {
+    for (let pelota of this.scene.listaPelotas.getChildren()) {
+        if (pelota.body.y < config.height) {
+            hayPelotas = true;
+            break;
+        }
+    }
+    /* this.scene.listaPelotas.getChildren().forEach(pelota => {
         if (pelota.body.y < config.height) {
             hayPelotas = true;
             return;
         }
-    });
+    }); */
     return hayPelotas;
 }

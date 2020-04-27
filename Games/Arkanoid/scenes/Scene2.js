@@ -162,6 +162,8 @@ class Scene2 extends Phaser.Scene {
         this.listaJugador = this.add.group();
         this.listaJugador.add(
             new Jugador(this, gameConfig.posicionJugadorX, gameConfig.posicionJugadorY, "jugador_normal"));
+        // Misiles
+        this.listaMisiles = this.add.group();
 
         /**************** 
             COLISIONES
@@ -208,6 +210,9 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.listaTodosLadrillos, this.listaBarras, this.colisionLadrilloBarra, null, this);
         // Colision mejora - jugador
         this.physics.add.collider(this.listaMejoras, this.listaJugador, this.colisionMejoraJugador, null, this);
+        // Colision misil - ladrillos duros
+        this.physics.add.collider(this.listaMisiles, this.listaLadrillos,
+            this.colisionzMisilLadrillo, null, this);
         /************
             SONIDOS
         *************/
@@ -222,6 +227,11 @@ class Scene2 extends Phaser.Scene {
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        /* Pruebas */
+        this.listaMejoras.add(new Mejora(this, config.width/2, config.height - 100, "mejora_negra")
+            .setOrigin(0.5, 0).setScale(1.5));
+
+        this.pruebas();
     }
 
     update() {
@@ -233,6 +243,16 @@ class Scene2 extends Phaser.Scene {
         // Actualizador de los objetos Mejora
         this.listaMejoras.getChildren().forEach(mejora => {
             mejora.update();
+        });
+
+        // Actualizador del objeto jugador
+        this.listaJugador.getChildren().forEach(jugador => {
+            jugador.update();
+        });
+
+        // Actualizador del objeto Misil
+        this.listaMisiles.getChildren().forEach(misil => {
+            misil.update();
         });
 
         // Añadimos el movimiento del jugador
@@ -253,7 +273,6 @@ class Scene2 extends Phaser.Scene {
             gameConfig.vidas += 1;
             this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
         }
-
     }
 
     colisionPelotaLadrillo(pelota, ladrillo) {
@@ -461,7 +480,7 @@ class Scene2 extends Phaser.Scene {
 
     reponerLadrilloRegenerativo(posX, posY, movement) {
         let ladrillo = new LadrilloRegenerativo(this, posX, posY, "ladrillo_regenerativo", movement)
-        .setOrigin(0, 0).play("anim_ladrillo_regenerativo");
+            .setOrigin(0, 0).play("anim_ladrillo_regenerativo");
         this.listaLadrillosRegenerativos.add(ladrillo);
         this.listaTodosLadrillos.add(ladrillo);
     }
@@ -553,7 +572,7 @@ class Scene2 extends Phaser.Scene {
             let xMejora = ladrillo.body.x + (ladrillo.body.width / 2);
             let yMejora = ladrillo.body.y + ladrillo.body.height;
             let mejora;
-            let numeroRandom = Math.floor(Math.random() * 8);
+            let numeroRandom = Math.floor(Math.random() * 7);
             switch (numeroRandom) {
                 case 0:
                     // Mejora roja - maximizar
@@ -586,7 +605,7 @@ class Scene2 extends Phaser.Scene {
                 default:
                     // Si no se llegase a generar un numero adecuado, se genera la mejora roja por defecto
                     mejora = "mejora_roja";
-                    console.log("ha pasado por el default en la seleccion")
+                    console.log("ha pasado por el default en la seleccion", numeroRandom);
                     break;
             }
             this.listaMejoras.add(new Mejora(this, xMejora, yMejora, mejora)
@@ -595,57 +614,97 @@ class Scene2 extends Phaser.Scene {
     }
 
     colisionMejoraJugador(mejora, jugador) {
-        if (this.listaJugador.getChildren()[1]) {
-            this.listaJugador.getChildren()[1].destroy();
-        }
-        this.listaJugador.getChildren()[0].modoPegajoso = false;
-        this.listaJugador.getChildren()[0].modoPistolero = false;
-        this.listaJugador.getChildren()[0].modoMultipaleta = false;
-        this.listaJugador.getChildren()[0].modoMaximizar = false;
-        this.listaJugador.getChildren()[0].modoMinimizar = false;
-        if (this.listaJugador.getChildren()[0].mejoraActual !== mejora.texture.key) {
-            this.listaJugador.getChildren()[0].mejoraActual = mejora.texture.key;
+        let player = this.listaJugador.getChildren()[0];
+
+        if (player.mejoraActual !== mejora.texture.key) {
+
+            if (this.listaJugador.getChildren()[1]) {
+                this.listaJugador.getChildren()[1].destroy();
+            }
+
+            player.modoPegajoso = false;
+            player.modoPistolero = false;
+            player.modoMultipaleta = false;
+            player.modoMaximizar = false;
+            player.modoMinimizar = false;
+            player.setTexture("jugador_normal");
+            player.play("anim_jugador_normal");
+            player.body.width = player.getBounds().width;
+            player.mejoraActual = mejora.texture.key;
+
             switch (mejora.texture.key) {
                 case "mejora_roja":
                     // Mejora roja - maximizar
-                    this.listaJugador.getChildren()[0].modoMaximizar = true;
-                    
+                    player.setTexture("jugador_grande");
+                    player.play("anim_jugador_grande");
+                    player.body.width = player.getBounds().width;
+                    player.modoMaximizar = true;
                     break;
                 case "mejora_azul":
                     // Mejora azul - minimizar
-                    this.listaJugador.getChildren()[0].modoMinimizar = true;
-                    
+                    player.setTexture("jugador_peque");
+                    player.play("anim_jugador_peque");
+                    player.body.width = player.getBounds().width;
+                    player.modoMinimizar = true;
                     break;
                 case "mejora_blanca":
                     // Mejora blanca - multiple
-                    
+
                     break;
                 case "mejora_naranja":
                     // Mejora naranja - bola roja
-                    
+
                     break;
                 case "mejora_verde":
                     // Mejora verde - pegajoso
-                    this.listaJugador.getChildren()[0].modoPegajoso = true;
-                    
+                    player.modoPegajoso = true;
+
                     break;
                 case "mejora_negra":
                     // Mejora negra - pistolero
-                    this.listaJugador.getChildren()[0].modoPistolero = true;
-                    
+                    player.setTexture("jugador_transformacion_pistolero");
+                    player.play("anim_jugador_transformacion_pistolero");
+                    console.log(player.anims.duration)
+                    setTimeout(function(){
+                        player.setTexture("jugador_pistolero");
+                        player.play("anim_jugador_pistolero");
+                        player.modoPistolero = true;
+                    }, player.anims.duration);
                     break;
                 case "mejora_fucsia":
                     // Mejora fucsia - multipaleta
-                    this.listaJugador.getChildren()[0].modoMultipaleta = true;
-                    
+                    player.modoMultipaleta = true;
+
                     break;
                 default:
                     // Si no se llegase a generar un numero adecuado, se genera la mejora roja por defecto
-                    this.listaJugador.getChildren()[0].mejoraActual = "mejora_roja";
+                    player.mejoraActual = "mejora_roja";
                     console.log("Ha pasado por el default")
                     break;
             }
         }
         mejora.destroy();
+
+        this.pruebas();
+        //this.scene.pause()
+    }
+
+    colisionzMisilLadrillo(misil, ladrillo) {
+        misil.destroy();
+        this.hacerMoverseAlLadrillo(ladrillo);
+        this.generarMejora(ladrillo);
+        ladrillo.destroy();
+        this.click.play();
+        this.aumentarPuntos(ladrillo);
+        // Sistema de cambio de nivel
+        this.comprobarCambiarNivel();
+    }
+
+    pruebas() {
+        this.listaJugador.getChildren().forEach(element => {
+            console.log(element.body)
+            console.log(element.body.width)
+        });
+        console.log("--------------------------------");
     }
 }
