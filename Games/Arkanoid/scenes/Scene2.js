@@ -210,9 +210,35 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.listaTodosLadrillos, this.listaBarras, this.colisionLadrilloBarra, null, this);
         // Colision mejora - jugador
         this.physics.add.collider(this.listaMejoras, this.listaJugador, this.colisionMejoraJugador, null, this);
-        // Colision misil - ladrillos duros
+        // Colision misil - ladrillos
         this.physics.add.collider(this.listaMisiles, this.listaLadrillos,
             this.colisionMisilLadrillo, null, this);
+        // Colision misil - ladrillos indestructibles
+        this.physics.add.collider(this.listaMisiles, this.listaLadrillosIndestructibles,
+            this.colisionMisilLadrilloIndestructible, null, this);
+        // Colision misil - ladrillos regenerativos
+        this.physics.add.collider(this.listaMisiles, this.listaLadrillosRegenerativos,
+            this.colisionMisilLadrilloRegenerativo,
+            function (misil, ladrillo) {
+                ladrillo.golpes -= 1;
+                if (ladrillo.golpes > 0) {
+                    return true;
+                }
+                return false;
+            }, this);
+
+        this.physics.add.overlap(this.listaMisiles, this.listaLadrillosRegenerativos,
+            this.overlapMisilLadrilloRegenerativo,
+            function (misil, ladrillo) {
+                if (ladrillo.golpes <= 0) {
+                    return true;
+                }
+                return false;
+            }, this);
+        // Colision misil - ladrillos duros
+        this.physics.add.collider(this.listaMisiles, this.listaLadrillosDuros,
+            this.colisionMisilLadrilloDuro, null, this);
+        
         /************
             SONIDOS
         *************/
@@ -228,7 +254,7 @@ class Scene2 extends Phaser.Scene {
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         /* Pruebas */
-        this.listaMejoras.add(new Mejora(this, config.width/2, config.height - 100, "mejora_negra")
+        this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 100, "mejora_negra")
             .setOrigin(0.5, 0).setScale(1.5));
 
         this.pruebas();
@@ -665,7 +691,7 @@ class Scene2 extends Phaser.Scene {
                     player.setTexture("jugador_transformacion_pistolero");
                     player.play("anim_jugador_transformacion_pistolero");
                     console.log(player.anims.duration)
-                    setTimeout(function(){
+                    setTimeout(function () {
                         player.setTexture("jugador_pistolero");
                         player.play("anim_jugador_pistolero");
                         player.modoPistolero = true;
@@ -697,6 +723,57 @@ class Scene2 extends Phaser.Scene {
         this.click.play();
         this.aumentarPuntos(ladrillo);
         // Sistema de cambio de nivel
+        this.comprobarCambiarNivel();
+    }
+
+    colisionMisilLadrilloIndestructible(misil, ladrillo) {
+        misil.destroy();
+        this.click.play();
+        ladrillo.play("anim_ladrillo_indestructible");
+    }
+
+    colisionMisilLadrilloRegenerativo(misil, ladrillo) {
+        misil.destroy();
+        this.click.play();
+        if (ladrillo.golpes == 2) {
+            ladrillo.setTexture("ladrillo_regenerativo_2");
+        } else if (ladrillo.golpes == 1) {
+            ladrillo.setTexture("ladrillo_regenerativo_3");
+        }
+    }
+
+    overlapMisilLadrilloRegenerativo(misil, ladrillo) {
+        misil.destroy();
+        let posX = ladrillo.body.x;
+        let posY = ladrillo.body.y;
+        let movement = ladrillo.movement;
+        this.aumentarPuntos(ladrillo);
+        this.generarMejora(ladrillo);
+        ladrillo.destroy();
+        this.time.addEvent({
+            delay: 1000,
+            callback: this.reponerLadrilloRegenerativo,
+            callbackScope: this,
+            loop: false,
+            args: [posX, posY, movement]
+        });
+    }
+
+    colisionMisilLadrilloDuro(misil, ladrillo) {
+        misil.destroy();
+        this.click.play();
+        ladrillo.golpes -= 1;
+        if (ladrillo.golpes == 2) {
+            ladrillo.setTexture("ladrillo_duro_2");
+        } else if (ladrillo.golpes == 1) {
+            ladrillo.setTexture("ladrillo_duro_3");
+        }
+        if (ladrillo.golpes <= 0) {
+            this.aumentarPuntos(ladrillo);
+            this.hacerMoverseAlLadrillo(ladrillo);
+            this.generarMejora(ladrillo);
+            ladrillo.destroy();
+        }
         this.comprobarCambiarNivel();
     }
 
