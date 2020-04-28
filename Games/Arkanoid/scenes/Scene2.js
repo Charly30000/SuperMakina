@@ -443,11 +443,9 @@ class Scene2 extends Phaser.Scene {
             }
     
             this.reponerVelocidadPelota(pelota);
-        } else {
-            if (pelota.texture.key === "bola_pegajosa"){
+        } else if (pelota.texture.key === "bola_pegajosa" && jugador.body.touching.up){
                 pelota.body.velocity.set(0, 0);
                 pelota.estaPegada = true;
-            }
         }
         
         //console.log(pelota.body.velocity.x)
