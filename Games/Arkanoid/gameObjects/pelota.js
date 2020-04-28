@@ -15,6 +15,7 @@ class Pelota extends Phaser.GameObjects.Sprite {
 
         this.modoBolaRoja = false;
         this.modoPelotaLenta = false;
+        this.estaPegada = false;
     }
 
 
@@ -35,7 +36,25 @@ Pelota.prototype.update = function() {
         }
     } else if (this.body.y > config.height && this.hayPelotasEnPantalla()) {
         // Elimina las pelotas que haya fuera de la pantalla en caso de que haya pelotas en la pantalla
+        if (!this.hayPelotasPegajosasEnPantalla()) {
+            this.scene.listaJugador.getChildren().forEach(jugador => {
+                jugador.modoPegajoso = false;
+            });
+        }
         this.destroy();
+        
+    }
+
+    // Lanzar pelota si esta pegada
+    if (this.estaPegada && Phaser.Input.Keyboard.JustDown(this.scene.spacebar)) {
+        this.scene.listaPelotas.getChildren().forEach(pelota => {
+            if (pelota.estaPegada) {
+                pelota.body.velocity.set(
+                    Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                    gameConfig.velocidadPelotaY);
+                pelota.estaPegada = false;
+            }
+        });
     }
     
 }
@@ -59,4 +78,13 @@ Pelota.prototype.hayPelotasEnPantalla = function() {
         }
     }); */
     return hayPelotas;
+}
+
+Pelota.prototype.hayPelotasPegajosasEnPantalla = function () {
+    for (let pelota of this.scene.listaPelotas.getChildren()) {
+        if (pelota.texture.key === "bola_pegajosa") {
+            return true;
+        }
+    }
+    return false;
 }

@@ -256,6 +256,8 @@ class Scene2 extends Phaser.Scene {
         /* Pruebas */
         this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 100, "mejora_blanca")
             .setOrigin(0.5, 0).setScale(1.5));
+            this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 120, "mejora_verde")
+            .setOrigin(0.5, 0).setScale(1.5));
 
         this.pruebas();
     }
@@ -391,49 +393,63 @@ class Scene2 extends Phaser.Scene {
     }
 
     colisionPelotaBarras(pelota, barra) {
+        if (pelota.estaPegada) {
+            pelota.body.velocity.set(
+                Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                gameConfig.velocidadPelotaY);
+            pelota.estaPegada = false;
+        }
         this.reponerVelocidadPelota(pelota);
     }
 
     colisionPelotaJugador(pelota, jugador) {
-        if (jugador.body.touching.up) {
-            if (pelota.body.x + (pelota.body.width / 2) < jugador.body.x + (jugador.body.width / 2)) {
-                //console.log("Toca en la IZDA del jugador");
-                if (pelota.body.velocity.x > 0) {
-                    //console.log("voy a la dcha");
-                    if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 7 /* Zona naranja lado izdo */) {
-                        pelota.body.velocity.x *= -1
+        if (pelota.texture.key !== "bola_pegajosa") {
+            if (jugador.body.touching.up) {
+                if (pelota.body.x + (pelota.body.width / 2) < jugador.body.x + (jugador.body.width / 2)) {
+                    //console.log("Toca en la IZDA del jugador");
+                    if (pelota.body.velocity.x > 0) {
+                        //console.log("voy a la dcha");
+                        if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 7 /* Zona naranja lado izdo */) {
+                            pelota.body.velocity.x *= -1
+                        } else {
+                            // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
+                            pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x)
+                                + Phaser.Math.Between(30, 45);
+                        }
                     } else {
-                        // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
-                        pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x)
-                            + Phaser.Math.Between(30, 45);
+                        //console.log("voy a la izda");
+                        pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
+                            - Phaser.Math.Between(30, 45);
                     }
+    
                 } else {
-                    //console.log("voy a la izda");
-                    pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
-                        - Phaser.Math.Between(30, 45);
-                }
-
-            } else {
-                //console.log("Toca en la DCHA del jugador");
-                if (pelota.body.velocity.x > 0) {
-                    //console.log("voy a la dcha");
-                    pelota.body.velocity.x = pelota.body.velocity.x -
-                        (pelota.body.x - jugador.body.x - jugador.body.width)
-                        - Phaser.Math.Between(30, 45);
-                } else {
-                    //console.log("voy a la izda");
-                    if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 7) /* Zona naranja lado dcho */) {
-                        pelota.body.velocity.x *= -1;
-                    } else {
-                        pelota.body.velocity.x = pelota.body.velocity.x +
+                    //console.log("Toca en la DCHA del jugador");
+                    if (pelota.body.velocity.x > 0) {
+                        //console.log("voy a la dcha");
+                        pelota.body.velocity.x = pelota.body.velocity.x -
                             (pelota.body.x - jugador.body.x - jugador.body.width)
-                            + Phaser.Math.Between(30, 45);
+                            - Phaser.Math.Between(30, 45);
+                    } else {
+                        //console.log("voy a la izda");
+                        if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 7) /* Zona naranja lado dcho */) {
+                            pelota.body.velocity.x *= -1;
+                        } else {
+                            pelota.body.velocity.x = pelota.body.velocity.x +
+                                (pelota.body.x - jugador.body.x - jugador.body.width)
+                                + Phaser.Math.Between(30, 45);
+                        }
                     }
                 }
             }
+    
+            this.reponerVelocidadPelota(pelota);
+        } else {
+            if (pelota.texture.key === "bola_pegajosa"){
+                pelota.body.velocity.set(0, 0);
+                pelota.estaPegada = true;
+            }
         }
-
-        this.reponerVelocidadPelota(pelota);
+        
         //console.log(pelota.body.velocity.x)
     }
 
@@ -448,6 +464,13 @@ class Scene2 extends Phaser.Scene {
                         pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
                     });
                 }
+                if (jugador.modoPegajoso) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        if (pelota.estaPegada) {
+                            pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
+                        }
+                    });
+                }
             } else if (this.cursorKeys.right.isDown &&
                 (jugador.body.x + jugador.body.width) < this.barraLateralDcha.x) {
                 jugador.body.setVelocityX(gameConfig.velocidadJugadorX);
@@ -457,12 +480,26 @@ class Scene2 extends Phaser.Scene {
                         pelota.body.velocity.x = gameConfig.velocidadJugadorX;
                     });
                 }
+                if (jugador.modoPegajoso) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        if (pelota.estaPegada) {
+                            pelota.body.velocity.x = gameConfig.velocidadJugadorX;
+                        }
+                    });
+                }
             } else {
                 jugador.body.setVelocityX(0);
                 // Funciona en caso de que empiece la partida o el jugador pierda una vida
                 if (gameConfig.inicioPelota) {
                     this.listaPelotas.getChildren().forEach(pelota => {
                         pelota.body.velocity.x = 0;
+                    });
+                }
+                if (jugador.modoPegajoso) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        if (pelota.estaPegada) {
+                            pelota.body.velocity.x = 0;
+                        }
                     });
                 }
             }
@@ -647,7 +684,6 @@ class Scene2 extends Phaser.Scene {
                 this.listaJugador.getChildren()[1].destroy();
             }
 
-            player.modoPegajoso = false;
             player.modoPistolero = false;
             player.modoMultipaleta = false;
             player.modoMaximizar = false;
@@ -686,7 +722,9 @@ class Scene2 extends Phaser.Scene {
                 case "mejora_verde":
                     // Mejora verde - pegajoso
                     player.modoPegajoso = true;
-
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        pelota.setTexture("bola_pegajosa");
+                    });
                     break;
                 case "mejora_negra":
                     // Mejora negra - pistolero
@@ -705,7 +743,10 @@ class Scene2 extends Phaser.Scene {
                     break;
                 default:
                     // Si no se llegase a generar un numero adecuado, se genera la mejora roja por defecto
-                    player.mejoraActual = "mejora_roja";
+                    player.setTexture("jugador_grande");
+                    player.play("anim_jugador_grande");
+                    player.body.width = player.getBounds().width;
+                    player.modoMaximizar = true;
                     console.log("Ha pasado por el default")
                     break;
             }
