@@ -37,14 +37,30 @@ class Scene1 extends Phaser.Scene {
         });
 
         // Carga del directorio del jugador
-        var jugador = fs.readdirSync(`${__dirname}/assets/images/jugador`);
         /* Por hacer, hay que hacer cargas de los spritesheet que aun no estan puestos para que tenga animacion */
-        jugador.forEach(element => {
-            let nombreSinFormato = element.slice(0, element.indexOf("."));
-            this.load.spritesheet(nombreSinFormato, `assets/images/jugador/${element}`, {
-                frameWidth: 64,
-                frameHeight: 16
-            });
+        this.load.spritesheet("jugador_normal", `assets/images/jugador/jugador_normal.png`, {
+            frameWidth: 64,
+            frameHeight: 16
+        });
+        this.load.spritesheet("jugador_grande", `assets/images/jugador/jugador_grande.png`, {
+            frameWidth: 96,
+            frameHeight: 16
+        });
+        this.load.spritesheet("jugador_grande", `assets/images/jugador/jugador_grande.png`, {
+            frameWidth: 96,
+            frameHeight: 16
+        });
+        this.load.spritesheet("jugador_peque", `assets/images/jugador/jugador_peque.png`, {
+            frameWidth: 48,
+            frameHeight: 16
+        });
+        this.load.spritesheet("jugador_transformacion_pistolero", `assets/images/jugador/jugador_transformacion_pistolero.png`, {
+            frameWidth: 64,
+            frameHeight: 16
+        });
+        this.load.spritesheet("jugador_pistolero", `assets/images/jugador/jugador_pistolero.png`, {
+            frameWidth: 64,
+            frameHeight: 16
         });
 
         // Carga del directorio de los ladrillos
@@ -150,15 +166,51 @@ class Scene1 extends Phaser.Scene {
             repeat: -1
         });
 
-        // Animacion jugador destruido
+        // Animacion jugador grande
         this.anims.create({
-            key: "anim_jugador_destruido",
-            frames: this.anims.generateFrameNumbers("jugador_destruido", {
+            key: "anim_jugador_grande",
+            frames: this.anims.generateFrameNumbers("jugador_grande", {
+                start: 0,
+                end: 16
+            }),
+            yoyo: true,
+            frameRate: 20,
+            repeat: -1
+        });
+
+        // Animacion jugador peque
+        this.anims.create({
+            key: "anim_jugador_peque",
+            frames: this.anims.generateFrameNumbers("jugador_peque", {
                 start: 0,
                 end: 4
             }),
-            frameRate: 20,
+            yoyo: true,
+            frameRate: 5,
+            repeat: -1
+        });
+
+        // Animacion jugador transformacion pistolero
+        this.anims.create({
+            key: "anim_jugador_transformacion_pistolero",
+            frames: this.anims.generateFrameNumbers("jugador_transformacion_pistolero", {
+                start: 0,
+                end: 15
+            }),
+            frameRate: 15,
             repeat: 0
+        });
+
+        // Animacion jugador pistolero
+        this.anims.create({
+            key: "anim_jugador_pistolero",
+            frames: this.anims.generateFrameNumbers("jugador_pistolero", {
+                start: 0,
+                end: 4
+            }),
+            yoyo: true,
+            frameRate: 5,
+            repeat: -1
         });
 
         // Iniciar Scene2

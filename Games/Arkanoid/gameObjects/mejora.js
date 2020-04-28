@@ -9,10 +9,10 @@ class Mejora extends Phaser.GameObjects.Sprite {
         this.play(`anim_${type}`);
         this.body.velocity.y = 60;
     }
+}
 
-    update() {
-        if (this.y > config.height) {
-            this.destroy();
-        }
+Mejora.prototype.update = function() {
+    if (this.y > config.height) {
+        this.destroy();
     }
 }
