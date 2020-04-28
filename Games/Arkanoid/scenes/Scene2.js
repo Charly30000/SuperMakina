@@ -44,9 +44,7 @@ class Scene2 extends Phaser.Scene {
         }
 
         // Colocacion del fondo
-        /************** 
-            POR HACER
-        ***************/
+        this.add.image(200, 360, cargaNivel.background);
 
         // Colocacion de barras
         this.listaBarras = this.physics.add.staticGroup();

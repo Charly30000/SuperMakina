@@ -1,7 +1,7 @@
 var level_1 = 
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_azul_hexagonos",
     music: "",
     ladrillos: [
         [{ladrillo: "ladrillo_azul", movement: true}, {ladrillo: "ladrillo_azul", movement: true}, {ladrillo: "ladrillo_azul", movement: true}, {ladrillo: "", movement: true}, {ladrillo: "ladrillo_azul", movement: true}, {ladrillo: "ladrillo_azul", movement: true}, {ladrillo: "ladrillo_azul", movement: true}, {ladrillo: "", movement: true}, {ladrillo: "ladrillo_azul", movement: true}, {ladrillo: "ladrillo_azul", movement: true}, {ladrillo: "ladrillo_azul", movement: true},], // Primera fila
@@ -19,7 +19,7 @@ var level_1 =
 /* var level_1 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_azul_hexagonos",
     music: "",
     ladrillos: [
         [],
@@ -121,7 +121,7 @@ var level_1 =
 var level_2 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_verde",
     music: "",
     ladrillos: [
         [],
@@ -314,7 +314,7 @@ var level_2 =
 var level_3 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_rojo",
     music: "",
     ladrillos: [
         [],
@@ -435,7 +435,7 @@ var level_3 =
 var level_4 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_azul_cuadrados",
     music: "",
     ladrillos: [
         [],
@@ -641,7 +641,7 @@ var level_4 =
 var level_5 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_azul_hexagonos",
     music: "",
     ladrillos: [
         [], 
@@ -860,7 +860,7 @@ var level_5 =
 var level_6 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_verde",
     music: "",
     ladrillos: [
         [],
@@ -979,7 +979,7 @@ var level_6 =
 var level_7 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_rojo",
     music: "",
     ladrillos: [
         [],
@@ -1173,7 +1173,7 @@ var level_7 =
 var level_8 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_azul_cuadrados",
     music: "",
     ladrillos: [
         [],
@@ -1366,7 +1366,7 @@ var level_8 =
 var level_9 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_azul_hexagonos",
     music: "",
     ladrillos: [
         [],
@@ -1598,7 +1598,7 @@ var level_9 =
 var level_10 =
 {
     enemy_type: "",
-    background: "",
+    background: "fondo_verde",
     music: "",
     ladrillos: [
         [],
