@@ -208,9 +208,35 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.listaTodosLadrillos, this.listaBarras, this.colisionLadrilloBarra, null, this);
         // Colision mejora - jugador
         this.physics.add.collider(this.listaMejoras, this.listaJugador, this.colisionMejoraJugador, null, this);
-        // Colision misil - ladrillos duros
+        // Colision misil - ladrillos
         this.physics.add.collider(this.listaMisiles, this.listaLadrillos,
             this.colisionMisilLadrillo, null, this);
+        // Colision misil - ladrillos indestructibles
+        this.physics.add.collider(this.listaMisiles, this.listaLadrillosIndestructibles,
+            this.colisionMisilLadrilloIndestructible, null, this);
+        // Colision misil - ladrillos regenerativos
+        this.physics.add.collider(this.listaMisiles, this.listaLadrillosRegenerativos,
+            this.colisionMisilLadrilloRegenerativo,
+            function (misil, ladrillo) {
+                ladrillo.golpes -= 1;
+                if (ladrillo.golpes > 0) {
+                    return true;
+                }
+                return false;
+            }, this);
+
+        this.physics.add.overlap(this.listaMisiles, this.listaLadrillosRegenerativos,
+            this.overlapMisilLadrilloRegenerativo,
+            function (misil, ladrillo) {
+                if (ladrillo.golpes <= 0) {
+                    return true;
+                }
+                return false;
+            }, this);
+        // Colision misil - ladrillos duros
+        this.physics.add.collider(this.listaMisiles, this.listaLadrillosDuros,
+            this.colisionMisilLadrilloDuro, null, this);
+        
         /************
             SONIDOS
         *************/
@@ -226,7 +252,9 @@ class Scene2 extends Phaser.Scene {
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         /* Pruebas */
-        this.listaMejoras.add(new Mejora(this, config.width/2, config.height - 100, "mejora_negra")
+        this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 100, "mejora_blanca")
+            .setOrigin(0.5, 0).setScale(1.5));
+            this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 120, "mejora_verde")
             .setOrigin(0.5, 0).setScale(1.5));
 
         this.pruebas();
@@ -324,8 +352,7 @@ class Scene2 extends Phaser.Scene {
             ladrillo.setTexture("ladrillo_duro_2");
         } else if (ladrillo.golpes == 1) {
             ladrillo.setTexture("ladrillo_duro_3");
-        }
-        if (ladrillo.golpes <= 0) {
+        } else if (ladrillo.golpes <= 0) {
             this.aumentarPuntos(ladrillo);
             this.hacerMoverseAlLadrillo(ladrillo);
             this.generarMejora(ladrillo);
@@ -364,49 +391,61 @@ class Scene2 extends Phaser.Scene {
     }
 
     colisionPelotaBarras(pelota, barra) {
+        if (pelota.estaPegada) {
+            pelota.body.velocity.set(
+                Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                gameConfig.velocidadPelotaY);
+            pelota.estaPegada = false;
+        }
         this.reponerVelocidadPelota(pelota);
     }
 
     colisionPelotaJugador(pelota, jugador) {
-        if (jugador.body.touching.up) {
-            if (pelota.body.x + (pelota.body.width / 2) < jugador.body.x + (jugador.body.width / 2)) {
-                //console.log("Toca en la IZDA del jugador");
-                if (pelota.body.velocity.x > 0) {
-                    //console.log("voy a la dcha");
-                    if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 7 /* Zona naranja lado izdo */) {
-                        pelota.body.velocity.x *= -1
+        if (pelota.texture.key !== "bola_pegajosa") {
+            if (jugador.body.touching.up) {
+                if (pelota.body.x + (pelota.body.width / 2) < jugador.body.x + (jugador.body.width / 2)) {
+                    //console.log("Toca en la IZDA del jugador");
+                    if (pelota.body.velocity.x > 0) {
+                        //console.log("voy a la dcha");
+                        if ((pelota.body.x + (pelota.body.width / 2)) < jugador.body.x + 7 /* Zona naranja lado izdo */) {
+                            pelota.body.velocity.x *= -1
+                        } else {
+                            // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
+                            pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x)
+                                + Phaser.Math.Between(30, 45);
+                        }
                     } else {
-                        // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
-                        pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x)
-                            + Phaser.Math.Between(30, 45);
+                        //console.log("voy a la izda");
+                        pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
+                            - Phaser.Math.Between(30, 45);
                     }
+    
                 } else {
-                    //console.log("voy a la izda");
-                    pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
-                        - Phaser.Math.Between(30, 45);
-                }
-
-            } else {
-                //console.log("Toca en la DCHA del jugador");
-                if (pelota.body.velocity.x > 0) {
-                    //console.log("voy a la dcha");
-                    pelota.body.velocity.x = pelota.body.velocity.x -
-                        (pelota.body.x - jugador.body.x - jugador.body.width)
-                        - Phaser.Math.Between(30, 45);
-                } else {
-                    //console.log("voy a la izda");
-                    if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 7) /* Zona naranja lado dcho */) {
-                        pelota.body.velocity.x *= -1;
-                    } else {
-                        pelota.body.velocity.x = pelota.body.velocity.x +
+                    //console.log("Toca en la DCHA del jugador");
+                    if (pelota.body.velocity.x > 0) {
+                        //console.log("voy a la dcha");
+                        pelota.body.velocity.x = pelota.body.velocity.x -
                             (pelota.body.x - jugador.body.x - jugador.body.width)
-                            + Phaser.Math.Between(30, 45);
+                            - Phaser.Math.Between(30, 45);
+                    } else {
+                        //console.log("voy a la izda");
+                        if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 7) /* Zona naranja lado dcho */) {
+                            pelota.body.velocity.x *= -1;
+                        } else {
+                            pelota.body.velocity.x = pelota.body.velocity.x +
+                                (pelota.body.x - jugador.body.x - jugador.body.width)
+                                + Phaser.Math.Between(30, 45);
+                        }
                     }
                 }
             }
+    
+            this.reponerVelocidadPelota(pelota);
+        } else if (pelota.texture.key === "bola_pegajosa" && jugador.body.touching.up){
+                pelota.body.velocity.set(0, 0);
+                pelota.estaPegada = true;
         }
-
-        this.reponerVelocidadPelota(pelota);
+        
         //console.log(pelota.body.velocity.x)
     }
 
@@ -421,6 +460,13 @@ class Scene2 extends Phaser.Scene {
                         pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
                     });
                 }
+                if (jugador.modoPegajoso) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        if (pelota.estaPegada) {
+                            pelota.body.velocity.x = gameConfig.velocidadJugadorX * -1;
+                        }
+                    });
+                }
             } else if (this.cursorKeys.right.isDown &&
                 (jugador.body.x + jugador.body.width) < this.barraLateralDcha.x) {
                 jugador.body.setVelocityX(gameConfig.velocidadJugadorX);
@@ -430,12 +476,26 @@ class Scene2 extends Phaser.Scene {
                         pelota.body.velocity.x = gameConfig.velocidadJugadorX;
                     });
                 }
+                if (jugador.modoPegajoso) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        if (pelota.estaPegada) {
+                            pelota.body.velocity.x = gameConfig.velocidadJugadorX;
+                        }
+                    });
+                }
             } else {
                 jugador.body.setVelocityX(0);
                 // Funciona en caso de que empiece la partida o el jugador pierda una vida
                 if (gameConfig.inicioPelota) {
                     this.listaPelotas.getChildren().forEach(pelota => {
                         pelota.body.velocity.x = 0;
+                    });
+                }
+                if (jugador.modoPegajoso) {
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        if (pelota.estaPegada) {
+                            pelota.body.velocity.x = 0;
+                        }
                     });
                 }
             }
@@ -620,7 +680,6 @@ class Scene2 extends Phaser.Scene {
                 this.listaJugador.getChildren()[1].destroy();
             }
 
-            player.modoPegajoso = false;
             player.modoPistolero = false;
             player.modoMultipaleta = false;
             player.modoMaximizar = false;
@@ -647,7 +706,10 @@ class Scene2 extends Phaser.Scene {
                     break;
                 case "mejora_blanca":
                     // Mejora blanca - multiple
-
+                    if (this.listaPelotas.getLength() == 1) {
+                        this.mejoraBlanca();
+                        player.mejoraActual = "";
+                    }
                     break;
                 case "mejora_naranja":
                     // Mejora naranja - bola roja
@@ -656,14 +718,15 @@ class Scene2 extends Phaser.Scene {
                 case "mejora_verde":
                     // Mejora verde - pegajoso
                     player.modoPegajoso = true;
-
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        pelota.setTexture("bola_pegajosa");
+                    });
                     break;
                 case "mejora_negra":
                     // Mejora negra - pistolero
                     player.setTexture("jugador_transformacion_pistolero");
                     player.play("anim_jugador_transformacion_pistolero");
-                    console.log(player.anims.duration)
-                    setTimeout(function(){
+                    setTimeout(function () {
                         player.setTexture("jugador_pistolero");
                         player.play("anim_jugador_pistolero");
                         player.modoPistolero = true;
@@ -676,7 +739,10 @@ class Scene2 extends Phaser.Scene {
                     break;
                 default:
                     // Si no se llegase a generar un numero adecuado, se genera la mejora roja por defecto
-                    player.mejoraActual = "mejora_roja";
+                    player.setTexture("jugador_grande");
+                    player.play("anim_jugador_grande");
+                    player.body.width = player.getBounds().width;
+                    player.modoMaximizar = true;
                     console.log("Ha pasado por el default")
                     break;
             }
@@ -696,6 +762,74 @@ class Scene2 extends Phaser.Scene {
         this.aumentarPuntos(ladrillo);
         // Sistema de cambio de nivel
         this.comprobarCambiarNivel();
+    }
+
+    colisionMisilLadrilloIndestructible(misil, ladrillo) {
+        misil.destroy();
+        this.click.play();
+        ladrillo.play("anim_ladrillo_indestructible");
+    }
+
+    colisionMisilLadrilloRegenerativo(misil, ladrillo) {
+        misil.destroy();
+        this.click.play();
+        if (ladrillo.golpes == 2) {
+            ladrillo.setTexture("ladrillo_regenerativo_2");
+        } else if (ladrillo.golpes == 1) {
+            ladrillo.setTexture("ladrillo_regenerativo_3");
+        }
+    }
+
+    overlapMisilLadrilloRegenerativo(misil, ladrillo) {
+        misil.destroy();
+        let posX = ladrillo.body.x;
+        let posY = ladrillo.body.y;
+        let movement = ladrillo.movement;
+        this.aumentarPuntos(ladrillo);
+        this.generarMejora(ladrillo);
+        ladrillo.destroy();
+        this.time.addEvent({
+            delay: 1000,
+            callback: this.reponerLadrilloRegenerativo,
+            callbackScope: this,
+            loop: false,
+            args: [posX, posY, movement]
+        });
+    }
+
+    colisionMisilLadrilloDuro(misil, ladrillo) {
+        misil.destroy();
+        this.click.play();
+        ladrillo.golpes -= 1;
+        if (ladrillo.golpes == 2) {
+            ladrillo.setTexture("ladrillo_duro_2");
+        } else if (ladrillo.golpes == 1) {
+            ladrillo.setTexture("ladrillo_duro_3");
+        } else if (ladrillo.golpes <= 0) {
+            this.aumentarPuntos(ladrillo);
+            this.hacerMoverseAlLadrillo(ladrillo);
+            this.generarMejora(ladrillo);
+            ladrillo.destroy();
+        }
+        this.comprobarCambiarNivel();
+    }
+
+    mejoraBlanca() {
+        let posXPelota = this.listaPelotas.getChildren()[0].body.x;
+        let posYPelota = this.listaPelotas.getChildren()[0].body.y;
+        for (let i = 0; i < 5; i++) {
+            let pelota = new Pelota(this, posXPelota, posYPelota, "bola_blanca");
+            this.listaPelotas.add(pelota);
+            pelota.body.velocity.set(
+                Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                gameConfig.velocidadPelotaY);
+        }
+        if (gameConfig.inicioPelota) {
+            this.listaPelotas.getChildren()[0].body.velocity.set(
+                Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                gameConfig.velocidadPelotaY);
+            gameConfig.inicioPelota = false;
+        }
     }
 
     pruebas() {
