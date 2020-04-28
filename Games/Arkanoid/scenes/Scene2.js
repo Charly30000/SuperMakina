@@ -254,7 +254,7 @@ class Scene2 extends Phaser.Scene {
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         /* Pruebas */
-        this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 100, "mejora_negra")
+        this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 100, "mejora_blanca")
             .setOrigin(0.5, 0).setScale(1.5));
 
         this.pruebas();
@@ -352,8 +352,7 @@ class Scene2 extends Phaser.Scene {
             ladrillo.setTexture("ladrillo_duro_2");
         } else if (ladrillo.golpes == 1) {
             ladrillo.setTexture("ladrillo_duro_3");
-        }
-        if (ladrillo.golpes <= 0) {
+        } else if (ladrillo.golpes <= 0) {
             this.aumentarPuntos(ladrillo);
             this.hacerMoverseAlLadrillo(ladrillo);
             this.generarMejora(ladrillo);
@@ -675,7 +674,10 @@ class Scene2 extends Phaser.Scene {
                     break;
                 case "mejora_blanca":
                     // Mejora blanca - multiple
-
+                    if (this.listaPelotas.getLength() == 1) {
+                        this.mejoraBlanca();
+                        player.mejoraActual = "";
+                    }
                     break;
                 case "mejora_naranja":
                     // Mejora naranja - bola roja
@@ -690,7 +692,6 @@ class Scene2 extends Phaser.Scene {
                     // Mejora negra - pistolero
                     player.setTexture("jugador_transformacion_pistolero");
                     player.play("anim_jugador_transformacion_pistolero");
-                    console.log(player.anims.duration)
                     setTimeout(function () {
                         player.setTexture("jugador_pistolero");
                         player.play("anim_jugador_pistolero");
@@ -767,14 +768,31 @@ class Scene2 extends Phaser.Scene {
             ladrillo.setTexture("ladrillo_duro_2");
         } else if (ladrillo.golpes == 1) {
             ladrillo.setTexture("ladrillo_duro_3");
-        }
-        if (ladrillo.golpes <= 0) {
+        } else if (ladrillo.golpes <= 0) {
             this.aumentarPuntos(ladrillo);
             this.hacerMoverseAlLadrillo(ladrillo);
             this.generarMejora(ladrillo);
             ladrillo.destroy();
         }
         this.comprobarCambiarNivel();
+    }
+
+    mejoraBlanca() {
+        let posXPelota = this.listaPelotas.getChildren()[0].body.x;
+        let posYPelota = this.listaPelotas.getChildren()[0].body.y;
+        for (let i = 0; i < 5; i++) {
+            let pelota = new Pelota(this, posXPelota, posYPelota, "bola_blanca");
+            this.listaPelotas.add(pelota);
+            pelota.body.velocity.set(
+                Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                gameConfig.velocidadPelotaY);
+        }
+        if (gameConfig.inicioPelota) {
+            this.listaPelotas.getChildren()[0].body.velocity.set(
+                Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                gameConfig.velocidadPelotaY);
+            gameConfig.inicioPelota = false;
+        }
     }
 
     pruebas() {
