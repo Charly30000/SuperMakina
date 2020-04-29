@@ -12,7 +12,7 @@ const config = {
     physics: {
         default: "arcade",
         arcade: {
-            debug: false
+            debug: false 
             //true
         }
     }
@@ -33,5 +33,6 @@ var gameConfig = {
     nivel: null,
     movimientox: null,
     altura: 0,
-    cursors: null
+    cursors: null,
+    crearbola: true
 };

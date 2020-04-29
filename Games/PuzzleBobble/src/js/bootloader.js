@@ -28,6 +28,10 @@ class Bootloader extends Phaser.Scene {
         this.load.image("borde4-6", "./assets/images/Backgrounds/Borders 4-6.png");
         this.load.image("borde7-9", "./assets/images/Backgrounds/Borders 7-9.png");
         this.load.image("borde10-12", "./assets/images/Backgrounds/Borders 10-12.png");
+        this.load.spritesheet("maquinaria", `./assets/images/flechas/maquinaria.png`, {
+            frameWidth: 60,
+            frameHeight: 35
+        });
         // crea la barra de porcentaje
         var loadingBar = this.add.graphics({
             fillStyle: {
@@ -40,5 +44,17 @@ class Bootloader extends Phaser.Scene {
             //console.log(percent * 100);
             loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 50);
         })
+    }
+
+    create() {
+        this.anims.create({
+            key: "maquinariagiro",
+            frames: this.anims.generateFrameNumbers("maquinaria", {
+                start: 0,
+                end: 12
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
     }
 }
