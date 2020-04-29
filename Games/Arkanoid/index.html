@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arkanoid</title>
-    <link rel="stylesheet" type="text/css" href="../../node_modules/bootswatch/dist/cerulean/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../node_modules/bootswatch/dist/superhero/bootstrap.min.css">
     <!-- Insert this line above script imports  -->
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <script>
@@ -25,9 +25,21 @@
     </script>
 </head>
 
-<body>
-    <h1>Arkanoid</h1>
-    <div id="container"></div>
+<body class="container">
+    <div class="d-flex justify-content-between mt-5">
+        <div class="w-25">
+            <img src="../../view/assets/images/Arkanoid/logoArkanoid.png" class="img-fluid" alt="Arkanoid">
+            <div id="controles"></div>
+            <hr class="bg-primary">
+            <div id="explicacion"></div>
+        </div>
+        <div id="container"></div>
+        <div>
+            <a class="btn btn-primary" href="./index.html" role="button">Reiniciar</a>
+            <a class="btn btn-secondary" href="../../view/index.html" role="button">Volver</a>
+        </div>
+    </div>
+    <script src="indice.js"></script>
     <script src="../../node_modules/phaser/dist/phaser.min.js"></script>
     <script src="scenes/Scene1.js"></script>
     <script src="scenes/Scene2.js"></script>
