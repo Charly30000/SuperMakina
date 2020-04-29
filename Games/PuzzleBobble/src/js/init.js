@@ -22,6 +22,7 @@ const config = {
 var game = new Phaser.Game(config);
 var gameConfig = {
     numeronivel : 1,
+    puntuacionvelocidad: 20000,
     puntos: 0,
     bolachocaizquierda: false,
     bolachocaderecha: false,

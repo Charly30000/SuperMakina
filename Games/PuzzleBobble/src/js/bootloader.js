@@ -32,6 +32,20 @@ class Bootloader extends Phaser.Scene {
             frameWidth: 60,
             frameHeight: 35
         });
+
+        this.load.spritesheet("rueda", `./assets/images/flechas/rueda.png`, {
+            frameWidth: 34,
+            frameHeight: 17
+        });
+
+        this.load.spritesheet("dragones1", `./assets/images/dragones/dragones1.png`, {
+            frameWidth: 60,
+            frameHeight: 35
+        });
+        this.load.spritesheet("dragones2", `./assets/images/dragones/dragones2.png`, {
+            frameWidth: 60,
+            frameHeight: 35
+        });
         // crea la barra de porcentaje
         var loadingBar = this.add.graphics({
             fillStyle: {
@@ -52,6 +66,35 @@ class Bootloader extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers("maquinaria", {
                 start: 0,
                 end: 12
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: "rueda",
+            frames: this.anims.generateFrameNumbers("rueda", {
+                start: 0,
+                end: 1
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+        this.anims.create({
+            key: "dragones1",
+            frames: this.anims.generateFrameNumbers("dragones1", {
+                start: 11,
+                end: 5
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: "dragones2",
+            frames: this.anims.generateFrameNumbers("dragones2", {
+                start: 0,
+                end: 8
             }),
             frameRate: 20,
             repeat: 0
