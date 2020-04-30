@@ -48,7 +48,8 @@ class Scene2 extends Phaser.Scene {
 
         // Colocacion de barras
         this.listaBarras = this.physics.add.staticGroup();
-        this.listaBarras.add(this.add.sprite(30, 48, "barra_arriba").setOrigin(0, 0));
+        this.barraArriba = this.add.sprite(30, 48, "barra_arriba").setOrigin(0, 0);
+        this.listaBarras.add(this.barraArriba);
         this.barraLateralIzda = this.add.sprite(0, 68, "barra_lateralizda").setOrigin(0, 0);
         this.listaBarras.add(this.barraLateralIzda);
         this.barraLateralDcha = this.add.sprite(376, 68, "barra_lateraldcha").setOrigin(0, 0);
@@ -170,32 +171,54 @@ class Scene2 extends Phaser.Scene {
         this.physics.world.setBoundsCollision(true, true, true, false);
         // Colision pelota - ladrillos
         this.physics.add.collider(this.listaPelotas, this.listaLadrillos,
-            this.colisionPelotaLadrillo, null, this);
+            this.colisionPelotaLadrillo, function (pelota, ladrillo) {
+                return this.comprobarBolaRoja(pelota, ladrillo);
+            }, this);
+        this.physics.add.overlap(this.listaPelotas, this.listaLadrillos,
+            this.overlapPelotaLadrillo, function (pelota, ladrillo) {
+                return this.comprobarOverlapBolaRoja(pelota, ladrillo);
+            }, this);
+
         // Colision pelota - ladrillos indestructibles
         this.physics.add.collider(this.listaPelotas, this.listaLadrillosIndestructibles,
-            this.colisionPelotaLadrilloIndestructible, null, this);
+            this.colisionPelotaLadrilloIndestructible, function (pelota, ladrillo) {
+                return this.comprobarBolaRoja(pelota, ladrillo);
+            }, this);
+        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosIndestructibles,
+            this.overlapPelotaLadrilloIndestructible, function (pelota, ladrillo) {
+                return this.comprobarOverlapBolaRoja(pelota, ladrillo);
+            }, this);
+
         // Colision pelota - ladrillos regenerativos
+        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosRegenerativos,
+            this.overlapPelotaLadrilloRegenerativo,
+            function (pelota, ladrillo) {
+                ladrillo.golpes--;
+                if (ladrillo.golpes <= 0 || this.comprobarOverlapBolaRoja(pelota, ladrillo)) {
+                    return true;
+                }
+                return false;
+            }, this);
         this.physics.add.collider(this.listaPelotas, this.listaLadrillosRegenerativos,
             this.colisionPelotaLadrilloRegenerativo,
             function (pelota, ladrillo) {
-                ladrillo.golpes -= 1;
-                if (ladrillo.golpes > 0) {
+                if (ladrillo.golpes > 0 || this.comprobarBolaRoja(pelota, ladrillo)) {
                     return true;
                 }
                 return false;
             }, this);
 
-        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosRegenerativos,
-            this.overlapPelotaLadrilloRegenerativo,
-            function (pelota, ladrillo) {
-                if (ladrillo.golpes <= 0) {
-                    return true;
-                }
-                return false;
-            }, this);
+        
         // Colision pelota - ladrillos duros
         this.physics.add.collider(this.listaPelotas, this.listaLadrillosDuros,
-            this.colisionPelotaLadrilloDuro, null, this);
+            this.colisionPelotaLadrilloDuro, function (pelota, ladrillo) {
+                return this.comprobarBolaRoja(pelota, ladrillo);
+            }, this);
+        this.physics.add.overlap(this.listaPelotas, this.listaLadrillosDuros,
+            this.overlapPelotaLadrilloDuro, function (pelota, ladrillo) {
+                return this.comprobarOverlapBolaRoja(pelota, ladrillo);
+            }, this);
+
         // Colision pelota - barras
         this.physics.add.collider(this.listaPelotas, this.listaBarras, this.colisionPelotaBarras, null, this);
         // Colision pelota - jugador
@@ -254,7 +277,8 @@ class Scene2 extends Phaser.Scene {
         /* Pruebas */
         this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 120, "mejora_naranja")
             .setOrigin(0.5, 0).setScale(1.5));
-
+            this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 100, "mejora_blanca")
+            .setOrigin(0.5, 0).setScale(1.5));
         this.pruebas();
     }
 
@@ -310,13 +334,30 @@ class Scene2 extends Phaser.Scene {
         this.comprobarCambiarNivel();
     }
 
+    overlapPelotaLadrillo(pelota, ladrillo) {
+        this.hacerMoverseAlLadrillo(ladrillo);
+        this.generarMejora(ladrillo);
+        ladrillo.destroy();
+        this.aumentarPuntos(ladrillo);
+        // Sistema de cambio de nivel
+        this.comprobarCambiarNivel();
+    }
+
     colisionPelotaLadrilloIndestructible(pelota, ladrillo) {
         this.reponerVelocidadPelota(pelota);
         this.click.play();
         ladrillo.play("anim_ladrillo_indestructible");
     }
 
+    overlapPelotaLadrilloIndestructible(pelota, ladrillo) {
+        this.hacerMoverseAlLadrillo(ladrillo);
+        this.aumentarPuntos(ladrillo);
+        this.generarMejora(ladrillo);
+        ladrillo.destroy();
+    }
+
     colisionPelotaLadrilloRegenerativo(pelota, ladrillo) {
+        
         this.reponerVelocidadPelota(pelota);
         this.click.play();
         if (ladrillo.golpes == 2) {
@@ -356,6 +397,14 @@ class Scene2 extends Phaser.Scene {
             this.generarMejora(ladrillo);
             ladrillo.destroy();
         }
+        this.comprobarCambiarNivel();
+    }
+
+    overlapPelotaLadrilloDuro(pelota, ladrillo) {
+        this.aumentarPuntos(ladrillo);
+        this.hacerMoverseAlLadrillo(ladrillo);
+        this.generarMejora(ladrillo);
+        ladrillo.destroy();
         this.comprobarCambiarNivel();
     }
 
@@ -711,6 +760,7 @@ class Scene2 extends Phaser.Scene {
                     break;
                 case "mejora_naranja":
                     // Mejora naranja - bola roja
+                    player.modoPegajoso = false;
                     this.listaPelotas.getChildren().forEach(pelota => {
                         pelota.setTexture("bola_roja");
                         pelota.modoBolaRoja = true;
@@ -721,6 +771,7 @@ class Scene2 extends Phaser.Scene {
                     player.modoPegajoso = true;
                     this.listaPelotas.getChildren().forEach(pelota => {
                         pelota.setTexture("bola_pegajosa");
+                        pelota.modoBolaRoja = false;
                     });
                     break;
                 case "mejora_negra":
@@ -728,9 +779,11 @@ class Scene2 extends Phaser.Scene {
                     player.setTexture("jugador_transformacion_pistolero");
                     player.play("anim_jugador_transformacion_pistolero");
                     setTimeout(function () {
-                        player.setTexture("jugador_pistolero");
-                        player.play("anim_jugador_pistolero");
-                        player.modoPistolero = true;
+                        if (player.texture.key === "jugador_transformacion_pistolero") {
+                            player.setTexture("jugador_pistolero");
+                            player.play("anim_jugador_pistolero");
+                            player.modoPistolero = true;
+                        }
                     }, player.anims.duration);
                     break;
                 case "mejora_fucsia":
@@ -833,8 +886,18 @@ class Scene2 extends Phaser.Scene {
         }
     }
 
-    overlapPelotaTodosLadrillos(pelota, ladrillo) {
-        ladrillo.destroy();
+    comprobarBolaRoja(pelota, ladrillo) {
+        if (!pelota.modoBolaRoja) {
+            return true;
+        }
+        return false;
+    }
+
+    comprobarOverlapBolaRoja(pelota, ladrillo) {
+        if (pelota.modoBolaRoja) {
+            return true;
+        }
+        return false;
     }
 
     pruebas() {

@@ -28,6 +28,10 @@ Pelota.prototype.update = function() {
     } else if (this.body.x + this.body.width > this.scene.barraLateralDcha.body.x) {
         this.body.x = this.scene.barraLateralDcha.body.x - this.body.width;
     }
+
+    if (this.body.y < this.scene.barraArriba.body.y + this.scene.barraArriba.body.height) {
+        this.body.y = this.scene.barraArriba.body.y + this.scene.barraArriba.body.height;
+    }
     
     if (this.body.y > config.height && !this.hayPelotasEnPantalla()) {
         if (gameConfig.vidas > 0){
@@ -42,7 +46,6 @@ Pelota.prototype.update = function() {
             });
         }
         this.destroy();
-        
     }
 
     // Lanzar pelota si esta pegada
