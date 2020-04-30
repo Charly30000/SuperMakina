@@ -273,13 +273,6 @@ class Scene2 extends Phaser.Scene {
         *************/
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-        /* Pruebas */
-        this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 120, "mejora_naranja")
-            .setOrigin(0.5, 0).setScale(1.5));
-            this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 100, "mejora_blanca")
-            .setOrigin(0.5, 0).setScale(1.5));
-        this.pruebas();
     }
 
     update() {
@@ -317,6 +310,7 @@ class Scene2 extends Phaser.Scene {
                 });
             }
         }
+
         if (this.cursorKeys.up.isDown) {
             gameConfig.vidas += 1;
             this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
@@ -493,7 +487,6 @@ class Scene2 extends Phaser.Scene {
             pelota.estaPegada = true;
         }
 
-        //console.log(pelota.body.velocity.x)
     }
 
     movimientoJugador() {
@@ -590,6 +583,10 @@ class Scene2 extends Phaser.Scene {
         this.listaTodosLadrillos.add(ladrillo);
     }
 
+    /**
+     * Funcion que aumenta los puntos (scoreLabel) en funcion de los puntos que ofrezca el ladrillo
+     * @param {*} ladrillo 
+     */
     aumentarPuntos(ladrillo) {
         gameConfig.puntos += ladrillo.puntos;
         let scoreFormated = this.zeroPad(gameConfig.puntos, 6);
@@ -704,13 +701,13 @@ class Scene2 extends Phaser.Scene {
                     mejora = "mejora_negra";
                     break;
                 case 6:
-                    // Mejora fucsia - multipaleta
+                    // Mejora fucsia - vida +
                     mejora = "mejora_fucsia";
                     break;
                 default:
                     // Si no se llegase a generar un numero adecuado, se genera la mejora roja por defecto
                     mejora = "mejora_roja";
-                    console.log("ha pasado por el default en la seleccion", numeroRandom);
+                    /* console.log("ha pasado por el default en la seleccion", numeroRandom); */
                     break;
             }
             this.listaMejoras.add(new Mejora(this, xMejora, yMejora, mejora)
@@ -764,6 +761,12 @@ class Scene2 extends Phaser.Scene {
                     this.listaPelotas.getChildren().forEach(pelota => {
                         pelota.setTexture("bola_roja");
                         pelota.modoBolaRoja = true;
+                        if (pelota.estaPegada) {
+                            pelota.body.velocity.set(
+                                Phaser.Math.Between(gameConfig.velocidadJugadorX * -1, gameConfig.velocidadJugadorX),
+                                gameConfig.velocidadPelotaY);
+                            pelota.estaPegada = false;
+                        }
                     });
                     break;
                 case "mejora_verde":
@@ -787,9 +790,11 @@ class Scene2 extends Phaser.Scene {
                     }, player.anims.duration);
                     break;
                 case "mejora_fucsia":
-                    // Mejora fucsia - multipaleta
-                    player.modoMultipaleta = true;
-
+                    // Mejora fucsia - vida +
+                    if (gameConfig.vidas < 3) {
+                        gameConfig.vidas++;
+                        this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
+                    }
                     break;
                 default:
                     // Si no se llegase a generar un numero adecuado, se genera la mejora roja por defecto
@@ -797,14 +802,11 @@ class Scene2 extends Phaser.Scene {
                     player.play("anim_jugador_grande");
                     player.body.width = player.getBounds().width;
                     player.modoMaximizar = true;
-                    console.log("Ha pasado por el default")
+                    /* console.log("Ha pasado por el default") */
                     break;
             }
         }
         mejora.destroy();
-
-        this.pruebas();
-        //this.scene.pause()
     }
 
     colisionMisilLadrillo(misil, ladrillo) {
@@ -868,6 +870,10 @@ class Scene2 extends Phaser.Scene {
         this.comprobarCambiarNivel();
     }
 
+    /**
+     * Metodo que genera 5 pelotas segun la posicion del jugador, si esta en el modo de
+     * inicioPelota, la pelota empezara a moverse
+     */
     mejoraBlanca() {
         let posXPelota = this.listaPelotas.getChildren()[0].body.x;
         let posYPelota = this.listaPelotas.getChildren()[0].body.y;
@@ -886,6 +892,12 @@ class Scene2 extends Phaser.Scene {
         }
     }
 
+    /**
+     * Este metodo comprueba si la bola esta en modo bola roja, retorna true cuando
+     * la bola esta en otro modo, false si esta en modo bola roja
+     * @param {*} pelota 
+     * @param {*} ladrillo 
+     */
     comprobarBolaRoja(pelota, ladrillo) {
         if (!pelota.modoBolaRoja) {
             return true;
@@ -893,18 +905,16 @@ class Scene2 extends Phaser.Scene {
         return false;
     }
 
+    /**
+     * Este metodo comprueba si la bola esta en modo bola roja, retorna true si esta en modo bola roja
+     * false en caso de que la bola no este en modo bola roja
+     * @param {*} pelota 
+     * @param {*} ladrillo 
+     */
     comprobarOverlapBolaRoja(pelota, ladrillo) {
         if (pelota.modoBolaRoja) {
             return true;
         }
         return false;
-    }
-
-    pruebas() {
-        this.listaJugador.getChildren().forEach(element => {
-            console.log(element.body)
-            console.log(element.body.width)
-        });
-        console.log("--------------------------------");
     }
 }
