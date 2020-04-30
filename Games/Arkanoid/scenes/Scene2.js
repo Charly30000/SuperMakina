@@ -236,7 +236,7 @@ class Scene2 extends Phaser.Scene {
         // Colision misil - ladrillos duros
         this.physics.add.collider(this.listaMisiles, this.listaLadrillosDuros,
             this.colisionMisilLadrilloDuro, null, this);
-        
+
         /************
             SONIDOS
         *************/
@@ -252,9 +252,7 @@ class Scene2 extends Phaser.Scene {
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         /* Pruebas */
-        this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 100, "mejora_blanca")
-            .setOrigin(0.5, 0).setScale(1.5));
-            this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 120, "mejora_verde")
+        this.listaMejoras.add(new Mejora(this, config.width / 2, config.height - 120, "mejora_naranja")
             .setOrigin(0.5, 0).setScale(1.5));
 
         this.pruebas();
@@ -419,7 +417,7 @@ class Scene2 extends Phaser.Scene {
                         pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
                             - Phaser.Math.Between(30, 45);
                     }
-    
+
                 } else {
                     //console.log("Toca en la DCHA del jugador");
                     if (pelota.body.velocity.x > 0) {
@@ -439,13 +437,13 @@ class Scene2 extends Phaser.Scene {
                     }
                 }
             }
-    
+
             this.reponerVelocidadPelota(pelota);
-        } else if (pelota.texture.key === "bola_pegajosa" && jugador.body.touching.up){
-                pelota.body.velocity.set(0, 0);
-                pelota.estaPegada = true;
+        } else if (pelota.texture.key === "bola_pegajosa" && jugador.body.touching.up) {
+            pelota.body.velocity.set(0, 0);
+            pelota.estaPegada = true;
         }
-        
+
         //console.log(pelota.body.velocity.x)
     }
 
@@ -713,7 +711,10 @@ class Scene2 extends Phaser.Scene {
                     break;
                 case "mejora_naranja":
                     // Mejora naranja - bola roja
-
+                    this.listaPelotas.getChildren().forEach(pelota => {
+                        pelota.setTexture("bola_roja");
+                        pelota.modoBolaRoja = true;
+                    });
                     break;
                 case "mejora_verde":
                     // Mejora verde - pegajoso
@@ -830,6 +831,10 @@ class Scene2 extends Phaser.Scene {
                 gameConfig.velocidadPelotaY);
             gameConfig.inicioPelota = false;
         }
+    }
+
+    overlapPelotaTodosLadrillos(pelota, ladrillo) {
+        ladrillo.destroy();
     }
 
     pruebas() {
