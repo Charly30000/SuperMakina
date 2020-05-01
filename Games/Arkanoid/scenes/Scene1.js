@@ -215,7 +215,7 @@ class Scene1 extends Phaser.Scene {
 
         this.add.image(0, 0, "fondo_inicio").setOrigin(0, 0);
         setInterval(() => {
-            let imgPressScpace = this.add.image(config.width / 2, config.height / 2, "pressSpace");
+            let imgPressScpace = this.add.image(config.width / 2, config.height / 2 + 75, "pressSpace");
             setTimeout(() => {
                 imgPressScpace.destroy();
             }, 1000);
