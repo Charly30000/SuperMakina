@@ -214,6 +214,12 @@ class Scene1 extends Phaser.Scene {
         });
 
         this.add.image(0, 0, "fondo_inicio").setOrigin(0, 0);
+        setInterval(() => {
+            let imgPressScpace = this.add.image(config.width / 2, config.height / 2, "pressSpace");
+            setTimeout(() => {
+                imgPressScpace.destroy();
+            }, 1000);
+        }, 2000);
 
         this.space_bar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         
