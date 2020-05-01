@@ -213,7 +213,16 @@ class Scene1 extends Phaser.Scene {
             repeat: -1
         });
 
-        // Iniciar Scene2
-        this.scene.start("playGame");
+        this.add.image(0, 0, "fondo_inicio").setOrigin(0, 0);
+
+        this.space_bar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        
+    }
+
+    update() {
+        if (this.space_bar.isDown) {
+            // Iniciar Scene2
+            this.scene.start("playGame");
+        }
     }
 }

@@ -1,4 +1,4 @@
-var level_1 = 
+/* var level_1 = 
 {
     enemy_type: "",
     background: "fondo_azul_hexagonos",
@@ -15,8 +15,8 @@ var level_1 =
         [{ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false}, {ladrillo: "ladrillo_regenerativo", movement: false},], // Novena fila
         [{ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false}, {ladrillo: "ladrillo_duro", movement: false},] // Decima fila
     ]
-}
-/* var level_1 =
+} */
+var level_1 =
 {
     enemy_type: "",
     background: "fondo_azul_hexagonos",
@@ -116,7 +116,7 @@ var level_1 =
             { ladrillo: "ladrillo_duro", movement: false },
         ],
     ]
-} */
+}
 
 var level_2 =
 {

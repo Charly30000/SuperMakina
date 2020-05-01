@@ -311,10 +311,10 @@ class Scene2 extends Phaser.Scene {
             }
         }
 
-        if (this.cursorKeys.up.isDown) {
+        /* if (this.cursorKeys.up.isDown) {
             gameConfig.vidas += 1;
             this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
-        }
+        } */
     }
 
     colisionPelotaLadrillo(pelota, ladrillo) {
