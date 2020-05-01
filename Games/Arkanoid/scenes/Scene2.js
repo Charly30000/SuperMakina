@@ -341,6 +341,15 @@ class Scene2 extends Phaser.Scene {
         this.reponerVelocidadPelota(pelota);
         this.click.play();
         ladrillo.play("anim_ladrillo_indestructible");
+        if (ladrillo.movement && ladrillo.body.velocity.x) {
+            if (ladrillo.body.velocity.x > 0) {
+                ladrillo.body.velocity.x = 60;
+            } else if (ladrillo.body.velocity.x < 0) {
+                ladrillo.body.velocity.x = -60;
+            } else if (ladrillo.body.velocity.x == 0) {
+                ladrillo.body.velocity.x = 60;
+            }
+        }
     }
 
     overlapPelotaLadrilloIndestructible(pelota, ladrillo) {
