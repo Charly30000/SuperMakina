@@ -218,7 +218,6 @@ class Scene1 extends Phaser.Scene {
             let imgPressSpace = this.add.image(config.width / 2, config.height / 2 + 75, "pressSpace");
             setTimeout(() => {
                 imgPressSpace.destroy();
-                console.log("hola");
             }, 1000);
         }, 2000);
 
