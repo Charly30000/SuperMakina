@@ -136,37 +136,39 @@ class Scene_play extends Phaser.Scene {
     }
 
     colisionPelotas(burbujamovil, burbuja) {
-        gameConfig.contador++;
-        let color = burbujamovil.name;
-        let coordenadas = burbuja.posicion.split("-");
-        coordenadas[0] = parseInt(coordenadas[0]);
-        coordenadas[1] = parseInt(coordenadas[1]);
-        //burbujamovil.body.touching.left
-        if (burbuja.y + 23 <= burbujamovil.y) {
-            burbujamovil.destroy();
-            if (gameConfig.arrayburbujas[coordenadas[0]].length == coordenadas[1] + 1 && coordenadas[0] % 2 == 0) {
-                coordenadas[1] = coordenadas[1] - 1;
-            } else if (burbujamovil.x < burbuja.x && coordenadas[0] % 2 == 0 && gameConfig.arrayburbujas[coordenadas[0] + 1][coordenadas[1] - 1] == " ") {
-                coordenadas[1] = coordenadas[1] - 1;
-            }
+        if (gameConfig.crearbola) {
+            gameConfig.contador++;
+            let color = burbujamovil.name;
+            let coordenadas = burbuja.posicion.split("-");
+            coordenadas[0] = parseInt(coordenadas[0]);
+            coordenadas[1] = parseInt(coordenadas[1]);
+            //burbujamovil.body.touching.left
+            if (burbuja.y + 23 <= burbujamovil.y) {
+                burbujamovil.destroy();
+                if (gameConfig.arrayburbujas[coordenadas[0]].length == coordenadas[1] + 1 && coordenadas[0] % 2 == 0) {
+                    coordenadas[1] = coordenadas[1] - 1;
+                } else if (burbujamovil.x < burbuja.x && coordenadas[0] % 2 == 0 && gameConfig.arrayburbujas[coordenadas[0] + 1][coordenadas[1] - 1] == " ") {
+                    coordenadas[1] = coordenadas[1] - 1;
+                }
 
-            if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0 && gameConfig.arrayburbujas[coordenadas[0] + 1][coordenadas[1] + 1] == " ") {
+                if (burbujamovil.x > burbuja.x && coordenadas[0] % 2 != 0 && gameConfig.arrayburbujas[coordenadas[0] + 1][coordenadas[1] + 1] == " ") {
+                    coordenadas[1] = coordenadas[1] + 1;
+                }
+
+                coordenadas[0] = coordenadas[0] + 1;
+                this.posicionarpelota(coordenadas, color);
+
+
+            } else if (burbujamovil.x < burbuja.x) {
+                burbujamovil.destroy();
+                coordenadas[1] = coordenadas[1] - 1;
+                this.posicionarpelota(coordenadas, color);
+
+            } else {
+                burbujamovil.destroy();
                 coordenadas[1] = coordenadas[1] + 1;
+                this.posicionarpelota(coordenadas, color);
             }
-
-            coordenadas[0] = coordenadas[0] + 1;
-            this.posicionarpelota(coordenadas, color);
-
-
-        } else if (burbujamovil.x < burbuja.x) {
-            burbujamovil.destroy();
-            coordenadas[1] = coordenadas[1] - 1;
-            this.posicionarpelota(coordenadas, color);
-
-        } else {
-            burbujamovil.destroy();
-            coordenadas[1] = coordenadas[1] + 1;
-            this.posicionarpelota(coordenadas, color);
         }
     }
 
@@ -188,12 +190,8 @@ class Scene_play extends Phaser.Scene {
             if (aisladas.length > 0) {
                 this.eliminarbolas(aisladas);
             }
-            if (this.burbujasNivel.getLength() == 0) {
-                gameConfig.crearbola = false;
-                this.ganarnivel();
-            }
         }
-        this.physics.add.collider(this.lineaGameOver, this.burbujasNivel, this.gameover, null, this);
+        this.physics.add.collider(this.lineaGameOver, this.burbujasNivel, this.comprobargameover, null, this);
         this.modificarbolasmoviles();
     }
 
@@ -203,7 +201,7 @@ class Scene_play extends Phaser.Scene {
         gameConfig.altura = 0;
         this.flecha.angle = 0;
         gameConfig.velocidadburbujax = 0,
-        gameConfig.velocidadburbujay = -900;
+            gameConfig.velocidadburbujay = -900;
         gameConfig.contador = 0;
         gameConfig.crearbola = true;
         gameConfig.puntos += gameConfig.puntuacionvelocidad;
@@ -213,9 +211,14 @@ class Scene_play extends Phaser.Scene {
     aumentarPuntos(numero) {
         gameConfig.puntos += numero * 50;
     }
+    comprobargameover(linea, burbuja) {
+        if (burbuja.body.transform.y > 505) {
+            this.scene.pause();
+            gameConfig.crearbola = false;
+            this.gameover();
+        }
+    }
     gameover() {
-        //gameConfig.crearbola = false;
-        console.log("muerto");
         this.scene.pause();
     }
 
@@ -409,7 +412,17 @@ class Scene_play extends Phaser.Scene {
         this.burbujasNivel.getChildren().forEach(burbuja => {
             burbuja.y = burbuja.y + 45;
         });
+        if (gameConfig.altura == 45) {
+            this.add.image(this.sys.game.config.width / 2 - 1, 46, gameConfig.nivel.techoAdicional).setScale(3);
+            this.techo = this.add.image(this.sys.game.config.width / 2 -1 , 68, gameConfig.nivel.techoInferior).setScale(3);
+        }else {
+            this.add.image(this.sys.game.config.width / 2 - 1, this.techo.y, gameConfig.nivel.techoAdicional).setScale(3);
+            this.add.image(this.sys.game.config.width / 2 - 1, this.techo.y + 23, gameConfig.nivel.techoAdicional).setScale(3);
+            this.techo = this.techo = this.add.image(this.sys.game.config.width / 2 -1 , this.techo.y + 45, gameConfig.nivel.techoInferior).setScale(3);
+        }
     }
+
+
 
     update() {
         if (this.burbujasNivel.getLength() == 0) {
@@ -501,12 +514,14 @@ class Scene_play extends Phaser.Scene {
         }
 
 
-        if (gameConfig.contador >= 8) {
-            gameConfig.graphics = this.add.graphics();
-            gameConfig.altura += 45;
-            gameConfig.graphics.fillRect(this.sys.game.config.width / 3.2 - 24, this.sys.game.config.height / 10 - 24, 384, gameConfig.altura);
-            this.moverburbujas();
-            gameConfig.contador = 0;
+        if (gameConfig.contador >= 3) {
+            if (gameConfig.crearbola) {
+                //gameConfig.graphics = this.add.graphics();
+                gameConfig.altura += 45;
+                //gameConfig.graphics.fillRect(this.sys.game.config.width / 3.2 - 24, this.sys.game.config.height / 10 - 24, 384, gameConfig.altura);
+                this.moverburbujas();
+                gameConfig.contador = 0;
+            }
         }
     }
 }
