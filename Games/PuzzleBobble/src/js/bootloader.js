@@ -28,7 +28,31 @@ class Bootloader extends Phaser.Scene {
         this.load.image("borde4-6", "./assets/images/Backgrounds/Borders 4-6.png");
         this.load.image("borde7-9", "./assets/images/Backgrounds/Borders 7-9.png");
         this.load.image("borde10-12", "./assets/images/Backgrounds/Borders 10-12.png");
+        // sin probar
+        this.load.image("techoInferior1-3", "./assets/images/Techos/techo inferior 1-3.png");
+        this.load.image("techoInferior4-6", "./assets/images/Techos/techo inferior 4-6.png");
+        this.load.image("techoInferior7-9", "./assets/images/Techos/techo inferior 7-9.png");
+        this.load.image("techoInferior10-12", "./assets/images/Techos/techo inferior 10-12.png");
+        this.load.image("techoAdicional1-3", "./assets/images/Techos/techo adicional 1-3.png");
+        this.load.image("techoAdicional4-6", "./assets/images/Techos/techo adicional 4-6.png");
+        this.load.image("techoAdicional7-9", "./assets/images/Techos/techo adicional 7-9.png");
+        this.load.image("techoAdicional10-12", "./assets/images/Techos/techo adicional 10-12.png");
+        
         this.load.spritesheet("maquinaria", `./assets/images/flechas/maquinaria.png`, {
+            frameWidth: 60,
+            frameHeight: 35
+        });
+
+        this.load.spritesheet("rueda", `./assets/images/flechas/rueda.png`, {
+            frameWidth: 34,
+            frameHeight: 17
+        });
+
+        this.load.spritesheet("dragones1", `./assets/images/dragones/dragones1.png`, {
+            frameWidth: 60,
+            frameHeight: 35
+        });
+        this.load.spritesheet("dragones2", `./assets/images/dragones/dragones2.png`, {
             frameWidth: 60,
             frameHeight: 35
         });
@@ -52,6 +76,35 @@ class Bootloader extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers("maquinaria", {
                 start: 0,
                 end: 12
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: "rueda",
+            frames: this.anims.generateFrameNumbers("rueda", {
+                start: 0,
+                end: 1
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+        this.anims.create({
+            key: "dragones1",
+            frames: this.anims.generateFrameNumbers("dragones1", {
+                start: 11,
+                end: 5
+            }),
+            frameRate: 20,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: "dragones2",
+            frames: this.anims.generateFrameNumbers("dragones2", {
+                start: 0,
+                end: 8
             }),
             frameRate: 20,
             repeat: 0

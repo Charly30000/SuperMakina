@@ -2,6 +2,8 @@ var nivel1 =
 {
     fondo: "fondo1-3",
     borde: "borde1-3",
+    techoInferior: "techoInferior1-3",
+    techoAdicional: "techoAdicional1-3",
     musica: "",
     burbuja: [
         [
@@ -48,6 +50,8 @@ var nivel2 =
 {
     fondo: "fondo1-3",
     borde: "borde1-3",
+    techoInferior: "techoInferior1-3",
+    techoAdicional: "techoAdicional1-3",
     musica: "",
     burbuja: [
         [
@@ -130,6 +134,8 @@ var nivel3 =
 {
     fondo: "fondo1-3",
     borde: "borde1-3",
+    techoInferior: "techoInferior1-3",
+    techoAdicional: "techoAdicional1-3",
     musica: "",
     burbuja: [
         [
@@ -205,6 +211,8 @@ var nivel4 =
 {
     fondo: "fondo4-6",
     borde: "borde4-6",
+    techoInferior: "techoInferior4-6",
+    techoAdicional: "techoAdicional4-6",
     musica: "",
     burbuja: [
         [
@@ -293,6 +301,8 @@ var nivel5 =
 {
     fondo: "fondo4-6",
     borde: "borde4-6",
+    techoInferior: "techoInferior4-6",
+    techoAdicional: "techoAdicional4-6",
     musica: "",
     burbuja: [
         [
@@ -377,6 +387,8 @@ var nivel6 =
 {
     fondo: "fondo4-6",
     borde: "borde4-6",
+    techoInferior: "techoInferior4-6",
+    techoAdicional: "techoAdicional4-6",
     musica: "",
     burbuja: [
         [
@@ -452,6 +464,8 @@ var nivel7 =
 {
     fondo: "fondo7-9",
     borde: "borde7-9",
+    techoInferior: "techoInferior7-9",
+    techoAdicional: "techoAdicional7-9",
     musica: "",
     burbuja: [
         [
@@ -517,6 +531,8 @@ var nivel8 =
 {
     fondo: "fondo7-9",
     borde: "borde7-9",
+    techoInferior: "techoInferior7-9",
+    techoAdicional: "techoAdicional7-9",
     musica: "",
     burbuja: [
         [
@@ -563,6 +579,8 @@ var nivel9 =
 {
     fondo: "fondo7-9",
     borde: "borde7-9",
+    techoInferior: "techoInferior7-9",
+    techoAdicional: "techoAdicional7-9",
     musica: "",
     burbuja: [
         [
@@ -647,6 +665,8 @@ var nivel10 =
 {
     fondo: "fondo10-12",
     borde: "borde10-12",
+    techoInferior: "techoInferior10-12",
+    techoAdicional: "techoAdicional10-12",
     musica: "",
     burbuja: [
         [
