@@ -926,4 +926,53 @@ class Scene2 extends Phaser.Scene {
         }
         return false;
     }
+
+    /**
+     * Metodo que comprueba si en el lado en el que golpea la pelota, hay un ladrillo pegado,
+     * si lo hay devuelve true, en caso contrario devuelve false.
+     * Metodo actualmente sin uso debido a que aun no se conoce como aplicarlo en el sistema de
+     * colisiones de phaser
+     * @param {*} ladrillo 
+     */
+    hayLadrilloPegado(ladrillo) {
+        if (ladrillo.body.touching.up) {
+            // Si toca el ladrillo por arriba
+            //+32x +16y
+            for (let lad of this.listaTodosLadrillos) {
+                if (lad.body.x == ladrillo.body.x && lad.body.y == ladrillo.body.y - 16){
+                    // encuentra ladrillo encima
+                    console.log("hay ladrillo encima")
+                    return true;
+                }
+            }
+        } else if (ladrillo.body.touching.down) {
+            // Si toca por abajo
+            console.log("ha tocado abajo")
+            for (let lad of this.listaTodosLadrillos) {
+                if (lad.body.x == ladrillo.body.x && lad.body.y == ladrillo.body.y + 16){
+                    // encuentra ladrillo debajo
+                    console.log("hay ladrillo debajo")
+                    return true;
+                }
+            }
+        } else if (ladrillo.body.touching.right) {
+            // Si toca por la derecha
+            for (let lad of this.listaTodosLadrillos) {
+                if (lad.body.x == ladrillo.body.x + 32 && lad.body.y == ladrillo.body.y){
+                    // encuentra ladrillo a su derecha
+                    return true;
+                }
+            }
+        } else if (ladrillo.body.touching.left) {
+            // Si toca por la izquierda
+            for (let lad of this.listaTodosLadrillos) {
+                if (lad.body.x == ladrillo.body.x - 32 && lad.body.y == ladrillo.body.y){
+                    // encuentra ladrillo a su izquierda
+                    return true;
+                }
+            }
+        } else {
+            return false;
+        }
+    }
 }
