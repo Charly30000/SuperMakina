@@ -61,7 +61,7 @@ class Scene2 extends Phaser.Scene {
         var graphics = this.add.graphics();
         graphics.fillStyle("Black");
         graphics.fillRect(0, 0, config.width, 48);
-        this.scoreLabel = this.add.text(16, 8, `SCORE: ${this.zeroPad(gameConfig.puntos, 6)}`);
+        this.scoreLabel = this.add.text(16, 8, `SCORE: ${this.zeroPad(gameConfig.puntos, 7)}`);
         this.vidasLabel = this.add.text(16, 28, `Vidas: ${gameConfig.vidas}`);
         this.nivelLabel = this.add.text(config.width - 100, 28, `Nivel: ${gameConfig.nivel}`);
 
@@ -598,7 +598,7 @@ class Scene2 extends Phaser.Scene {
      */
     aumentarPuntos(ladrillo) {
         gameConfig.puntos += ladrillo.puntos;
-        let scoreFormated = this.zeroPad(gameConfig.puntos, 6);
+        let scoreFormated = this.zeroPad(gameConfig.puntos, 7);
         this.scoreLabel.text = `SCORE: ${scoreFormated}`;
     }
 
