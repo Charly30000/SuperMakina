@@ -267,6 +267,7 @@ class Scene2 extends Phaser.Scene {
         this.click = this.sound.add("efecto_click");
         this.inicioNivel = this.sound.add("musica_inicioNivel");
         //this.inicioNivel.play();
+        this.gameOver = this.sound.add("musica_gameOver");
 
         /************
             TECLADO
@@ -571,7 +572,15 @@ class Scene2 extends Phaser.Scene {
         gameConfig.vidas = 3;
         gameConfig.nivel = 1;
         gameConfig.puntos = 0;
-        this.scene.restart();
+        console.log(this.scene)
+        this.scene.pause();
+        this.gameOver.play();
+        this.add.image(config.width / 2, config.height / 2, "game_over").setScale(0.8);
+        setTimeout(function() {
+            console.log(this.scene)
+            this.scene.restart();
+            //this.scene.remove('playGame');
+        }, 2000);
         /* this.scene.stop();
         this.scene.start("bootGame") */
     }
