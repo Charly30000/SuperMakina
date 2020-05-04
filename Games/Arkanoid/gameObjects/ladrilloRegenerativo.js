@@ -7,7 +7,7 @@ class LadrilloRegenerativo extends Phaser.GameObjects.Sprite {
         this.body.setCollideWorldBounds(true);
         
         this.movement = movement;
-        this.puntos = 5;
+        this.puntos = 50;
         this.golpes = 3;
         this.tieneMejora = false;
     }

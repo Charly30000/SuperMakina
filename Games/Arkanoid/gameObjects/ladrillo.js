@@ -7,7 +7,7 @@ class Ladrillo extends Phaser.GameObjects.Sprite {
         this.body.setCollideWorldBounds(true);
         
         this.movement = movement;
-        this.puntos = 20;
+        this.puntos = 100;
         this.tieneMejora = false;
     }
 }

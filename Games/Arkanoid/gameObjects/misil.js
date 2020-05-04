@@ -10,6 +10,5 @@ class Misil extends Phaser.GameObjects.Sprite {
 Misil.prototype.update = function() {
     if (this.body.y < 0) { 
         this.destroy();
-        console.log("misil destruido");
     }
 }
