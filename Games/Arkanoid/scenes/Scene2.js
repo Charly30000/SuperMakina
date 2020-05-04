@@ -572,13 +572,13 @@ class Scene2 extends Phaser.Scene {
         gameConfig.vidas = 3;
         gameConfig.nivel = 1;
         gameConfig.puntos = 0;
-        console.log(this.scene)
-        this.scene.pause();
+        var escena = this.scene;
+        escena.pause();
         this.gameOver.play();
         this.add.image(config.width / 2, config.height / 2, "game_over").setScale(0.8);
         setTimeout(function() {
             console.log(this.scene)
-            this.scene.restart();
+            escena.restart();
             //this.scene.remove('playGame');
         }, 2000);
         /* this.scene.stop();
