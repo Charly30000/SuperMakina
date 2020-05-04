@@ -17,8 +17,8 @@ class Bootloader extends Phaser.Scene {
         this.load.image("burbujaNa", "./assets/images/bolas/bolanaranja.png");
         this.load.image("burbujaRo", "./assets/images/bolas/bolaroja.png");
         this.load.image("burbujaVe", "./assets/images/bolas/bolaverde.png");
-        this.load.image('flecha','./assets/images/flechas/flechaprueba.png');
-        this.load.image("inicio", "./assets/images/pantallainicial/titulo.jpg");
+        this.load.image('flecha','./assets/images/flechas/flecha.png');
+        this.load.image("inicio", "./assets/images/pantallainicial/titulo.png");
         this.load.image("lineago", "./assets/images/Backgrounds/linea_game_over.png");
         this.load.image("fondo1-3", "./assets/images/Backgrounds/Background 1-3.png");
         this.load.image("fondo4-6", "./assets/images/Backgrounds/Background 4-6.png");
@@ -36,22 +36,15 @@ class Bootloader extends Phaser.Scene {
         this.load.image("techoAdicional4-6", "./assets/images/Techos/techo adicional 4-6.png");
         this.load.image("techoAdicional7-9", "./assets/images/Techos/techo adicional 7-9.png");
         this.load.image("techoAdicional10-12", "./assets/images/Techos/techo adicional 10-12.png");
-        
-        this.load.spritesheet("maquinaria", `./assets/images/flechas/maquinaria.png`, {
-            frameWidth: 60,
-            frameHeight: 35
-        });
+        this.load.image("gameover", "./assets/images/gameover/gameoverscene.png");
+        this.load.image("rueda", `./assets/images/flechas/rueda.png`);
+        this.load.image("maquinaria", `./assets/images/flechas/maquinaria.png`);
 
-        this.load.spritesheet("rueda", `./assets/images/flechas/rueda.png`, {
-            frameWidth: 34,
-            frameHeight: 17
+        this.load.spritesheet("dragones1", `./assets/images/dragones/dragones1beta.png`, {
+            frameWidth: 33,
+            frameHeight: 20
         });
-
-        this.load.spritesheet("dragones1", `./assets/images/dragones/dragones1.png`, {
-            frameWidth: 60,
-            frameHeight: 35
-        });
-        this.load.spritesheet("dragones2", `./assets/images/dragones/dragones2.png`, {
+        this.load.spritesheet("dragones2", `./assets/images/dragones/dragones2beta.png`, {
             frameWidth: 60,
             frameHeight: 35
         });
@@ -70,32 +63,14 @@ class Bootloader extends Phaser.Scene {
     }
 
     create() {
-        this.anims.create({
-            key: "maquinariagiro",
-            frames: this.anims.generateFrameNumbers("maquinaria", {
-                start: 0,
-                end: 12
-            }),
-            frameRate: 20,
-            repeat: 0
-        });
 
-        this.anims.create({
-            key: "rueda",
-            frames: this.anims.generateFrameNumbers("rueda", {
-                start: 0,
-                end: 1
-            }),
-            frameRate: 20,
-            repeat: 0
-        });
         this.anims.create({
             key: "dragones1",
             frames: this.anims.generateFrameNumbers("dragones1", {
-                start: 11,
-                end: 5
+                start: 0,
+                end: 12
             }),
-            frameRate: 20,
+            frameRate: 10,
             repeat: 0
         });
 

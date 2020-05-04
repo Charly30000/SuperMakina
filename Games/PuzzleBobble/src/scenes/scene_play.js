@@ -42,14 +42,13 @@ class Scene_play extends Phaser.Scene {
                 break;
         }
         document.getElementById("nivel").textContent = "Nivel: " + gameConfig.numeronivel;
-
         // se carga el fondo y el borde segun el nivel en el que estas
         this.add.image(450, 300, gameConfig.nivel.fondo).setScale(3);
         this.add.image(this.sys.game.config.width / 2, 300, gameConfig.nivel.borde).setScale(3);
         this.lineaGameOver = this.physics.add.image(this.sys.game.config.width / 2, 505, "lineago").setScale(3);
-        this.physics.add.sprite(this.sys.game.config.width / 2.1, 550, 'maquinaria').setScale(3);
-        //this.physics.add.sprite(this.sys.game.config.width / 2, 520, 'rueda').setScale(3);
-        //this.physics.add.sprite(this.sys.game.config.width / 2.1,  550, 'dragones1').setScale(3);
+        this.add.image(this.sys.game.config.width / 2.07, 565, 'maquinaria').setScale(3);
+        this.add.image(this.sys.game.config.width / 2, 510, 'rueda').setScale(3);
+        this.dragonesiz = this.physics.add.sprite(this.sys.game.config.width / 2.8,  550, 'dragones1').setScale(3);
         //this.physics.add.sprite(this.sys.game.config.width / 2.1,  550, 'dragones2').setScale(3);
 
 
@@ -118,13 +117,7 @@ class Scene_play extends Phaser.Scene {
 
 
     }
-    zeroPad(number, size) {
-        let stringNumber = String(number);
-        while (stringNumber.length < (size || 2)) {
-            stringNumber = "0" + stringNumber;
-        }
-        return stringNumber;
-    }
+    
 
     // crea un array con 7 o 8 sitios
     crearfila(numero) {
@@ -201,12 +194,23 @@ class Scene_play extends Phaser.Scene {
         gameConfig.altura = 0;
         this.flecha.angle = 0;
         gameConfig.velocidadburbujax = 0,
-            gameConfig.velocidadburbujay = -900;
+        gameConfig.velocidadburbujay = -900;
         gameConfig.contador = 0;
         gameConfig.crearbola = true;
         gameConfig.puntos += gameConfig.puntuacionvelocidad;
         gameConfig.puntuacionvelocidad = 20000;
         this.scene.restart();
+    }
+    reiniciartodo() {
+        gameConfig.altura = 0;
+        this.flecha.angle = 0;
+        gameConfig.velocidadburbujax = 0,
+        gameConfig.velocidadburbujay = -900;
+        gameConfig.contador = 0;
+        gameConfig.crearbola = true;
+        gameConfig.puntos = 0;
+        gameConfig.puntuacionvelocidad = 20000;
+        gameConfig.numeronivel = 1;
     }
     aumentarPuntos(numero) {
         gameConfig.puntos += numero * 50;
@@ -215,11 +219,11 @@ class Scene_play extends Phaser.Scene {
         if (burbuja.body.transform.y > 505) {
             this.scene.pause();
             gameConfig.crearbola = false;
-            this.gameover();
+            this.add.image(this.sys.game.config.width / 2, 300, "gameover").setScale(3);
+            this.reiniciartodo();
+            //this.scene.restart();
+            this.scene.start("Fin");
         }
-    }
-    gameover() {
-        this.scene.pause();
     }
 
     modificarbolasmoviles() {
@@ -433,6 +437,7 @@ class Scene_play extends Phaser.Scene {
         document.getElementById("puntuacion").textContent = "SCORE: " + gameConfig.puntos;
         if (this.cursor_space.isDown) {
             // para darle velocidad si la pelota aun no ha sido lanzada
+            this.dragonesiz.anims.play('dragones1', true);
             if (this.lanzarbola.body.velocity.x == 0 && this.lanzarbola.body.velocity.y == 0) {
                 this.lanzarbola.body.velocity.set(gameConfig.velocidadburbujax, gameConfig.velocidadburbujay);
                 gameConfig.movimientox = -this.lanzarbola.body.velocity.x;
@@ -514,11 +519,9 @@ class Scene_play extends Phaser.Scene {
         }
 
 
-        if (gameConfig.contador >= 3) {
+        if (gameConfig.contador >= 8) {
             if (gameConfig.crearbola) {
-                //gameConfig.graphics = this.add.graphics();
                 gameConfig.altura += 45;
-                //gameConfig.graphics.fillRect(this.sys.game.config.width / 3.2 - 24, this.sys.game.config.height / 10 - 24, 384, gameConfig.altura);
                 this.moverburbujas();
                 gameConfig.contador = 0;
             }
