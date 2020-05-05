@@ -3,7 +3,7 @@ var config = {
     height: 600,
     parent: "container",
     type: Phaser.CANVAS,
-    scene: [Scene1, Scene2],
+    scene: [Scene1, Scene2, Scene3],
     pixelArt: true,
     physics: {
         default: "arcade",
@@ -15,7 +15,7 @@ var config = {
 }
 
 var gameConfig = {
-    nivel : 5,
+    nivel : 1,
     puntos: 0,
     vidas: 3,
     inicioPelota: true,

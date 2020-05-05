@@ -571,18 +571,14 @@ class Scene2 extends Phaser.Scene {
     resetearJuego() {
         gameConfig.vidas = 3;
         gameConfig.nivel = 1;
-        gameConfig.puntos = 0;
         var escena = this.scene;
         escena.pause();
         this.gameOver.play();
         this.add.image(config.width / 2, config.height / 2, "game_over").setScale(0.8);
         setTimeout(function() {
-            console.log(this.scene)
-            escena.restart();
-            //this.scene.remove('playGame');
+            escena.start("gameOver");
+            escena.stop();
         }, 2000);
-        /* this.scene.stop();
-        this.scene.start("bootGame") */
     }
 
     /* Comprueba los ladrillos que quedan, si no quedan ladrillos por destruir, cambia de nivel */
