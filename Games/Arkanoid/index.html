@@ -7,7 +7,6 @@
     <title>Arkanoid</title>
     <link rel="stylesheet" type="text/css" href="../../node_modules/bootswatch/dist/superhero/bootstrap.min.css">
     <!-- Insert this line above script imports  -->
-    <link rel="stylesheet" type="text/css" href="css/index.css">
     <script>
         if (typeof module === 'object') {
             window.module = module; module = undefined
@@ -37,6 +36,36 @@
         <div>
             <a class="btn btn-primary" href="./index.html" role="button">Reiniciar</a>
             <a class="btn btn-secondary" href="../../view/index.html" role="button">Volver</a>
+        </div>
+    </div>
+
+    <!-- Modal puntuación nueva -->
+    <div class="modal fade" id="modalPuntuacion" tabindex="-1" role="dialog" aria-labelledby="modalPuntuacion"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Puntuación
+                    </h5>
+                </div>
+                <div class="modal-body" id="formPuntuacion">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row">
+                          <div class="col-md-4 mb-3">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control is-invalid" id="nombre" placeholder="" required>
+                            <div id="mensaje" class="valid-feedback"></div>
+                            <label id="numeroPuntuacion"></label> puntos
+                          </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="modalGuardar">Guardar</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
         </div>
     </div>
     <script src="indice.js"></script>

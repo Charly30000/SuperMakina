@@ -11,11 +11,7 @@ class Scene3 extends Phaser.Scene {
                 { "nombre": "nbc", "puntuacion": 242352 }, 
                 { "nombre": "san", "puntuacion": 123312 }, 
                 { "nombre": "dfb", "puntuacion": 13123 }, 
-                { "nombre": "mjm", "puntuacion": 6573 }, 
-                { "nombre": "asd", "puntuacion": 5673 }, 
-                { "nombre": "asd", "puntuacion": 5673 }, 
-                { "nombre": "asd", "puntuacion": 5673 }, 
-                { "nombre": "asd", "puntuacion": 5673 }, 
+                { "nombre": "mjm", "puntuacion": 6573 },  
                 { "nombre": "asd", "puntuacion": 5673 }
             ]
         )); */
@@ -59,6 +55,12 @@ class Scene3 extends Phaser.Scene {
             if (this.posNuevo != 11) {
                 // Crea el modal y guarda las puntuaciones
                 /* ALBERTO CURRA POR AQUI */
+                $('#numeroPuntuacion').text(gameConfig.puntos);
+                $('#modalPuntuacion').modal('show');
+                // Si ha metido un nombre correcto y se ha guardado su puntuación
+                if ($('#nombre').hasClass("is-valid")) {
+                    
+                }
             } else {
                 // Se reinicia el juego
                 this.scene.start("playGame");
