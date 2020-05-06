@@ -15,7 +15,7 @@ var config = {
 }
 
 var gameConfig = {
-    nivel : 1,
+    nivel : 10,
     puntos: 0,
     vidas: 3,
     inicioPelota: true,
@@ -25,7 +25,10 @@ var gameConfig = {
     posicionJugadorY: config.height - 50,
     posicionPelotaX: config.width / 2,
     posicionPelotaY: config.height - 50 - 16,
-    velocidadMinimaPelotaX: 70
+    velocidadMinimaPelotaX: 70,
+    haGanado: false
 };
+
+var sonidoGana;
 
 var game = new Phaser.Game(config);

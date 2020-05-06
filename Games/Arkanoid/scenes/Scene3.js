@@ -51,6 +51,9 @@ class Scene3 extends Phaser.Scene {
         });
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.add.text(20, config.height - 50, "Press Space to continue....");
+        if (gameConfig.haGanado) {
+            gameConfig.haGanado = false;
+        }
     }
 
     update() {
@@ -64,6 +67,7 @@ class Scene3 extends Phaser.Scene {
                     this.scene.start("playGame");
                     this.scene.stop();
                     gameConfig.puntos = 0;
+                    sonidoGana.stop();
                 } else {
                     // Muestra el modal y guarda las puntuaciones
                     $('#numeroPuntuacion').text(gameConfig.puntos);

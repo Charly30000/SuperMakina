@@ -268,7 +268,7 @@ class Scene2 extends Phaser.Scene {
         this.inicioNivel = this.sound.add("musica_inicioNivel");
         //this.inicioNivel.play();
         this.gameOver = this.sound.add("musica_gameOver");
-
+        sonidoGana = this.sound.add("musica_winner");
         /************
             TECLADO
         *************/
@@ -586,8 +586,26 @@ class Scene2 extends Phaser.Scene {
         if (this.listaLadrillos.getLength() <= 0 && this.listaLadrillosDuros.getLength() <= 0) {
             gameConfig.nivel += 1;
             gameConfig.inicioPelota = true;
-            this.scene.restart();
+            if (gameConfig.nivel > 10){
+                this.ganar();
+            } else {
+                this.scene.restart();
+            }
         }
+    }
+
+    ganar() {
+        gameConfig.vidas = 3;
+        gameConfig.nivel = 1;
+        var escena = this.scene;
+        escena.pause();
+        gameConfig.haGanado = true;
+        sonidoGana.play();
+        this.add.image(config.width / 2, config.height / 2, "winner").setScale(0.8);
+        setTimeout(function() {
+            escena.start("gameOver");
+            escena.stop();
+        }, 2000);
     }
 
     reponerLadrilloRegenerativo(posX, posY, movement) {
