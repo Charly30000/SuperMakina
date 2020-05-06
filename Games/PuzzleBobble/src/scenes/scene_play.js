@@ -134,7 +134,7 @@ class Scene_play extends Phaser.Scene {
 
 
         if (this.cursor_space.isDown) {
-            //this.dragonesiz.anims.play('dragones1', true);
+            this.dragonesiz.anims.play('dragones1', true);
             if (this.lanzarbola.body.velocity.x == 0 && this.lanzarbola.body.velocity.y == 0) {
                 this.lanzarbola.body.velocity.set(gameConfig.velocidadburbujax, gameConfig.velocidadburbujay);
                 gameConfig.movimientox = -this.lanzarbola.body.velocity.x;
