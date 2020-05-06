@@ -7,7 +7,8 @@ const config = {
     scene: [
         Bootloader,
         Scene_play,
-        Inicio
+        Inicio,
+        GameOver
     ],
     physics: {
         default: "arcade",

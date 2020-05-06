@@ -38,22 +38,24 @@ class Scene_play extends Phaser.Scene {
                 gameConfig.nivel = nivel10;
                 break;
             default:
-                gameConfig.numeronivel = 1;
+                gameConfig.nivel = nivel1;
                 break;
         }
+
+
         document.getElementById("nivel").textContent = "Nivel: " + gameConfig.numeronivel;
-        // se carga el fondo y el borde segun el nivel en el que estas
+
+
+        // se carga el fondo, borde, flecha y dragones
         this.add.image(450, 300, gameConfig.nivel.fondo).setScale(3);
         this.add.image(this.sys.game.config.width / 2, 300, gameConfig.nivel.borde).setScale(3);
         this.lineaGameOver = this.physics.add.image(this.sys.game.config.width / 2, 505, "lineago").setScale(3);
         this.add.image(this.sys.game.config.width / 2.07, 565, 'maquinaria').setScale(3);
         this.add.image(this.sys.game.config.width / 2, 510, 'rueda').setScale(3);
-        this.dragonesiz = this.physics.add.sprite(this.sys.game.config.width / 2.8,  550, 'dragones1').setScale(3);
+        this.dragonesiz = this.physics.add.sprite(this.sys.game.config.width / 2.8, 550, 'dragones1').setScale(3);
         //this.physics.add.sprite(this.sys.game.config.width / 2.1,  550, 'dragones2').setScale(3);
-
-
-        //se crea la flecha
         this.flecha = this.add.image(this.sys.game.config.width / 2, 525, 'flecha').setScale(3);
+
 
 
         // crea el array de todas las filas del nivel para guardar las referencias de las burbujas
@@ -106,7 +108,7 @@ class Scene_play extends Phaser.Scene {
         this.lanzarbola = this.crearbolalanzar(this.sys.game.config.width / 2, 525);
         this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
 
-
+        //se crean los cursores
         this.cursor_space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         gameConfig.cursores = this.input.keyboard.createCursorKeys();
 
@@ -117,7 +119,132 @@ class Scene_play extends Phaser.Scene {
 
 
     }
-    
+
+
+    update() {
+        //comprueba si eliminaste todas las bolas
+        if (this.burbujasNivel.getLength() == 0) {
+            gameConfig.crearbola = false;
+            this.pasarnivel();
+        }
+
+        //por cada milisegundo quita uno de la puntuacion maxima que puede ganar
+        gameConfig.puntuacionvelocidad--;
+
+
+
+        if (this.cursor_space.isDown) {
+            //this.dragonesiz.anims.play('dragones1', true);
+            if (this.lanzarbola.body.velocity.x == 0 && this.lanzarbola.body.velocity.y == 0) {
+                this.lanzarbola.body.velocity.set(gameConfig.velocidadburbujax, gameConfig.velocidadburbujay);
+                gameConfig.movimientox = -this.lanzarbola.body.velocity.x;
+            }
+        }
+
+
+        // para cambiar la velocidad si choca con el lado izquierdo
+        if (this.lanzarbola.x < this.sys.game.config.width / 3.2) {
+            if (gameConfig.bolachocaderecha) {
+                gameConfig.movimientox = -gameConfig.movimientox;
+            }
+            this.lanzarbola.body.velocity.set(gameConfig.movimientox, this.lanzarbola.body.velocity.y);
+            gameConfig.bolachocaizquierda = true;
+            gameConfig.bolachocaderecha = false;
+            // para cambiar la velocidad si choca con el lado derecho
+        } else if (this.lanzarbola.x > this.sys.game.config.width / 3.2 + 335) {
+            if (gameConfig.bolachocaizquierda) {
+                gameConfig.movimientox = -gameConfig.movimientox;
+            }
+            this.lanzarbola.body.velocity.set(gameConfig.movimientox, this.lanzarbola.body.velocity.y);
+            gameConfig.bolachocaizquierda = false;
+            gameConfig.bolachocaderecha = true;
+        }
+
+
+
+        //pega la burbuja al techo
+        if (this.sys.game.config.height / 10 + gameConfig.altura > this.lanzarbola.y) {
+            let x1 = 0;
+            let x2 = 0;
+            let color = this.lanzarbola.name;
+            let iterador = 0;
+            let encontrado = false;
+            while (!encontrado || iterador > 8) {
+                x1 = (this.sys.game.config.width / 3.2 - 24) + iterador * 48;
+                x2 = (this.sys.game.config.width / 3.2 - 24) + (iterador + 1) * 48;
+                if (this.lanzarbola.x >= x1 && this.lanzarbola.x <= x2) {
+                    gameConfig.arrayburbujas[0][iterador] = 0 + "-" + iterador + "-" + color;
+                    this.burbujasNivel.add(new Burbuja(this, this.sys.game.config.width / 3.2 + 48 * iterador, this.sys.game.config.height / 10 + gameConfig.altura,
+                        "burbuja" + color, color, 0 + "-" + iterador + "-" + color).setScale(3));
+                    this.lanzarbola.destroy();
+                    let choquebolas = this.detectarsiexplosion(0 + "-" + iterador + "-" + color);
+                    if (choquebolas.length >= 3) {
+                        this.eliminarbolas(choquebolas);
+                        let aisladas = this.detectarBurbujasAisladas();
+                        if (aisladas.length > 0) {
+                            this.eliminarbolas(aisladas);
+                        }
+                    }
+                    this.modificarbolasmoviles();
+                    encontrado = true;
+
+                } else {
+                    iterador++;
+                }
+            }
+        }
+
+        /* gira la flecha hacia la izquierda y la derecha, y guarda la velocidad con la que va a salir la bola
+        en cada eje */
+        if (gameConfig.cursores.left.isDown) {
+            if (gameConfig.velocidadburbujax > -800 && gameConfig.velocidadburbujay < 0) {
+                if (gameConfig.velocidadburbujax < 0) {
+                    gameConfig.velocidadburbujay += 10;
+                } else {
+                    gameConfig.velocidadburbujay -= 10;
+                }
+                gameConfig.velocidadburbujax -= 10;
+                this.flecha.angle = Math.round(this.flecha.angle - 1.00);
+            }
+
+        } else if (gameConfig.cursores.right.isDown) {
+            if (gameConfig.velocidadburbujax < 800 && gameConfig.velocidadburbujay < 0) {
+                if (gameConfig.velocidadburbujax > 0) {
+                    gameConfig.velocidadburbujay += 10;
+                } else {
+                    gameConfig.velocidadburbujay -= 10;
+                }
+                gameConfig.velocidadburbujax += 10;
+                this.flecha.angle = Math.round(this.flecha.angle + 1.00);
+            }
+        }
+
+
+        //baja el techo cada 8 bolas
+        if (gameConfig.contador >= 8) {
+            if (gameConfig.crearbola) {
+                gameConfig.altura += 45;
+                this.moverburbujas();
+                gameConfig.contador = 0;
+            }
+        }
+    }
+
+    // se encarga de mover todas la burbujas hacia abajo y de crear los techos
+    moverburbujas() {
+        this.burbujasNivel.getChildren().forEach(burbuja => {
+            burbuja.y = burbuja.y + 45;
+        });
+        if (gameConfig.altura == 45) {
+            this.add.image(this.sys.game.config.width / 2 - 1, 46, gameConfig.nivel.techoAdicional).setScale(3);
+            this.techo = this.add.image(this.sys.game.config.width / 2 - 1, 68, gameConfig.nivel.techoInferior).setScale(3);
+        } else {
+            this.add.image(this.sys.game.config.width / 2 - 1, this.techo.y, gameConfig.nivel.techoAdicional).setScale(3);
+            this.add.image(this.sys.game.config.width / 2 - 1, this.techo.y + 23, gameConfig.nivel.techoAdicional).setScale(3);
+            this.techo = this.techo = this.add.image(this.sys.game.config.width / 2 - 1, this.techo.y + 45, gameConfig.nivel.techoInferior).setScale(3);
+        }
+    }
+
 
     // crea un array con 7 o 8 sitios
     crearfila(numero) {
@@ -128,6 +255,7 @@ class Scene_play extends Phaser.Scene {
         }
     }
 
+    //comprueba si la colision ha sido por abajo, izquierda o derecha 
     colisionPelotas(burbujamovil, burbuja) {
         if (gameConfig.crearbola) {
             gameConfig.contador++;
@@ -135,7 +263,6 @@ class Scene_play extends Phaser.Scene {
             let coordenadas = burbuja.posicion.split("-");
             coordenadas[0] = parseInt(coordenadas[0]);
             coordenadas[1] = parseInt(coordenadas[1]);
-            //burbujamovil.body.touching.left
             if (burbuja.y + 23 <= burbujamovil.y) {
                 burbujamovil.destroy();
                 if (gameConfig.arrayburbujas[coordenadas[0]].length == coordenadas[1] + 1 && coordenadas[0] % 2 == 0) {
@@ -165,7 +292,8 @@ class Scene_play extends Phaser.Scene {
         }
     }
 
-
+    /*,Guarda la burbuja en el grupo y la añade al array, comprobando si las burbujas explotan o quedan alguna bola sin estar 
+    tocando a otras */
     posicionarpelota(coordenadas, color) {
         let xocho = this.sys.game.config.width / 3.2;
         let xsiete = this.sys.game.config.width / 2.95;
@@ -184,48 +312,13 @@ class Scene_play extends Phaser.Scene {
                 this.eliminarbolas(aisladas);
             }
         }
-        this.physics.add.collider(this.lineaGameOver, this.burbujasNivel, this.comprobargameover, null, this);
+        this.physics.add.collider(this.lineaGameOver, this.burbujasNivel, this.gameover, null, this);
         this.modificarbolasmoviles();
     }
 
-    // añadir cuando se terminen los niveles
-    ganarnivel() {
-        gameConfig.numeronivel++;
-        gameConfig.altura = 0;
-        this.flecha.angle = 0;
-        gameConfig.velocidadburbujax = 0,
-        gameConfig.velocidadburbujay = -900;
-        gameConfig.contador = 0;
-        gameConfig.crearbola = true;
-        gameConfig.puntos += gameConfig.puntuacionvelocidad;
-        gameConfig.puntuacionvelocidad = 20000;
-        this.scene.restart();
-    }
-    reiniciartodo() {
-        gameConfig.altura = 0;
-        this.flecha.angle = 0;
-        gameConfig.velocidadburbujax = 0,
-        gameConfig.velocidadburbujay = -900;
-        gameConfig.contador = 0;
-        gameConfig.crearbola = true;
-        gameConfig.puntos = 0;
-        gameConfig.puntuacionvelocidad = 20000;
-        gameConfig.numeronivel = 1;
-    }
-    aumentarPuntos(numero) {
-        gameConfig.puntos += numero * 50;
-    }
-    comprobargameover(linea, burbuja) {
-        if (burbuja.body.transform.y > 505) {
-            this.scene.pause();
-            gameConfig.crearbola = false;
-            this.add.image(this.sys.game.config.width / 2, 300, "gameover").setScale(3);
-            this.reiniciartodo();
-            //this.scene.restart();
-            this.scene.start("Fin");
-        }
-    }
 
+    /* mueve la segunda bola a la primera posicion de lanzar y crea una nueva bola para el segundo sitio
+     */
     modificarbolasmoviles() {
         this.lanzarbola = this.lanzarbolasegunda;
         this.lanzarbola.x = this.sys.game.config.width / 2,
@@ -258,6 +351,7 @@ class Scene_play extends Phaser.Scene {
     }
 
 
+    //elimina las burbujas del array que le pasan
     eliminarbolas(array) {
         let contador = 0;
         while (array.length != 0) {
@@ -277,15 +371,13 @@ class Scene_play extends Phaser.Scene {
 
             }
         }
-        console.log(this.burbujasNivel.getLength());
-        console.log(gameConfig.arrayburbujas);
         this.aumentarPuntos(contador);
     }
 
 
 
 
-
+    //comprueba si hay cuatro burbujas juntas del mismo color apartir de la burbuja que acabamos de lanzar
     detectarsiexplosion(posicion) {
         let arrayBurbujasAisladas = [];
         let setBurbujasVisitadas = new Set();
@@ -319,7 +411,7 @@ class Scene_play extends Phaser.Scene {
 
 
 
-    // primero se detectan las burbujas del techo y luego por descarte las aisladas para borrarlas después
+    // comprueba si hay alguna burbuja que no este unida a las demas
     detectarBurbujasAisladas() {
         let arrayBurbujasAisladas = [];
         let setBurbujasVisitadas = new Set();
@@ -357,7 +449,8 @@ class Scene_play extends Phaser.Scene {
 
 
 
-    // dado referencia "fila-columna"
+    /*comprueba si las burbujas Adyacentes son del mismo color y si lo son luego lo comprueba con ella
+    asi hasta que no encuentre ninguna Adyacente del mismo color */
     burbujasAdyacentes(posicion) {
         let coordenadas = posicion.split("-");
         let fila = parseInt(coordenadas[0]);
@@ -412,119 +505,66 @@ class Scene_play extends Phaser.Scene {
         return arrayAdyacentes;
     }
 
-    moverburbujas() {
-        this.burbujasNivel.getChildren().forEach(burbuja => {
-            burbuja.y = burbuja.y + 45;
-        });
-        if (gameConfig.altura == 45) {
-            this.add.image(this.sys.game.config.width / 2 - 1, 46, gameConfig.nivel.techoAdicional).setScale(3);
-            this.techo = this.add.image(this.sys.game.config.width / 2 -1 , 68, gameConfig.nivel.techoInferior).setScale(3);
-        }else {
-            this.add.image(this.sys.game.config.width / 2 - 1, this.techo.y, gameConfig.nivel.techoAdicional).setScale(3);
-            this.add.image(this.sys.game.config.width / 2 - 1, this.techo.y + 23, gameConfig.nivel.techoAdicional).setScale(3);
-            this.techo = this.techo = this.add.image(this.sys.game.config.width / 2 -1 , this.techo.y + 45, gameConfig.nivel.techoInferior).setScale(3);
-        }
+
+    aumentarPuntos(numero) {
+        gameConfig.puntos += numero * 50;
+        document.getElementById("puntuacion").textContent = "SCORE: " + gameConfig.puntos;
     }
 
+    // añadir cuando se terminen los niveles
+    pasarnivel() {
+        gameConfig.numeronivel++;
+        if (gameConfig.numeronivel == 10) {
+            this.ganarjuego();
+        } else {
+            gameConfig.altura = 0;
+            this.flecha.angle = 0;
+            gameConfig.velocidadburbujax = 0,
+                gameConfig.velocidadburbujay = -900;
+            gameConfig.contador = 0;
+            gameConfig.crearbola = true;
+            gameConfig.puntos += gameConfig.puntuacionvelocidad;
+            document.getElementById("puntuacion").textContent = "SCORE: " + gameConfig.puntos;
+            gameConfig.puntuacionvelocidad = 20000;
+            this.scene.restart();
+        }
+    }
+    reiniciartodo() {
+        gameConfig.altura = 0;
+        this.flecha.angle = 0;
+        gameConfig.velocidadburbujax = 0,
+            gameConfig.velocidadburbujay = -900;
+        gameConfig.contador = 0;
+        gameConfig.crearbola = true;
+        //gameConfig.puntos = 0;
+        gameConfig.puntuacionvelocidad = 20000;
+        gameConfig.numeronivel = 1;
+    }
 
-
-    update() {
-        if (this.burbujasNivel.getLength() == 0) {
+    gameover(linea, burbuja) {
+        if (burbuja.body.transform.y > 505) {
             gameConfig.crearbola = false;
-            this.ganarnivel();
+            this.reiniciartodo();
+            var escena = this.scene;
+            escena.pause();
+            this.add.image(this.sys.game.config.width / 2, 300, "gameover").setScale(3);
+            setTimeout(function () {
+                escena.start("GameOver");
+                escena.stop();
+            }, 2000);
         }
-        gameConfig.puntuacionvelocidad--;
-        document.getElementById("puntuacion").textContent = "SCORE: " + gameConfig.puntos;
-        if (this.cursor_space.isDown) {
-            // para darle velocidad si la pelota aun no ha sido lanzada
-            this.dragonesiz.anims.play('dragones1', true);
-            if (this.lanzarbola.body.velocity.x == 0 && this.lanzarbola.body.velocity.y == 0) {
-                this.lanzarbola.body.velocity.set(gameConfig.velocidadburbujax, gameConfig.velocidadburbujay);
-                gameConfig.movimientox = -this.lanzarbola.body.velocity.x;
-            }
-        }
-        // para cambiar la velocidad si choca con el lado izquierdo
-        if (this.lanzarbola.x < this.sys.game.config.width / 3.2) {
-            if (gameConfig.bolachocaderecha) {
-                gameConfig.movimientox = -gameConfig.movimientox;
-            }
-            this.lanzarbola.body.velocity.set(gameConfig.movimientox, this.lanzarbola.body.velocity.y);
-            gameConfig.bolachocaizquierda = true;
-            gameConfig.bolachocaderecha = false;
-            // para cambiar la velocidad si choca con el lado derecho
-        } else if (this.lanzarbola.x > this.sys.game.config.width / 3.2 + 335) {
-            if (gameConfig.bolachocaizquierda) {
-                gameConfig.movimientox = -gameConfig.movimientox;
-            }
-            this.lanzarbola.body.velocity.set(gameConfig.movimientox, this.lanzarbola.body.velocity.y);
-            gameConfig.bolachocaizquierda = false;
-            gameConfig.bolachocaderecha = true;
-        }
+    }
+    ganarjuego() {
+        gameConfig.crearbola = false;
+        this.reiniciartodo();
+        var escena = this.scene;
+        escena.pause();
+        console.log("gane");
+        //this.add.image(this.sys.game.config.width / 2, 300, "victoria").setScale(3);
+        setTimeout(function () {
+            escena.start("GameOver");
+            escena.stop();
+        }, 2000);
 
-
-        if (this.sys.game.config.height / 10 + gameConfig.altura > this.lanzarbola.y) {
-            let x1 = 0;
-            let x2 = 0;
-            let color = this.lanzarbola.name;
-            let iterador = 0;
-            let encontrado = false;
-            while (!encontrado || iterador > 8) {
-                x1 = (this.sys.game.config.width / 3.2 - 24) + iterador * 48;
-                x2 = (this.sys.game.config.width / 3.2 - 24) + (iterador + 1) * 48;
-                if (this.lanzarbola.x >= x1 && this.lanzarbola.x <= x2) {
-                    gameConfig.arrayburbujas[0][iterador] = 0 + "-" + iterador + "-" + color;
-                    this.burbujasNivel.add(new Burbuja(this, this.sys.game.config.width / 3.2 + 48 * iterador, this.sys.game.config.height / 10 + gameConfig.altura,
-                        "burbuja" + color, color, 0 + "-" + iterador + "-" + color).setScale(3));
-                    this.lanzarbola.destroy();
-                    let choquebolas = this.detectarsiexplosion(0 + "-" + iterador + "-" + color);
-                    if (choquebolas.length >= 3) {
-                        this.eliminarbolas(choquebolas);
-                        let aisladas = this.detectarBurbujasAisladas();
-                        if (aisladas.length > 0) {
-                            this.eliminarbolas(aisladas);
-                        }
-                    }
-                    this.modificarbolasmoviles();
-                    encontrado = true;
-
-                } else {
-                    iterador++;
-                }
-            }
-        }
-
-
-        if (gameConfig.cursores.left.isDown) {
-            if (gameConfig.velocidadburbujax > -800 && gameConfig.velocidadburbujay < 0) {
-                if (gameConfig.velocidadburbujax < 0) {
-                    gameConfig.velocidadburbujay += 10;
-                } else {
-                    gameConfig.velocidadburbujay -= 10;
-                }
-                gameConfig.velocidadburbujax -= 10;
-                this.flecha.angle = Math.round(this.flecha.angle - 1.00);
-            }
-
-        } else if (gameConfig.cursores.right.isDown) {
-            //derecha
-            if (gameConfig.velocidadburbujax < 800 && gameConfig.velocidadburbujay < 0) {
-                if (gameConfig.velocidadburbujax > 0) {
-                    gameConfig.velocidadburbujay += 10;
-                } else {
-                    gameConfig.velocidadburbujay -= 10;
-                }
-                gameConfig.velocidadburbujax += 10;
-                this.flecha.angle = Math.round(this.flecha.angle + 1.00);
-            }
-        }
-
-
-        if (gameConfig.contador >= 8) {
-            if (gameConfig.crearbola) {
-                gameConfig.altura += 45;
-                this.moverburbujas();
-                gameConfig.contador = 0;
-            }
-        }
     }
 }

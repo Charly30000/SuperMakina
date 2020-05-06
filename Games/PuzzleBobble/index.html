@@ -23,10 +23,12 @@
         if (window.module) module = window.module;
     </script>
 </head>
+
 <body>
     <div class="d-flex justify-content-center mt-5">
         <div class="w-25">
-            <img src="../../view/assets/images/Puzzle Booble/logoPuzzleBobble.png" class="img-fluid" alt="Puzzle Bobble">
+            <img src="../../view/assets/images/Puzzle Booble/logoPuzzleBobble.png" class="img-fluid"
+                alt="Puzzle Bobble">
             <div id="controles"></div>
             <hr class="bg-primary">
             <div id="explicacion"></div>
@@ -39,11 +41,41 @@
             <div id="nivel" class="mt-5"></div>
         </div>
     </div>
+    <div class="modal fade" id="modalPuntuacion" tabindex="-1" role="dialog" aria-labelledby="modalPuntuacion"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Puntuación
+                    </h5>
+                </div>
+                <div class="modal-body" id="formPuntuacion">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control is-invalid" id="nombre" placeholder="" required>
+                                <div id="mensaje" class="valid-feedback"></div>
+                                <div id="error" class="invalid-feedback"></div>
+                                <label id="numeroPuntuacion"></label> puntos
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="modalGuardar">Guardar</button>
+                    <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="indice.js"></script>
     <script src="../../node_modules/phaser/dist/phaser.min.js"></script>
     <script src="src/js/Bootloader.js"></script>
     <script src="src/scenes/Inicio.js"></script>
     <script src="src/scenes/Scene_play.js"></script>
+    <script src="src/scenes/GameOver.js"></script>
     <script src="src/gameObjects/burbuja.js"></script>
     <script src="src/niveles/niveles.js"></script>
 
