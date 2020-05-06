@@ -11,12 +11,15 @@ class Scene3 extends Phaser.Scene {
                 { "nombre": "nbc", "puntuacion": 242352 }, 
                 { "nombre": "san", "puntuacion": 123312 }, 
                 { "nombre": "dfb", "puntuacion": 13123 }, 
-                { "nombre": "mjm", "puntuacion": 6573 },  
+                { "nombre": "mjm", "puntuacion": 6573 },
+                { "nombre": "mjm", "puntuacion": 6573 },
+                { "nombre": "mjm", "puntuacion": 6573 },
+                { "nombre": "mjm", "puntuacion": 6573 },
                 { "nombre": "asd", "puntuacion": 5673 }
             ]
         )); */
         var puntuaciones = JSON.parse(localStorage.getItem("Arkanoid"));
-        puntuaciones.push({nombre: "Nuevo!", puntuacion: gameConfig.puntos})
+        puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos })
         puntuaciones.sort((a, b) => {
             if (a.puntuacion > b.puntuacion) {
                 return -1;
@@ -31,15 +34,15 @@ class Scene3 extends Phaser.Scene {
         var posicionTabla = 1;
         this.posNuevo;
         puntuaciones.forEach(puntuacion => {
-            if (puntuacion.nombre === "Nuevo!"){
+            if (puntuacion.nombre === "Nuevo!") {
                 if (posicionTabla == 11) {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, {color: '#E74C3C'});
+                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#E74C3C' });
                 } else {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, {color: '#2E86C1'});
+                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#2E86C1' });
                 }
                 this.posNuevo = posicionTabla;
-            } else if (posicionTabla == 11){
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, {color: '#E74C3C'});
+            } else if (posicionTabla == 11) {
+                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#E74C3C' });
             } else {
                 this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`);
             }
@@ -53,13 +56,18 @@ class Scene3 extends Phaser.Scene {
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
             if (this.posNuevo != 11) {
-                // Crea el modal y guarda las puntuaciones
-                /* ALBERTO CURRA POR AQUI */
-                $('#numeroPuntuacion').text(gameConfig.puntos);
-                $('#modalPuntuacion').modal('show');
                 // Si ha metido un nombre correcto y se ha guardado su puntuación
                 if ($('#nombre').hasClass("is-valid")) {
-                    
+                    $('#nombre').removeClass("is-valid");
+                    $('#nombre').addClass("is-invalid");
+                    $('#nombre').val("");
+                    this.scene.start("playGame");
+                    this.scene.stop();
+                    gameConfig.puntos = 0;
+                } else {
+                    // Muestra el modal y guarda las puntuaciones
+                    $('#numeroPuntuacion').text(gameConfig.puntos);
+                    $('#modalPuntuacion').modal('show');
                 }
             } else {
                 // Se reinicia el juego
@@ -67,6 +75,6 @@ class Scene3 extends Phaser.Scene {
                 this.scene.stop();
                 gameConfig.puntos = 0;
             }
-        } 
+        }
     }
 }

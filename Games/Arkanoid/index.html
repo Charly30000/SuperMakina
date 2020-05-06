@@ -52,18 +52,19 @@
                 <div class="modal-body" id="formPuntuacion">
                     <form class="needs-validation" novalidate>
                         <div class="form-row">
-                          <div class="col-md-4 mb-3">
-                            <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control is-invalid" id="nombre" placeholder="" required>
-                            <div id="mensaje" class="valid-feedback"></div>
-                            <label id="numeroPuntuacion"></label> puntos
-                          </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control is-invalid" id="nombre" placeholder="" required>
+                                <div id="mensaje" class="valid-feedback"></div>
+                                <div id="error" class="invalid-feedback"></div>
+                                <label id="numeroPuntuacion"></label> puntos
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success" id="modalGuardar">Guardar</button>
-                        <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
