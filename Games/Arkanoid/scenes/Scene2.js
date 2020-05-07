@@ -266,9 +266,10 @@ class Scene2 extends Phaser.Scene {
         // Añado los sonidos....
         this.click = this.sound.add("efecto_click");
         this.inicioNivel = this.sound.add("musica_inicioNivel");
-        //this.inicioNivel.play();
+        this.inicioNivel.play();
         this.gameOver = this.sound.add("musica_gameOver");
         sonidoGana = this.sound.add("musica_winner");
+        this.efectoLaserShot = this.sound.add("efecto_LaserShot");
         /************
             TECLADO
         *************/

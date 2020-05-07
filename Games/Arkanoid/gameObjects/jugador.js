@@ -21,6 +21,7 @@ class Jugador extends Phaser.GameObjects.Sprite {
 Jugador.prototype.update = function() {
     if (!gameConfig.inicioPelota && this.modoPistolero) {
         if (Phaser.Input.Keyboard.JustDown(this.scene.spacebar)) {
+            this.scene.efectoLaserShot.play();
             this.scene.listaMisiles.add(
                 new Misil(this.scene, this.body.x + 20, this.body.y)
             );

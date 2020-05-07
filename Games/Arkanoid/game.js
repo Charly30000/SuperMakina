@@ -15,7 +15,7 @@ var config = {
 }
 
 var gameConfig = {
-    nivel : 10,
+    nivel : 1,
     puntos: 0,
     vidas: 3,
     inicioPelota: true,
