@@ -463,30 +463,34 @@ class Scene2 extends Phaser.Scene {
                             pelota.body.velocity.x *= -1
                         } else {
                             // Sumo 40 y resto 40 en todos para que haya una diferencia notable en su cambio de direccion
-                            pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x)
-                                + Phaser.Math.Between(30, 45);
+                            /* pelota.body.velocity.x = pelota.body.velocity.x + (pelota.body.x - jugador.body.x)
+                                + Phaser.Math.Between(30, 45); */
+                            pelota.body.velocity.x = Math.abs(pelota.body.velocity.x + Phaser.Math.Between(-100, 100));
                         }
                     } else {
                         //console.log("voy a la izda");
-                        pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
-                            - Phaser.Math.Between(30, 45);
+                        /* pelota.body.velocity.x = pelota.body.velocity.x - (pelota.body.x - jugador.body.x)
+                            - Phaser.Math.Between(30, 45); */
+                        pelota.body.velocity.x = Math.abs(pelota.body.velocity.x - Phaser.Math.Between(-100, 100)) * -1;
                     }
 
                 } else {
                     //console.log("Toca en la DCHA del jugador");
                     if (pelota.body.velocity.x > 0) {
                         //console.log("voy a la dcha");
-                        pelota.body.velocity.x = pelota.body.velocity.x -
+                        /* pelota.body.velocity.x = pelota.body.velocity.x -
                             (pelota.body.x - jugador.body.x - jugador.body.width)
-                            - Phaser.Math.Between(30, 45);
+                            - Phaser.Math.Between(30, 45); */
+                        pelota.body.velocity.x = Math.abs(pelota.body.velocity.x + Phaser.Math.Between(-100, 100));
                     } else {
                         //console.log("voy a la izda");
                         if ((pelota.body.x + (pelota.body.width / 2)) > (jugador.body.x + jugador.body.width - 7) /* Zona naranja lado dcho */) {
                             pelota.body.velocity.x *= -1;
                         } else {
-                            pelota.body.velocity.x = pelota.body.velocity.x +
+                            /* pelota.body.velocity.x = pelota.body.velocity.x +
                                 (pelota.body.x - jugador.body.x - jugador.body.width)
-                                + Phaser.Math.Between(30, 45);
+                                + Phaser.Math.Between(30, 45); */
+                            pelota.body.velocity.x = Math.abs(pelota.body.velocity.x - Phaser.Math.Between(-100, 100)) * -1;
                         }
                     }
                 }

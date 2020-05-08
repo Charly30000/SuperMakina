@@ -19,7 +19,7 @@ class Scene3 extends Phaser.Scene {
             ]
         )); */
         var puntuaciones = JSON.parse(localStorage.getItem("Arkanoid"));
-        puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos })
+        puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos });
         puntuaciones.sort((a, b) => {
             if (a.puntuacion > b.puntuacion) {
                 return -1;
