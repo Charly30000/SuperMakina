@@ -67,7 +67,9 @@ class Scene3 extends Phaser.Scene {
                     this.scene.start("playGame");
                     this.scene.stop();
                     gameConfig.puntos = 0;
-                    sonidoGana.stop();
+                    if (sonidoGana.isPlaying) {
+                        sonidoGana.stop();
+                    }
                 } else {
                     // Muestra el modal y guarda las puntuaciones
                     $('#numeroPuntuacion').text(gameConfig.puntos);
@@ -78,7 +80,11 @@ class Scene3 extends Phaser.Scene {
                 this.scene.start("playGame");
                 this.scene.stop();
                 gameConfig.puntos = 0;
+                if (sonidoGana.isPlaying) {
+                    sonidoGana.stop();
+                }
             }
+            
         }
     }
 }

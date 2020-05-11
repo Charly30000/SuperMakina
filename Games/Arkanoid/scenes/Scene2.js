@@ -269,6 +269,15 @@ class Scene2 extends Phaser.Scene {
         this.inicioNivel.play();
         this.gameOver = this.sound.add("musica_gameOver");
         sonidoGana = this.sound.add("musica_winner");
+        this.musicWinnerConfig = {
+            mute : false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0
+        }
         this.efectoLaserShot = this.sound.add("efecto_LaserShot");
         /************
             TECLADO
@@ -605,8 +614,8 @@ class Scene2 extends Phaser.Scene {
         var escena = this.scene;
         escena.pause();
         gameConfig.haGanado = true;
-        sonidoGana.play();
-        this.add.image(config.width / 2, config.height / 2, "winner").setScale(0.8);
+        sonidoGana.play(this.musicWinnerConfig);
+        this.add.image(config.width / 2, config.height / 2, "winner");
         setTimeout(function() {
             escena.start("gameOver");
             escena.stop();
