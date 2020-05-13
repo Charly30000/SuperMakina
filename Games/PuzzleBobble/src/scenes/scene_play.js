@@ -52,9 +52,10 @@ class Scene_play extends Phaser.Scene {
         this.lineaGameOver = this.physics.add.image(this.sys.game.config.width / 2, 505, "lineago").setScale(3);
         this.add.image(this.sys.game.config.width / 2.07, 565, 'maquinaria').setScale(3);
         this.add.image(this.sys.game.config.width / 2, 510, 'rueda').setScale(3);
-        this.dragonesiz = this.physics.add.sprite(this.sys.game.config.width / 2.8, 550, 'dragones1').setScale(3);
-        //this.physics.add.sprite(this.sys.game.config.width / 2.1,  550, 'dragones2').setScale(3);
         this.flecha = this.add.image(this.sys.game.config.width / 2, 525, 'flecha').setScale(3);
+        this.add.image(this.sys.game.config.width / 2.8, 565, 'saco').setScale(3);
+        this.dragonesiz = this.physics.add.sprite(this.sys.game.config.width / 2.13, 575, 'dragones1').setScale(3);
+        this.dragonesderec = this.physics.add.sprite(this.sys.game.config.width / 1.65, 575, 'dragones2').setScale(3);
 
 
 
@@ -106,7 +107,7 @@ class Scene_play extends Phaser.Scene {
 
         // se crean las dos bolas de lanzar
         this.lanzarbola = this.crearbolalanzar(this.sys.game.config.width / 2, 525);
-        this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
+        this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.5, 600);
 
         //se crean los cursores
         this.cursor_space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -135,6 +136,7 @@ class Scene_play extends Phaser.Scene {
 
         if (this.cursor_space.isDown) {
             this.dragonesiz.anims.play('dragones1', true);
+            this.dragonesderec.anims.play('dragones2', true);
             if (this.lanzarbola.body.velocity.x == 0 && this.lanzarbola.body.velocity.y == 0) {
                 this.lanzarbola.body.velocity.set(gameConfig.velocidadburbujax, gameConfig.velocidadburbujay);
                 gameConfig.movimientox = -this.lanzarbola.body.velocity.x;
@@ -323,7 +325,7 @@ class Scene_play extends Phaser.Scene {
         this.lanzarbola = this.lanzarbolasegunda;
         this.lanzarbola.x = this.sys.game.config.width / 2,
             this.lanzarbola.y = 525;
-        this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.4, 600);
+        this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.5, 600);
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
         gameConfig.bolachocaizquierda = false;
         gameConfig.bolachocaderecha = false;

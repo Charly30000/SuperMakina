@@ -19,6 +19,7 @@ class Bootloader extends Phaser.Scene {
         this.load.image("burbujaVe", "./assets/images/bolas/bolaverde.png");
         this.load.image('flecha','./assets/images/flechas/flecha.png');
         this.load.image("inicio", "./assets/images/pantallainicial/titulo.png");
+        this.load.image("pressSpace", `./assets/images/pantallainicial/pressSpace.png`);
         this.load.image("lineago", "./assets/images/Backgrounds/linea_game_over.png");
         this.load.image("fondo1-3", "./assets/images/Backgrounds/Background 1-3.png");
         this.load.image("fondo4-6", "./assets/images/Backgrounds/Background 4-6.png");
@@ -39,6 +40,7 @@ class Bootloader extends Phaser.Scene {
         this.load.image("gameover", "./assets/images/gameover/gameoverscene.png");
         this.load.image("rueda", `./assets/images/flechas/rueda.png`);
         this.load.image("maquinaria", `./assets/images/flechas/maquinaria.png`);
+        this.load.image('saco','./assets/images/flechas/saco.png');
 
         this.load.spritesheet("dragones1", `./assets/images/dragones/dragones1beta.png`, {
             frameWidth: 29,
@@ -70,7 +72,7 @@ class Bootloader extends Phaser.Scene {
                 start: 1,
                 end: 13
             }),
-            frameRate: 10,
+            frameRate: 30,
             repeat: 0
         });
 
@@ -80,7 +82,7 @@ class Bootloader extends Phaser.Scene {
                 start: 1,
                 end: 8
             }),
-            frameRate: 20,
+            frameRate: 30,
             repeat: 0
         });
     }

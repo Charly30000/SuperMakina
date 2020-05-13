@@ -7,7 +7,14 @@ class Inicio extends Phaser.Scene {
 
     create() {
         this.add.image(450, 250, 'inicio');
-        this.scoreLabel = this.add.text(300, 550, `Presiona Espacio para comenzar`);
+        //this.scoreLabel = this.add.text(300, 550, `Presiona Espacio para comenzar`);
+        this.intervalPressSpace = setInterval(() => {
+            let imgPressSpace = this.add.image(config.width / 2, config.height / 2 + 250, "pressSpace");
+            setTimeout(() => {
+                imgPressSpace.destroy();
+            }, 1000);
+        }, 2000);
+
         this.cursor_empezar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 

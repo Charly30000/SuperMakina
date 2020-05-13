@@ -7,7 +7,6 @@ class GameOver extends Phaser.Scene {
     create() {
         this.add.text(20, 20, `Puntos: ${gameConfig.puntos}`);
         var puntuaciones = JSON.parse(localStorage.getItem("PuzzleBobble"));
-        console.log(puntuaciones);
         puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos })
         puntuaciones.sort((a, b) => {
             if (a.puntuacion > b.puntuacion) {
