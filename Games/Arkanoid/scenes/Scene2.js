@@ -326,6 +326,11 @@ class Scene2 extends Phaser.Scene {
             gameConfig.vidas += 1;
             this.vidasLabel.text = `Vidas: ${gameConfig.vidas}`;
         } */
+
+        // Autobot
+        /* this.listaJugador.getChildren().forEach(jugador => {
+            jugador.body.x = this.listaPelotas.getChildren()[0].body.x - 25;
+        }); */
     }
 
     colisionPelotaLadrillo(pelota, ladrillo) {
