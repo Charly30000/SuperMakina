@@ -4,7 +4,8 @@ class Scene3 extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(20, 20, `Puntos: ${gameConfig.puntos}`);
+        this.add.image(200, 300, "Escena3");
+        this.add.text(120, 40, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'monospace', fontSize: 20});
         /* localStorage.setItem("Arkanoid", JSON.stringify(
             [
                 { "nombre": "alb", "puntuacion": 123123123 }, 
@@ -36,21 +37,20 @@ class Scene3 extends Phaser.Scene {
         puntuaciones.forEach(puntuacion => {
             if (puntuacion.nombre === "Nuevo!") {
                 if (posicionTabla == 11) {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#E74C3C' });
+                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#000000'});
                 } else {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#2E86C1' });
+                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#ff2e35'});
                 }
                 this.posNuevo = posicionTabla;
             } else if (posicionTabla == 11) {
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#E74C3C' });
+                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#000000'});
             } else {
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`);
+                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace' });
             }
             posY += 40;
             posicionTabla++;
         });
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.add.text(20, config.height - 50, "Press Space to continue....");
         if (gameConfig.haGanado) {
             gameConfig.haGanado = false;
         }
@@ -84,7 +84,7 @@ class Scene3 extends Phaser.Scene {
                     sonidoGana.stop();
                 }
             }
-            
+
         }
     }
 }
