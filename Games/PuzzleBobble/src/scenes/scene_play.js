@@ -59,10 +59,7 @@ class Scene_play extends Phaser.Scene {
 
 
 
-        /************
-            SONIDOS
-        *************/
-        // Añado los sonidos....
+        //SONIDOS
         this.inicioNivel = this.sound.add("InicioNivel");
         this.inicioNivel.play();
         this.ColisionBurbujas = this.sound.add("ColisionBurbuja");
