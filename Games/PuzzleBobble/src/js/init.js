@@ -36,5 +36,6 @@ var gameConfig = {
     movimientox: null,
     altura: 0,
     cursors: null,
-    crearbola: true
+    crearbola: true,
+    proximolanzamiento: true
 };

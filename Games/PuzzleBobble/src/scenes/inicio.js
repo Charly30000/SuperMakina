@@ -7,19 +7,22 @@ class Inicio extends Phaser.Scene {
 
     create() {
         this.add.image(450, 250, 'inicio');
+        this.inicio = this.sound.add("MusicaInicial");
+        this.inicio.play();
         //this.scoreLabel = this.add.text(300, 550, `Presiona Espacio para comenzar`);
         this.intervalPressSpace = setInterval(() => {
             let imgPressSpace = this.add.image(config.width / 2, config.height / 2 + 250, "pressSpace");
             setTimeout(() => {
                 imgPressSpace.destroy();
             }, 1000);
-        }, 2000);
+        }, 1000);
 
         this.cursor_empezar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update() {
         if (this.cursor_empezar.isDown) {
+            this.inicio.stop();
             this.scene.start("Scene_play");
         }
 

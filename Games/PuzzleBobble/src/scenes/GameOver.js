@@ -5,8 +5,9 @@ class GameOver extends Phaser.Scene {
 
 
     create() {
-        this.add.image(450, 300, "escena3");
-        this.add.text(50, 25, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'monospace', fontSize: 30 });
+        this.musica = this.sound.add("GameOverPuntuaciones");
+        this.musica.play();
+        this.add.text(20, 20, `Puntos: ${gameConfig.puntos}`);
         var puntuaciones = JSON.parse(localStorage.getItem("PuzzleBobble"));
         puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos })
         puntuaciones.sort((a, b) => {
@@ -25,24 +26,26 @@ class GameOver extends Phaser.Scene {
         puntuaciones.forEach(puntuacion => {
             if (puntuacion.nombre === "Nuevo!") {
                 if (posicionTabla == 11) {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#990000' });
+                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#E74C3C' });
                 } else {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#ff0810' });
+                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#2E86C1' });
                 }
                 this.posNuevo = posicionTabla;
             } else if (posicionTabla == 11) {
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#990000' });
+                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#E74C3C' });
             } else {
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#000000' });
+                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`);
             }
             posY += 40;
             posicionTabla++;
         });
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.add.text(20, config.height - 50, "Press Space to continue....");
     }
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
+            this.musica.stop();
             if (this.posNuevo != 11) {
                 // Si ha metido un nombre correcto y se ha guardado su puntuación
                 if ($('#nombre').hasClass("is-valid")) {
@@ -52,6 +55,7 @@ class GameOver extends Phaser.Scene {
                     this.scene.start("Scene_play");
                     this.scene.stop();
                     gameConfig.puntos = 0;
+                    gameConfig.crearbola = true;
                 } else {
                     // Muestra el modal y guarda las puntuaciones
                     $('#numeroPuntuacion').text(gameConfig.puntos);
@@ -62,6 +66,7 @@ class GameOver extends Phaser.Scene {
                 this.scene.start("Scene_play");
                 this.scene.stop();
                 gameConfig.puntos = 0;
+                gameConfig.crearbola = true;
             }
         }
     }

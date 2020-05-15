@@ -4,7 +4,6 @@ class Scene_play extends Phaser.Scene {
     }
 
     create() {
-
         //comprueba en la variable global del init en que numero de nivel nos encontramos y coge del nivel(numero).js toda la informacion
         switch (gameConfig.numeronivel) {
             case 1:
@@ -58,6 +57,18 @@ class Scene_play extends Phaser.Scene {
         this.dragonesderec = this.physics.add.sprite(this.sys.game.config.width / 1.65, 575, 'dragones2').setScale(3);
 
 
+
+
+        /************
+            SONIDOS
+        *************/
+        // Añado los sonidos....
+        this.inicioNivel = this.sound.add("InicioNivel");
+        this.inicioNivel.play();
+        this.ColisionBurbujas = this.sound.add("ColisionBurbuja");
+        this.EliminarBurbujas = this.sound.add("EliminarBurbujas");
+        this.LanzamientoBurbuja = this.sound.add("LanzamientoBurbuja");
+        this.RebotePared = this.sound.add("RebotePared");
 
         // crea el array de todas las filas del nivel para guardar las referencias de las burbujas
         gameConfig.arrayburbujas = new Array(this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7), this.crearfila(8), this.crearfila(7),
@@ -117,8 +128,6 @@ class Scene_play extends Phaser.Scene {
         // colision entre burbuja movil y el grupo de burbujas
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
 
-
-
     }
 
 
@@ -134,7 +143,9 @@ class Scene_play extends Phaser.Scene {
 
 
 
-        if (this.cursor_space.isDown) {
+        if (this.cursor_space.isDown && gameConfig.proximolanzamiento) {
+            gameConfig.proximolanzamiento = false;
+            this.reiniciarlanzamiento();
             this.dragonesiz.anims.play('dragones1', true);
             this.dragonesderec.anims.play('dragones2', true);
             if (this.lanzarbola.body.velocity.x == 0 && this.lanzarbola.body.velocity.y == 0) {
@@ -166,6 +177,7 @@ class Scene_play extends Phaser.Scene {
 
         //pega la burbuja al techo
         if (this.sys.game.config.height / 10 + gameConfig.altura > this.lanzarbola.y) {
+            this.ColisionBurbujas.play();
             let x1 = 0;
             let x2 = 0;
             let color = this.lanzarbola.name;
@@ -225,6 +237,7 @@ class Scene_play extends Phaser.Scene {
         //baja el techo cada 8 bolas
         if (gameConfig.contador >= 8) {
             if (gameConfig.crearbola) {
+                this.RebotePared.play();
                 gameConfig.altura += 45;
                 this.moverburbujas();
                 gameConfig.contador = 0;
@@ -232,6 +245,13 @@ class Scene_play extends Phaser.Scene {
         }
     }
 
+
+
+    reiniciarlanzamiento() {
+        setTimeout(function () {
+            gameConfig.proximolanzamiento = true;
+        }, 300);
+    }
     // se encarga de mover todas la burbujas hacia abajo y de crear los techos
     moverburbujas() {
         this.burbujasNivel.getChildren().forEach(burbuja => {
@@ -259,6 +279,7 @@ class Scene_play extends Phaser.Scene {
 
     //comprueba si la colision ha sido por abajo, izquierda o derecha 
     colisionPelotas(burbujamovil, burbuja) {
+        this.ColisionBurbujas.play();
         if (gameConfig.crearbola) {
             gameConfig.contador++;
             let color = burbujamovil.name;
@@ -328,7 +349,7 @@ class Scene_play extends Phaser.Scene {
         this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.5, 600);
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
         gameConfig.bolachocaizquierda = false;
-        gameConfig.bolachocaderecha = false;
+        gameConfig.bolachocaderecha = false; 
     }
 
 
@@ -355,6 +376,7 @@ class Scene_play extends Phaser.Scene {
 
     //elimina las burbujas del array que le pasan
     eliminarbolas(array) {
+        this.EliminarBurbujas.play();
         let contador = 0;
         while (array.length != 0) {
             let burbujaarray = array.pop();
@@ -538,7 +560,6 @@ class Scene_play extends Phaser.Scene {
             gameConfig.velocidadburbujay = -900;
         gameConfig.contador = 0;
         gameConfig.crearbola = true;
-        //gameConfig.puntos = 0;
         gameConfig.puntuacionvelocidad = 20000;
         gameConfig.numeronivel = 1;
     }
@@ -547,26 +568,32 @@ class Scene_play extends Phaser.Scene {
         if (burbuja.body.transform.y > 505) {
             this.reiniciartodo();
             gameConfig.crearbola = false;
+            this.lineaGameOver.destroy();
             var escena = this.scene;
             escena.pause();
             this.add.image(this.sys.game.config.width / 2, 300, "gameover").setScale(3);
-            setTimeout(function () {
-                escena.start("GameOver");
-                escena.stop();
-            }, 2000);
+                setTimeout(function () {
+                    escena.start("GameOver");
+                    escena.stop();
+                }, 1000);
         }
     }
+
     ganarjuego() {
+        this.sonidoganar = this.sound.add("MainTheme");
+        this.sonidoganar.play();
         gameConfig.crearbola = false;
         this.reiniciartodo();
         var escena = this.scene;
+        var sonido = this.sonidoganar;
         escena.pause();
         console.log("gane");
-        //this.add.image(this.sys.game.config.width / 2, 300, "victoria").setScale(3);
+        this.add.image(this.sys.game.config.width / 2, 300, "winner").setScale(3);
         setTimeout(function () {
+            sonido.stop();
             escena.start("GameOver");
             escena.stop();
-        }, 2000);
+        }, 3000);
 
     }
 }
