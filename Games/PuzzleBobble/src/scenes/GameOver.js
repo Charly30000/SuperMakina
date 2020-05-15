@@ -41,7 +41,6 @@ class GameOver extends Phaser.Scene {
             posicionTabla++;
         });
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.add.text(20, config.height - 50, "Press Space to continue....");
     }
 
     update() {
