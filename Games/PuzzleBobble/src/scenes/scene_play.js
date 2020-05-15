@@ -545,8 +545,8 @@ class Scene_play extends Phaser.Scene {
 
     gameover(linea, burbuja) {
         if (burbuja.body.transform.y > 505) {
-            gameConfig.crearbola = false;
             this.reiniciartodo();
+            gameConfig.crearbola = false;
             var escena = this.scene;
             escena.pause();
             this.add.image(this.sys.game.config.width / 2, 300, "gameover").setScale(3);
