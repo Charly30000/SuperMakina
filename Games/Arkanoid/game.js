@@ -15,9 +15,9 @@ var config = {
 }
 
 var gameConfig = {
-    nivel : 2,
+    nivel : 1,
     puntos: 0,
-    vidas: 1,
+    vidas: 3,
     inicioPelota: true,
     velocidadPelotaY: -200,
     velocidadJugadorX: 300,
