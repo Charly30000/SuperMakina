@@ -38,6 +38,7 @@ class Bootloader extends Phaser.Scene {
         this.load.image("techoAdicional7-9", "./assets/images/Techos/techo adicional 7-9.png");
         this.load.image("techoAdicional10-12", "./assets/images/Techos/techo adicional 10-12.png");
         this.load.image("gameover", "./assets/images/gameover/gameoverscene.png");
+        this.load.image("escena3", "./assets/images/gameover/Escena3.png");
         this.load.image("rueda", `./assets/images/flechas/rueda.png`);
         this.load.image("maquinaria", `./assets/images/flechas/maquinaria.png`);
         this.load.image('saco','./assets/images/flechas/saco.png');

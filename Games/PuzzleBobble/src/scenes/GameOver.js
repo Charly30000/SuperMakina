@@ -5,7 +5,8 @@ class GameOver extends Phaser.Scene {
 
 
     create() {
-        this.add.text(20, 20, `Puntos: ${gameConfig.puntos}`);
+        this.add.image(450, 300, "escena3");
+        this.add.text(50, 25, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'monospace', fontSize: 30 });
         var puntuaciones = JSON.parse(localStorage.getItem("PuzzleBobble"));
         puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos })
         puntuaciones.sort((a, b) => {
@@ -24,21 +25,20 @@ class GameOver extends Phaser.Scene {
         puntuaciones.forEach(puntuacion => {
             if (puntuacion.nombre === "Nuevo!") {
                 if (posicionTabla == 11) {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#E74C3C' });
+                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#990000' });
                 } else {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#2E86C1' });
+                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#ff0810' });
                 }
                 this.posNuevo = posicionTabla;
             } else if (posicionTabla == 11) {
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { color: '#E74C3C' });
+                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#990000' });
             } else {
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`);
+                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#000000' });
             }
             posY += 40;
             posicionTabla++;
         });
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.add.text(20, config.height - 50, "Press Space to continue....");
     }
 
     update() {
