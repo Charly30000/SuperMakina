@@ -50,6 +50,7 @@ class Bootloader extends Phaser.Scene {
         this.load.image("pressSpace", `./assets/images/pantallainicial/pressSpace.png`);
         this.load.image("gameover", "./assets/images/gameover/gameoverscene.png");
         this.load.image("winner", "./assets/images/winner/winner.png");
+        this.load.image("escena3", "./assets/images/gameover/Escena3.png");
         
 
         this.load.spritesheet("dragones1", `./assets/images/dragones/dragones1beta.png`, {
