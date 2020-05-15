@@ -5,7 +5,7 @@ class Scene3 extends Phaser.Scene {
 
     create() {
         this.add.image(200, 300, "Escena3");
-        this.add.text(120, 40, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'monospace', fontSize: 20});
+        this.add.text(config.width / 2, 45, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'Rockwell', fontSize: 30, color: '#000000'}).setOrigin(0.5, 0.5);
         /* localStorage.setItem("Arkanoid", JSON.stringify(
             [
                 { "nombre": "alb", "puntuacion": 123123123 }, 
@@ -31,29 +31,40 @@ class Scene3 extends Phaser.Scene {
             }
         });
 
-        var posY = 80;
+        var posY = 95;
         var posicionTabla = 1;
         this.posNuevo;
         puntuaciones.forEach(puntuacion => {
             if (puntuacion.nombre === "Nuevo!") {
                 if (posicionTabla == 11) {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#000000'});
+                    this.add.text(35, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString()}`, { fontFamily: 'Rockwell', color: '#bf0000'});
+                    this.add.text(250, posY, `${puntuacion.puntuacion}`, { fontFamily: 'Rockwell', color: '#bf0000'});
                 } else {
-                    this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#ff2e35'});
+                    this.add.text(35, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString()}`, { fontFamily: 'Rockwell', color: '#0000c2'});
+                    this.add.text(250, posY, `${puntuacion.puntuacion}`, { fontFamily: 'Rockwell', color: '#0000c2'});
                 }
                 this.posNuevo = posicionTabla;
             } else if (posicionTabla == 11) {
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace', color: '#000000'});
+                this.add.text(35, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString()}`, { fontFamily: 'Rockwell', color: '#bf0000'});
+                this.add.text(250, posY, `${puntuacion.puntuacion}`, { fontFamily: 'Rockwell', color: '#bf0000'});
             } else {
-                this.add.text(20, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString().padEnd(15, ".")}${puntuacion.puntuacion}`, { fontFamily: 'monospace' });
+                this.add.text(35, posY, `${posicionTabla.toString().padStart(3, " ")}º   ${puntuacion.nombre.toString()}`, { fontFamily: 'Rockwell', color: '#000000'});
+                this.add.text(250, posY, `${puntuacion.puntuacion}`, { fontFamily: 'Rockwell', color: '#000000'});
+                
             }
-            posY += 40;
+            posY += 39;
             posicionTabla++;
         });
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         if (gameConfig.haGanado) {
             gameConfig.haGanado = false;
         }
+        this.intervalPressSpace = setInterval(() => {
+            let imgPressSpace = this.add.image(config.width / 2, 550, "pressSpace").setScale(1.2);
+            setTimeout(() => {
+                imgPressSpace.destroy();
+            }, 1000);
+        }, 2000);
     }
 
     update() {
@@ -61,6 +72,7 @@ class Scene3 extends Phaser.Scene {
             if (this.posNuevo != 11) {
                 // Si ha metido un nombre correcto y se ha guardado su puntuación
                 if ($('#nombre').hasClass("is-valid")) {
+                    clearInterval(this.intervalPressSpace);
                     $('#nombre').removeClass("is-valid");
                     $('#nombre').addClass("is-invalid");
                     $('#nombre').val("");
@@ -77,6 +89,7 @@ class Scene3 extends Phaser.Scene {
                 }
             } else {
                 // Se reinicia el juego
+                clearInterval(this.intervalPressSpace);
                 this.scene.start("playGame");
                 this.scene.stop();
                 gameConfig.puntos = 0;
