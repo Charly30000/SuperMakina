@@ -209,24 +209,30 @@ class Scene_play extends Phaser.Scene {
         en cada eje */
         if (gameConfig.cursores.left.isDown) {
             if (gameConfig.velocidadburbujax > -800 && gameConfig.velocidadburbujay < 0) {
-                if (gameConfig.velocidadburbujax < 0) {
+                if (gameConfig.velocidadburbujax <= 0) {
                     gameConfig.velocidadburbujay += 10;
                 } else {
                     gameConfig.velocidadburbujay -= 10;
                 }
                 gameConfig.velocidadburbujax -= 10;
                 this.flecha.angle = Math.round(this.flecha.angle - 1.00);
+                console.log(gameConfig.velocidadburbujay);
+                console.log(gameConfig.velocidadburbujax);
+                console.log(this.flecha.angle);
             }
 
         } else if (gameConfig.cursores.right.isDown) {
             if (gameConfig.velocidadburbujax < 800 && gameConfig.velocidadburbujay < 0) {
-                if (gameConfig.velocidadburbujax > 0) {
+                if (gameConfig.velocidadburbujax >= 0) {
                     gameConfig.velocidadburbujay += 10;
                 } else {
                     gameConfig.velocidadburbujay -= 10;
                 }
                 gameConfig.velocidadburbujax += 10;
                 this.flecha.angle = Math.round(this.flecha.angle + 1.00);
+                console.log(gameConfig.velocidadburbujay);
+                console.log(gameConfig.velocidadburbujax);
+                console.log(this.flecha.angle);
             }
         }
 
