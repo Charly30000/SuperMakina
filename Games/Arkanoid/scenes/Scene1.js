@@ -222,13 +222,15 @@ class Scene1 extends Phaser.Scene {
         }, 2000);
 
         this.space_bar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        
+        this.musicaInicio = this.sound.add("musica_inicioJuego");
+        this.musicaInicio.play();
     }
 
     update() {
         if (this.space_bar.isDown) {
             // Iniciar Scene2
             clearInterval(this.intervalPressSpace);
+            this.musicaInicio.stop();
             this.scene.start("playGame");
         }
     }
