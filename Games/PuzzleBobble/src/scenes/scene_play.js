@@ -144,7 +144,6 @@ class Scene_play extends Phaser.Scene {
             gameConfig.proximolanzamiento = false;
             this.reiniciarlanzamiento();
             this.dragonesiz.anims.play('dragones1', true);
-            this.dragonesderec.anims.play('dragones2', true);
             if (this.lanzarbola.body.velocity.x == 0 && this.lanzarbola.body.velocity.y == 0) {
                 this.lanzarbola.body.velocity.set(gameConfig.velocidadburbujax, gameConfig.velocidadburbujay);
                 gameConfig.movimientox = -this.lanzarbola.body.velocity.x;
@@ -208,6 +207,7 @@ class Scene_play extends Phaser.Scene {
         /* gira la flecha hacia la izquierda y la derecha, y guarda la velocidad con la que va a salir la bola
         en cada eje */
         if (gameConfig.cursores.left.isDown) {
+            this.dragonesderec.anims.play('dragones2', true);
             if (gameConfig.velocidadburbujax > -800 && gameConfig.velocidadburbujay < 0) {
                 if (gameConfig.velocidadburbujax <= 0) {
                     gameConfig.velocidadburbujay += 10;
@@ -222,6 +222,7 @@ class Scene_play extends Phaser.Scene {
             }
 
         } else if (gameConfig.cursores.right.isDown) {
+            this.dragonesderec.anims.play('dragones2', true);
             if (gameConfig.velocidadburbujax < 800 && gameConfig.velocidadburbujay < 0) {
                 if (gameConfig.velocidadburbujax >= 0) {
                     gameConfig.velocidadburbujay += 10;
@@ -578,7 +579,7 @@ class Scene_play extends Phaser.Scene {
                 setTimeout(function () {
                     escena.start("GameOver");
                     escena.stop();
-                }, 1000);
+                }, 3000);
         }
     }
 
