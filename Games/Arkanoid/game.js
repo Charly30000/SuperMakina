@@ -3,7 +3,7 @@ var config = {
     height: 600,
     parent: "container",
     type: Phaser.CANVAS,
-    scene: [Scene1, Scene2, Scene3],
+    scene: [bootGame, playGame, gameOver],
     pixelArt: true,
     physics: {
         default: "arcade",
