@@ -216,9 +216,6 @@ class Scene_play extends Phaser.Scene {
                 }
                 gameConfig.velocidadburbujax -= 10;
                 this.flecha.angle = Math.round(this.flecha.angle - 1.00);
-                console.log(gameConfig.velocidadburbujay);
-                console.log(gameConfig.velocidadburbujax);
-                console.log(this.flecha.angle);
             }
 
         } else if (gameConfig.cursores.right.isDown) {
@@ -231,15 +228,12 @@ class Scene_play extends Phaser.Scene {
                 }
                 gameConfig.velocidadburbujax += 10;
                 this.flecha.angle = Math.round(this.flecha.angle + 1.00);
-                console.log(gameConfig.velocidadburbujay);
-                console.log(gameConfig.velocidadburbujax);
-                console.log(this.flecha.angle);
             }
         }
 
 
         //baja el techo cada 8 bolas
-        if (gameConfig.contador >= 8) {
+        if (gameConfig.contador >= 10) {
             if (gameConfig.crearbola) {
                 this.RebotePared.play();
                 gameConfig.altura += 45;
@@ -542,7 +536,7 @@ class Scene_play extends Phaser.Scene {
     // añadir cuando se terminen los niveles
     pasarnivel() {
         gameConfig.numeronivel++;
-        if (gameConfig.numeronivel == 10) {
+        if (gameConfig.numeronivel > 10) {
             this.ganarjuego();
         } else {
             gameConfig.altura = 0;
@@ -591,7 +585,6 @@ class Scene_play extends Phaser.Scene {
         var escena = this.scene;
         var sonido = this.sonidoganar;
         escena.pause();
-        console.log("gane");
         this.add.image(this.sys.game.config.width / 2, 300, "winner").setScale(3);
         setTimeout(function () {
             sonido.stop();

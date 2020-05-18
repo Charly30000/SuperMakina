@@ -8,6 +8,12 @@ class GameOver extends Phaser.Scene {
         this.musica = this.sound.add("GameOverPuntuaciones");
         this.musica.play();
         this.add.image(450, 300, "escena3");
+        this.intervalPressSpace = setInterval(() => {
+            let imgPressSpace = this.add.image(config.width / 2, config.height / 2 + 250, "pressSpace");
+            setTimeout(() => {
+                imgPressSpace.destroy();
+            }, 1000);
+        }, 2000);
         this.add.text(50, 25, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'monospace', fontSize: 30 });
         var puntuaciones = JSON.parse(localStorage.getItem("PuzzleBobble"));
         puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos })
@@ -18,6 +24,7 @@ class GameOver extends Phaser.Scene {
                 return 1;
             } else {
                 return 0;
+                
             }
         });
 

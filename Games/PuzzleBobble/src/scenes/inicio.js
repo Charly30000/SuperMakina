@@ -15,7 +15,8 @@ class Inicio extends Phaser.Scene {
             setTimeout(() => {
                 imgPressSpace.destroy();
             }, 1000);
-        }, 1000);
+        }, 2000);
+
 
         this.cursor_empezar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
