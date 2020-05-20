@@ -1,5 +1,3 @@
-//se muestra una imagen inicial del juego, la cual tendremos que cambiar,para empezar el juego hay que
-//pulsar la s y te mueve a Scene_play
 class Inicio extends Phaser.Scene {
     constructor() {
         super({ key: "Inicio" })
@@ -9,7 +7,6 @@ class Inicio extends Phaser.Scene {
         this.add.image(450, 250, 'inicio');
         this.inicio = this.sound.add("MusicaInicial");
         this.inicio.play();
-        //this.scoreLabel = this.add.text(300, 550, `Presiona Espacio para comenzar`);
         this.intervalPressSpace = setInterval(() => {
             let imgPressSpace = this.add.image(config.width / 2, config.height / 2 + 250, "pressSpace");
             setTimeout(() => {
@@ -22,6 +19,7 @@ class Inicio extends Phaser.Scene {
     }
 
     update() {
+        //inicio de la escena del juego
         if (this.cursor_empezar.isDown) {
             this.inicio.stop();
             this.scene.start("Scene_play");

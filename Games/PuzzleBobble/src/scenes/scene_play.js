@@ -51,8 +51,8 @@ class Scene_play extends Phaser.Scene {
         this.lineaGameOver = this.physics.add.image(this.sys.game.config.width / 2, 505, "lineago").setScale(3);
         this.add.image(this.sys.game.config.width / 2.07, 565, 'maquinaria').setScale(3);
         this.add.image(this.sys.game.config.width / 2, 510, 'rueda').setScale(3);
-        this.flecha = this.add.image(this.sys.game.config.width / 2, 525, 'flecha').setScale(3);
         this.add.image(this.sys.game.config.width / 2.8, 565, 'saco').setScale(3);
+        this.flecha = this.add.image(this.sys.game.config.width / 2, 525, 'flecha').setScale(3);
         this.dragonesiz = this.physics.add.sprite(this.sys.game.config.width / 2.13, 575, 'dragones1').setScale(3);
         this.dragonesderec = this.physics.add.sprite(this.sys.game.config.width / 1.65, 575, 'dragones2').setScale(3);
 
@@ -139,7 +139,7 @@ class Scene_play extends Phaser.Scene {
         gameConfig.puntuacionvelocidad--;
 
 
-
+        // regula si se puede lanzar bola y le añade la velocidad a la bola que lanzas.
         if (this.cursor_space.isDown && gameConfig.proximolanzamiento) {
             gameConfig.proximolanzamiento = false;
             this.reiniciarlanzamiento();
@@ -151,7 +151,7 @@ class Scene_play extends Phaser.Scene {
         }
 
 
-        // para cambiar la velocidad si choca con el lado izquierdo
+        // cambia la velocidad se choca con el lado izquierdo
         if (this.lanzarbola.x < this.sys.game.config.width / 3.2) {
             if (gameConfig.bolachocaderecha) {
                 gameConfig.movimientox = -gameConfig.movimientox;
@@ -159,7 +159,8 @@ class Scene_play extends Phaser.Scene {
             this.lanzarbola.body.velocity.set(gameConfig.movimientox, this.lanzarbola.body.velocity.y);
             gameConfig.bolachocaizquierda = true;
             gameConfig.bolachocaderecha = false;
-            // para cambiar la velocidad si choca con el lado derecho
+
+            //cambiar la velocidad si choca con el lado derecho
         } else if (this.lanzarbola.x > this.sys.game.config.width / 3.2 + 335) {
             if (gameConfig.bolachocaizquierda) {
                 gameConfig.movimientox = -gameConfig.movimientox;
@@ -171,7 +172,7 @@ class Scene_play extends Phaser.Scene {
 
 
 
-        //pega la burbuja al techo
+        //pega la burbuja al techo y comprueba si se destruyen bolas
         if (this.sys.game.config.height / 10 + gameConfig.altura > this.lanzarbola.y) {
             this.ColisionBurbujas.play();
             let x1 = 0;
@@ -244,12 +245,13 @@ class Scene_play extends Phaser.Scene {
     }
 
 
-
+    //controla cada cuanto tiempo se puede lanzar la bola
     reiniciarlanzamiento() {
         setTimeout(function () {
             gameConfig.proximolanzamiento = true;
         }, 300);
     }
+
     // se encarga de mover todas la burbujas hacia abajo y de crear los techos
     moverburbujas() {
         this.burbujasNivel.getChildren().forEach(burbuja => {
@@ -347,7 +349,7 @@ class Scene_play extends Phaser.Scene {
         this.lanzarbolasegunda = this.crearbolalanzar(this.sys.game.config.width / 2.5, 600);
         this.physics.add.collider(this.lanzarbola, this.burbujasNivel, this.colisionPelotas, null, this);
         gameConfig.bolachocaizquierda = false;
-        gameConfig.bolachocaderecha = false; 
+        gameConfig.bolachocaderecha = false;
     }
 
 
@@ -533,7 +535,7 @@ class Scene_play extends Phaser.Scene {
         document.getElementById("puntuacion").textContent = "SCORE: " + gameConfig.puntos;
     }
 
-    // añadir cuando se terminen los niveles
+    //renueva todas las variables y pasa de nivel
     pasarnivel() {
         gameConfig.numeronivel++;
         if (gameConfig.numeronivel > 10) {
@@ -551,6 +553,8 @@ class Scene_play extends Phaser.Scene {
             this.scene.restart();
         }
     }
+
+    //reinicia todas las variables
     reiniciartodo() {
         gameConfig.altura = 0;
         this.flecha.angle = 0;
@@ -562,6 +566,7 @@ class Scene_play extends Phaser.Scene {
         gameConfig.numeronivel = 1;
     }
 
+    // comprueba si gameover y cambia a la escena GameOver
     gameover(linea, burbuja) {
         if (burbuja.body.transform.y > 505) {
             this.reiniciartodo();
@@ -570,10 +575,10 @@ class Scene_play extends Phaser.Scene {
             var escena = this.scene;
             escena.pause();
             this.add.image(this.sys.game.config.width / 2, 300, "gameover").setScale(3);
-                setTimeout(function () {
-                    escena.start("GameOver");
-                    escena.stop();
-                }, 3000);
+            setTimeout(function () {
+                escena.start("GameOver");
+                escena.stop();
+            }, 3000);
         }
     }
 
