@@ -19,7 +19,8 @@ app.on('ready', function () {
             nodeIntegration: true
         },
         width: 1600,
-        height: 900
+        height: 900,
+        darkTheme: true
     })
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'view/index.html'),
@@ -34,8 +35,10 @@ app.on('ready', function () {
         app.quit();
     })
     mainWindow.maximize();
+    // mainWindow.removeMenu(); // para quitar el menu cuando se vaya a entregar
 })
 
+// *****no se puede quitar, el menu debe tener al menos una pestaña, rol o tipo
 const templateMenu = [
     {
         label: 'Exit',
@@ -45,7 +48,7 @@ const templateMenu = [
     }
 ];
 
-//Pantalla puntuaciones
+// Pantalla puntuaciones
 let ventanaPuntuaciones;
 
 // Funcion que crea una ventana con las puntuaciones del juego que el usuario pida
@@ -55,12 +58,14 @@ function crearVentanaPuntuaciones() {
             width: 800,
             height: 400,
             title: 'Puntuaciones',
+            darkTheme: true,
+            maximizable: false,
+            resizable: false,
             webPreferences: {
                 nodeIntegration: true
             },
             show: false
         });
-        //ventanaPuntuaciones.setMenu(null);
         ventanaPuntuaciones.loadURL(url.format({
             pathname: path.join(__dirname, 'view/ventanaPuntuaciones.html'),
             protocol: 'file',
@@ -71,8 +76,7 @@ function crearVentanaPuntuaciones() {
             mainWindow.setEnabled(true);
             mainWindow.show();
         })
-        ventanaPuntuaciones.setMaximizable(false);
-        ventanaPuntuaciones.setResizable(false);
+        // ventanaPuntuaciones.removeMenu(); // para quitar el menu cuando se vaya a entregar
     }
 }
 
@@ -97,7 +101,6 @@ if (process.env.NODE_ENV !== 'production') {
 ipcMain.on('puntuaciones', (evt, juego) => {
     crearVentanaPuntuaciones();
     ventanaPuntuaciones.once('ready-to-show', ()=>{
-        console.log(juego)
         ventanaPuntuaciones.webContents.send('juego', juego);
         ventanaPuntuaciones.show();
         mainWindow.setEnabled(false);

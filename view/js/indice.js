@@ -13,7 +13,6 @@ botonDescripcionArkanoid.addEventListener("click", function () {
 });
 
 // boton puntuaciones
-
 const { ipcRenderer } = require('electron');
 
 let botonPuntuacionesPuzzleBobble = document.getElementById("botonPuntuacionesPuzzleBobble");
@@ -23,7 +22,7 @@ botonPuntuacionesPuzzleBobble.addEventListener("click", function () {
 })
 
 let botonPuntuacionesArkanoid = document.getElementById("botonPuntuacionesArkanoid");
-botonPuntuacionesArkanoid.addEventListener("click", function() {
+botonPuntuacionesArkanoid.addEventListener("click", function () {
   let juego = infoJuegos.Arkanoid.Titulo;
   ipcRenderer.send('puntuaciones', juego);
 })
