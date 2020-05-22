@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arkanoid</title>
-    <link rel="stylesheet" type="text/css" href="../../node_modules/bootswatch/dist/cerulean/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../node_modules/bootswatch/dist/superhero/bootstrap.min.css">
     <!-- Insert this line above script imports  -->
     <script>
         if (typeof module === 'object') {
@@ -24,10 +24,66 @@
     </script>
 </head>
 
-<body>
-    <h1>Arkanoid</h1>
-    <div id="container"></div>
+<body class="container">
+    <div class="d-flex justify-content-between mt-5">
+        <div class="w-25">
+            <img src="../../view/assets/images/Arkanoid/logoArkanoid.png" class="img-fluid" alt="Arkanoid">
+            <div id="controles"></div>
+            <hr class="bg-primary">
+            <div id="explicacion"></div>
+        </div>
+        <div id="container"></div>
+        <div>
+            <a class="btn btn-primary" href="./index.html" role="button">Reiniciar</a>
+            <a class="btn btn-secondary" href="../../view/index.html" role="button">Volver</a>
+        </div>
+    </div>
+
+    <!-- Modal puntuación nueva -->
+    <div class="modal fade" id="modalPuntuacion" tabindex="-1" role="dialog" aria-labelledby="modalPuntuacion"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Puntuación
+                    </h5>
+                </div>
+                <div class="modal-body" id="formPuntuacion">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control is-invalid" id="nombre" placeholder="" required>
+                                <div id="mensaje" class="valid-feedback"></div>
+                                <div id="error" class="invalid-feedback"></div>
+                                <label id="numeroPuntuacion"></label> puntos
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="modalGuardar">Guardar</button>
+                    <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="indice.js"></script>
     <script src="../../node_modules/phaser/dist/phaser.min.js"></script>
+    <script src="scenes/bootGame.js"></script>
+    <script src="scenes/playGame.js"></script>
+    <script src="scenes/gameOver.js"></script>
+    <script src="gameObjects/jugador.js"></script>
+    <script src="gameObjects/ladrillo.js"></script>
+    <script src="gameObjects/ladrilloIndestructible.js"></script>
+    <script src="gameObjects/ladrilloRegenerativo.js"></script>
+    <script src="gameObjects/ladrilloDuro.js"></script>
+    <script src="gameObjects/mejora.js"></script>
+    <script src="gameObjects/misil.js"></script>
+    <script src="gameObjects/pelota.js"></script>
+    <script src="levels/levels.js"></script>
+    <script src="game.js"></script>
 </body>
 
 </html>
