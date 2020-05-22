@@ -20,16 +20,23 @@ class gameOver extends Phaser.Scene {
             ]
         )); */
         var puntuaciones = JSON.parse(localStorage.getItem("Arkanoid"));
-        puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos });
-        puntuaciones.sort((a, b) => {
-            if (a.puntuacion > b.puntuacion) {
-                return -1;
-            } else if (a.puntuacion < b.puntuacion) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+        if (puntuaciones) {
+            puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos });
+            puntuaciones.sort((a, b) => {
+                if (a.puntuacion > b.puntuacion) {
+                    return -1;
+                } else if (a.puntuacion < b.puntuacion) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+        } else {
+            puntuaciones = [
+                { nombre: "Nuevo!", puntuacion: gameConfig.puntos }, 
+            ]
+        }
+        
 
         var posY = 95;
         var posicionTabla = 1;

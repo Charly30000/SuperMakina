@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron');
 let nombreJuego;
 ipcRenderer.on('juego', (evt, juego) => {
-    creacionStorage(juego);
+    //creacionStorage(juego);
     creacionTabla(juego);
     document.getElementById("tituloJuego").textContent = juego;
 });
