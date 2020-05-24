@@ -15,7 +15,13 @@ document.getElementById("modalGuardar").addEventListener("click", function () {
                 let puntuacion = document.getElementById("numeroPuntuacion").textContent;
                 puntuacion = parseInt(puntuacion);
                 let puntuaciones = JSON.parse(localStorage.getItem("PuzzleBobble"));
-                puntuaciones.push({ nombre: nombre.value, puntuacion: puntuacion });
+                if (puntuaciones) {
+                    puntuaciones.push({ nombre: nombre.value, puntuacion: puntuacion });
+                } else {
+                    puntuaciones = [
+                        { nombre: nombre.value, puntuacion: puntuacion }, 
+                    ]
+                }
                 if (puntuaciones.length == 11) {
                     puntuaciones.sort((a, b) => {
                         if (a.puntuacion > b.puntuacion) {
