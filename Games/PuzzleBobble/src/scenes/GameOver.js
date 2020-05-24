@@ -59,6 +59,8 @@ class GameOver extends Phaser.Scene {
                     $('#nombre').removeClass("is-valid");
                     $('#nombre').addClass("is-invalid");
                     $('#nombre').val("");
+                    $('#error').text("Nombre con 3 caracteres");
+                    $('#mensaje').text("");
                     this.scene.start("Scene_play");
                     this.scene.stop();
                     gameConfig.puntos = 0;

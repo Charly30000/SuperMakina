@@ -6,19 +6,6 @@ class gameOver extends Phaser.Scene {
     create() {
         this.add.image(200, 300, "Escena3");
         this.add.text(config.width / 2, 45, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'Rockwell', fontSize: 30, color: '#000000'}).setOrigin(0.5, 0.5);
-        /* localStorage.setItem("Arkanoid", JSON.stringify(
-            [
-                { "nombre": "alb", "puntuacion": 123123123 }, 
-                { "nombre": "nbc", "puntuacion": 242352 }, 
-                { "nombre": "san", "puntuacion": 123312 }, 
-                { "nombre": "dfb", "puntuacion": 13123 }, 
-                { "nombre": "mjm", "puntuacion": 6573 },
-                { "nombre": "mjm", "puntuacion": 6573 },
-                { "nombre": "mjm", "puntuacion": 6573 },
-                { "nombre": "mjm", "puntuacion": 6573 },
-                { "nombre": "asd", "puntuacion": 5673 }
-            ]
-        )); */
         var puntuaciones = JSON.parse(localStorage.getItem("Arkanoid"));
         puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos });
         puntuaciones.sort((a, b) => {
@@ -76,6 +63,8 @@ class gameOver extends Phaser.Scene {
                     $('#nombre').removeClass("is-valid");
                     $('#nombre').addClass("is-invalid");
                     $('#nombre').val("");
+                    $('#error').text("Nombre con 3 caracteres");
+                    $('#mensaje').text("");
                     this.scene.start("playGame");
                     this.scene.stop();
                     gameConfig.puntos = 0;

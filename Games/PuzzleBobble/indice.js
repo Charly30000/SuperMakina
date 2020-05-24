@@ -5,7 +5,7 @@ document.getElementById("modalGuardar").addEventListener("click", function () {
     if (nombre.hasAttribute("class", "is-invalid")) {
         nombre.classList.remove("is-invalid");
         $('#error').text("");
-        if (nombre.value == "" || nombre.value.length > 3) {
+        if (nombre.value == "" || nombre.value.length >= 4) {
             nombre.classList.add("is-invalid");
             nombre.value = "";
             $('#error').text("Nombre con 3 caracteres");
@@ -14,8 +14,7 @@ document.getElementById("modalGuardar").addEventListener("click", function () {
                 nombre.classList.add("is-valid");
                 let puntuacion = document.getElementById("numeroPuntuacion").textContent;
                 puntuacion = parseInt(puntuacion);
-                let puntuaciones = JSON.parse(localStorage.getItem("Arkanoid"));
-                console.log(puntuaciones);
+                let puntuaciones = JSON.parse(localStorage.getItem("PuzzleBobble"));
                 puntuaciones.push({ nombre: nombre.value, puntuacion: puntuacion });
                 if (puntuaciones.length == 11) {
                     puntuaciones.sort((a, b) => {

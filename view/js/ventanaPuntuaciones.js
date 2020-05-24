@@ -1,55 +1,16 @@
 const { ipcRenderer } = require('electron');
 let nombreJuego;
 ipcRenderer.on('juego', (evt, juego) => {
-    creacionStorage(juego);
     creacionTabla(juego);
     document.getElementById("tituloJuego").textContent = juego;
 });
-function creacionStorage(juego) {
-    localStorage.setItem(juego, JSON.stringify(
-        [
-            {
-                "nombre": "san",
-                "puntuacion": 123312
-            },
-            {
-                "nombre": "alb",
-                "puntuacion": 123123123
-            },
-            {
-                "nombre": "dfb",
-                "puntuacion": 13123
-            },
-            {
-                "nombre": "mjm",
-                "puntuacion": 6573
-            },
-            {
-                "nombre": "nbc",
-                "puntuacion": 242352
-            },
-            {
-                "nombre": "asd",
-                "puntuacion": 5673
-            },
-            {
-                "nombre": "asd",
-                "puntuacion": 5673
-            },
-            {
-                "nombre": "asd",
-                "puntuacion": 5673
-            }
-        ]
-    ));
-}
 
 function creacionTabla(juego) {
     let objeto = JSON.parse(localStorage.getItem(juego));
     if (!objeto) {
         $('body').empty();
-        $(`<div class="alert alert-primary" role="alert">
-                ${juego}
+        $(`<div class="alert alert-secondary text-center">
+                ${juego} sin puntuaciones previas
                 </div>'`).appendTo($('body'));
     } else {
         objeto.sort((a, b) => {
