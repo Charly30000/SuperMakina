@@ -16,17 +16,24 @@ class GameOver extends Phaser.Scene {
         }, 2000);
         this.add.text(50, 25, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'monospace', fontSize: 30 });
         var puntuaciones = JSON.parse(localStorage.getItem("PuzzleBobble"));
-        puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos })
-        puntuaciones.sort((a, b) => {
-            if (a.puntuacion > b.puntuacion) {
-                return -1;
-            } else if (a.puntuacion < b.puntuacion) {
-                return 1;
-            } else {
-                return 0;
-                
-            }
-        });
+        if (puntuaciones) {
+            puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos })
+            puntuaciones.sort((a, b) => {
+                if (a.puntuacion > b.puntuacion) {
+                    return -1;
+                } else if (a.puntuacion < b.puntuacion) {
+                    return 1;
+                } else {
+                    return 0;
+                    
+                }
+            });
+        } else {
+            puntuaciones = [
+                { nombre: "Nuevo!", puntuacion: gameConfig.puntos }, 
+            ]
+        }
+        
 
         var posY = 80;
         var posicionTabla = 1;

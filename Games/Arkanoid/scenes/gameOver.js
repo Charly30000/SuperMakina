@@ -7,16 +7,23 @@ class gameOver extends Phaser.Scene {
         this.add.image(200, 300, "Escena3");
         this.add.text(config.width / 2, 45, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'Rockwell', fontSize: 30, color: '#000000'}).setOrigin(0.5, 0.5);
         var puntuaciones = JSON.parse(localStorage.getItem("Arkanoid"));
-        puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos });
-        puntuaciones.sort((a, b) => {
-            if (a.puntuacion > b.puntuacion) {
-                return -1;
-            } else if (a.puntuacion < b.puntuacion) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+        if (puntuaciones) {
+            puntuaciones.push({ nombre: "Nuevo!", puntuacion: gameConfig.puntos });
+            puntuaciones.sort((a, b) => {
+                if (a.puntuacion > b.puntuacion) {
+                    return -1;
+                } else if (a.puntuacion < b.puntuacion) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+        } else {
+            puntuaciones = [
+                { nombre: "Nuevo!", puntuacion: gameConfig.puntos }, 
+            ]
+        }
+        
 
         var posY = 95;
         var posicionTabla = 1;
