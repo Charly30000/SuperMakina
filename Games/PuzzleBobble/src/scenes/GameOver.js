@@ -14,7 +14,6 @@ class GameOver extends Phaser.Scene {
                 imgPressSpace.destroy();
             }, 1000);
         }, 2000);
-        localStorage.clear();
         this.add.text(50, 25, `Puntos: ${gameConfig.puntos}`, { fontFamily: 'monospace', fontSize: 30 });
         var puntuaciones = JSON.parse(localStorage.getItem("PuzzleBobble"));
         if (puntuaciones) {
