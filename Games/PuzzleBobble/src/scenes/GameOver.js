@@ -68,7 +68,7 @@ class GameOver extends Phaser.Scene {
                     $('#nombre').val("");
                     $('#error').text("Nombre con 3 caracteres");
                     $('#mensaje').text("");
-                    this.scene.start("Scene_play");
+                    this.scene.start("Sceneplay");
                     this.scene.stop();
                     gameConfig.puntos = 0;
                     gameConfig.crearbola = true;
@@ -79,7 +79,7 @@ class GameOver extends Phaser.Scene {
                 }
             } else {
                 // Se reinicia el juego
-                this.scene.start("Scene_play");
+                this.scene.start("Sceneplay");
                 this.scene.stop();
                 gameConfig.puntos = 0;
                 gameConfig.crearbola = true;
