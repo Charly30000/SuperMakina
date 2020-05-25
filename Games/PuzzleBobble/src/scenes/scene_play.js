@@ -43,6 +43,7 @@ class Scene_play extends Phaser.Scene {
 
 
         document.getElementById("nivel").textContent = "Nivel: " + gameConfig.numeronivel;
+        document.getElementById("puntuacion").textContent = "SCORE: " + gameConfig.puntos;
 
 
         // se carga el fondo, borde, flecha y dragones
