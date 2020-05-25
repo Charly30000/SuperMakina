@@ -35,7 +35,7 @@ app.on('ready', function () {
         app.quit();
     })
     mainWindow.maximize();
-    // mainWindow.removeMenu(); // para quitar el menu cuando se vaya a entregar
+    mainWindow.removeMenu(); // para quitar el menu cuando se vaya a entregar
 })
 
 // *****no se puede quitar, el menu debe tener al menos una pestaña, rol o tipo
@@ -76,7 +76,7 @@ function crearVentanaPuntuaciones() {
             mainWindow.setEnabled(true);
             mainWindow.show();
         })
-        // ventanaPuntuaciones.removeMenu(); // para quitar el menu cuando se vaya a entregar
+        ventanaPuntuaciones.removeMenu(); // para quitar el menu cuando se vaya a entregar
     }
 }
 
