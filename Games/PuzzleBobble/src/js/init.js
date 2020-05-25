@@ -6,7 +6,7 @@ const config = {
     type: Phaser.CANVAS,
     scene: [
         Bootloader,
-        Scene_play,
+        Sceneplay,
         Inicio,
         GameOver
     ],

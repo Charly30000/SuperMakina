@@ -1,6 +1,6 @@
-class Scene_play extends Phaser.Scene {
+class Sceneplay extends Phaser.Scene {
     constructor() {
-        super({ key: "Scene_play" })
+        super({ key: "Sceneplay" })
     }
 
     create() {

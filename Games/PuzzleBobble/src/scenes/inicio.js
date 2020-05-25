@@ -22,7 +22,7 @@ class Inicio extends Phaser.Scene {
         //inicio de la escena del juego
         if (this.cursor_empezar.isDown) {
             this.inicio.stop();
-            this.scene.start("Scene_play");
+            this.scene.start("Sceneplay");
         }
 
     }
